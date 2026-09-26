@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MusicFree 插件订阅站 · hebijunge</title>
+<style>
+  :root{
+    --bg:#0e1014; --card:#171a21; --line:#262b38;
+    --txt:#e8eaf0; --sub:#9aa3b5; --acc1:#7c5cff; --acc2:#ff5c8a;
+    --ok:#3ecf8e; --mono:'SF Mono',Consolas,Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+    min-height:100vh;background-image:radial-gradient(900px 400px at 80% -10%,rgba(124,92,255,.18),transparent),
+    radial-gradient(700px 350px at 0% 0%,rgba(255,92,138,.12),transparent)}
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 20px 60px}
+  header{text-align:center;margin-bottom:36px}
+  .logo{font-size:52px;line-height:1}
+  h1{font-size:30px;font-weight:700;margin:14px 0 8px;
+    background:linear-gradient(90deg,var(--acc1),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .tagline{color:var(--sub);font-size:15px}
+  .stats{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--sub)}
+  .stat b{color:var(--txt)}
+  .sub-card{background:linear-gradient(135deg,rgba(124,92,255,.14),rgba(255,92,138,.10)),var(--card);
+    border:1px solid rgba(124,92,255,.35);border-radius:16px;padding:22px 24px;margin-bottom:34px}
+  .sub-card h2{font-size:17px;margin-bottom:4px}
+  .sub-card p.tip{color:var(--sub);font-size:13px;margin-bottom:14px}
+  .sub-row{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.35);border:1px solid var(--line);
+    border-radius:10px;padding:10px 12px;margin-bottom:10px;flex-wrap:wrap}
+  .sub-row .label{font-size:12px;color:var(--acc1);border:1px solid rgba(124,92,255,.5);border-radius:6px;padding:2px 8px;white-space:nowrap}
+  .sub-row code,.sub-row .code-link{flex:1;font-family:var(--mono);font-size:13px;color:#cdd3e0;word-break:break-all;min-width:200px}
+  a.code-link{color:#9db8ff;text-decoration:none;border-bottom:1px dashed rgba(157,184,255,.4);padding-bottom:1px}
+  a.code-link:hover{color:#c3d4ff;border-bottom-color:#c3d4ff}
+  .btn{border:none;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;font-weight:600;white-space:nowrap;
+    background:linear-gradient(90deg,var(--acc1),var(--acc2));color:#fff;transition:opacity .15s}
+  .btn:hover{opacity:.85}
+  .btn.ghost{background:transparent;color:var(--sub);border:1px solid var(--line);font-weight:400}
+  .btn.ghost:hover{color:var(--txt);border-color:var(--sub)}
+  .copied{background:var(--ok)!important}
+  .px-head{font-size:15px;font-weight:700;margin:18px 0 2px;display:flex;align-items:center;gap:8px}
+  .px-head::before{content:'🛡️';font-size:14px}
+  .sub-row .spd{font-size:11px;color:var(--ok);font-family:var(--mono);white-space:nowrap;background:rgba(62,207,142,.08);border:1px solid rgba(62,207,142,.3);border-radius:6px;padding:2px 8px}
+
+  .sec-title{font-size:18px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .sec-title::before{content:'';width:4px;height:18px;border-radius:2px;background:linear-gradient(180deg,var(--acc1),var(--acc2))}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .15s,border-color .15s,box-shadow .15s}
+  .pcard:hover{transform:translateY(-3px);border-color:rgba(124,92,255,.55);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  .pcard .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .pcard .name{font-size:16px;font-weight:700}
+  .ver{font-size:11px;font-family:var(--mono);color:#d6bcff;background:rgba(124,92,255,.15);
+    border:1px solid rgba(124,92,255,.4);border-radius:12px;padding:2px 9px}
+  .links{display:flex;gap:8px;flex-wrap:wrap}
+  .lnk{font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:8px;padding:6px 11px;
+    text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:4px}
+  .lnk:hover{color:var(--txt);border-color:var(--acc1);background:rgba(124,92,255,.08)}
+  .lnk.main{color:#ffd7e4;border-color:rgba(255,92,138,.45)}
+  .lnk.main:hover{border-color:var(--acc2)}
+  footer{margin-top:44px;text-align:center;color:var(--sub);font-size:13px;line-height:2}
+  footer a{color:var(--acc1);text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  .update-time{text-align:center;color:var(--sub);font-size:12px;margin-top:6px;font-family:var(--mono)}
+  @media(max-width:520px){.sub-row code{font-size:11px}.wrap{padding:32px 14px 40px}h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">🎵</div>
+    <h1>MusicFree 插件订阅站</h1>
+    <div class="tagline">六源聚合 · 独立音源 · 一键订阅，插件持续更新</div>
+    <div class="stats">
+      <span class="stat">插件 <b id="stat-count">-</b> 个</span>
+      <span class="stat">页面数据 <b>自动跟随 plugins.json</b></span>
+    </div>
+  </header>
+
+  <div class="sub-card">
+    <h2>📌 订阅地址</h2>
+    <p class="tip">在 MusicFree 中打开「插件设置 → 订阅」，粘贴下面任一地址即可一键安装 / 更新全部插件。</p>
+    <div class="sub-row">
+      <span class="label">推荐 · GitHub Pages</span>
+      <a id="url-ghp" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins.json</a>
+      <button class="btn" data-copy="url-ghp">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">备用 · fastly 节点</span>
+      <a id="url-jsd" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-fastly.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-fastly.json</a>
+      <button class="btn ghost" data-copy="url-jsd">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">备用 · gcore 节点</span>
+      <a id="url-gcore" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-gcore.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-gcore.json</a>
+      <button class="btn ghost" data-copy="url-gcore">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内加速 · ghproxy</span>
+      <a id="url-ghproxy" class="code-link" href="https://ghproxy.net/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins-ghproxy.json" target="_blank" rel="noopener">https://ghproxy.net/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins-ghproxy.json</a>
+      <button class="btn ghost" data-copy="url-ghproxy">复制</button>
+    </div>
+    <div class="px-head">国内代理 · 实测收录</div>
+    <p class="tip" style="margin:6px 0 10px">2026-09-25 对 109 个候选代理全量实测（两轮复测），按「清单可用 + 内容校验一致 + 速度」收录 15 条；每条为独立订阅地址，内容与上方四条通道完全一致（25 个插件），插件 js 经对应代理直取 GitHub 源。上表任一通道报 Network Error 时可换用下面任一条。</p>
+    <div class="sub-row">
+      <span class="label">国内代理 01 · git.yylx.win</span>
+      <a id="url-px01" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-01.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-01.json</a>
+      <span class="spd">实测 434 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px01">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 02 · gh.acmsz.top</span>
+      <a id="url-px02" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-02.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-02.json</a>
+      <span class="spd">实测 401 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px02">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 03 · gh-proxy.com</span>
+      <a id="url-px03" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-03.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-03.json</a>
+      <span class="spd">实测 371 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px03">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 04 · ghm.078465.xyz</span>
+      <a id="url-px04" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-04.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-04.json</a>
+      <span class="spd">实测 305 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px04">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 05 · ghproxy.053000.xyz</span>
+      <a id="url-px05" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-05.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-05.json</a>
+      <span class="spd">实测 225 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px05">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 06 · gh.927223.xyz</span>
+      <a id="url-px06" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-06.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-06.json</a>
+      <span class="spd">实测 223 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px06">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 07 · gh.halonice.com</span>
+      <a id="url-px07" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-07.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-07.json</a>
+      <span class="spd">实测 197 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px07">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 08 · wget.la</span>
+      <a id="url-px08" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-08.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-08.json</a>
+      <span class="spd">实测 187 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px08">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 09 · cdn.akaere.online</span>
+      <a id="url-px09" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-09.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-09.json</a>
+      <span class="spd">实测 186 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px09">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 10 · gh.padao.fun</span>
+      <a id="url-px10" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-10.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-10.json</a>
+      <span class="spd">实测 184 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px10">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 11 · xsadwsd.kdns.fr</span>
+      <a id="url-px11" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-11.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-11.json</a>
+      <span class="spd">实测 183 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px11">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 12 · gh.idayer.com</span>
+      <a id="url-px12" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-12.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-12.json</a>
+      <span class="spd">实测 178 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px12">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 13 · js.jiangss.shop</span>
+      <a id="url-px13" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-13.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-13.json</a>
+      <span class="spd">实测 175 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px13">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 14 · github.xxlab.tech</span>
+      <a id="url-px14" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-14.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-14.json</a>
+      <span class="spd">实测 173 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px14">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">国内代理 15 · gh.felicity.ac.cn</span>
+      <a id="url-px15" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-15.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-15.json</a>
+      <span class="spd">实测 165 KB/s · 09-25</span>
+      <button class="btn ghost" data-copy="url-px15">复制</button>
+    </div>
+    <p class="tip" style="margin:10px 0 0">上方四条与下方十五条国内代理订阅内容完全一致（25 个插件）：github.io 或 jsdelivr 访问不稳定（间歇超时 / 报 Network Error）的用户，优先用「国内加速 · ghproxy」这条——清单与插件文件均经国内加速代理直取 GitHub 源；其余三条清单由 GitHub Pages 实时提供，插件文件分别走 Pages / fastly CDN / gcore CDN。导入时哪个通道报 Network Error，就换另一条订阅地址重试。</p>
+  </div>
+
+  <div class="sec-title">插件列表</div>
+  <div class="grid" id="grid"><div class="pcard" style="grid-column:1/-1;text-align:center;color:var(--sub)">加载中…</div></div>
+
+  <footer>
+    插件 js 均由沙箱构建并逐项自测后发布 · 新插件完成后追加进 <a href="https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins.json">plugins.json</a> 即自动出现在本页<br>
+    仓库：<a href="https://github.com/hebijunge/musicfree-plugins">github.com/hebijunge/musicfree-plugins</a>
+  </footer>
+  <div class="update-time" id="update-time"></div>
+</div>
+
+<script>
+var FALLBACK = [
+  {name:"QQ音乐",version:"1.9.15",file:"qq-source.plugin.v1.9.15.js"},
+  {name:"酷我音乐",version:"1.9.15",file:"kuwo-source.plugin.v1.9.15.js"},
+  {name:"酷狗音乐",version:"1.9.15",file:"kugou-source.plugin.v1.9.15.js"},
+  {name:"咪咕音乐",version:"1.9.15",file:"migu-source.plugin.v1.9.15.js"},
+  {name:"网易云音乐",version:"1.9.15",file:"netease-source.plugin.v1.9.15.js"},
+  {name:"汽水音乐",version:"1.9.15",file:"qishui-source.plugin.v1.9.15.js"},
+  {name:"B站",version:"1.1.0",file:"bilibili-source.plugin.v1.1.0.js"},
+  {name:"番茄畅听",version:"1.1.0",file:"fanqie-source.plugin.v1.1.0.js"},
+  {name:"DJ多多",version:"1.0.0",file:"djduoduo-source.plugin.v1.0.0.js"},
+  {name:"5sing",version:"1.0.0",file:"5sing-source.plugin.v1.0.0.js"},
+  {name:"千千音乐",version:"1.0.2",file:"qianqian-source.plugin.v1.0.2.js"},
+  {name:"Y2002电音",version:"1.0.0",file:"y2002-source.plugin.v1.0.0.js"},
+  {name:"一听音乐",version:"1.0.1",file:"1ting-source.plugin.v1.0.1.js"},
+  {name:"懒人听书",version:"1.0.1",file:"lrts-source.plugin.v1.0.1.js"},
+  {name:"街声",version:"1.0.0",file:"streetvoice-source.plugin.v1.0.0.js"},
+  {name:"火龙DJ",version:"1.0.2",file:"huolongdj-source.plugin.v1.0.2.js"},
+  {name:"快音",version:"1.0.0",file:"kuaiyin-source.plugin.v1.0.0.js"},
+  {name:"猫耳FM",version:"1.0.0",file:"missevan-source.plugin.v1.0.0.js"},
+  {name:"DJ串烧集",version:"1.0.0",file:"djcsj-source.plugin.v1.0.0.js"},
+  {name:"DJ秀",version:"1.0.0",file:"djshow.plugin.v1.0.0.js"},
+  {name:"Apple Music",version:"1.0.0",file:"apple-music-v1.0.0.js"},
+  {name:"华为音乐",version:"1.0.0",file:"hwmusic-source.plugin.v1.0.0.js"},
+  {name:"蜻蜓FM",version:"1.0.0",file:"qingting-source.plugin.v1.0.0.js"},
+  {name:"喜马拉雅",version:"1.0.0",file:"ximalaya-source.plugin.v1.0.0-r2.js"},
+  {name:"荔枝FM",version:"1.0.0",file:"lizhi-source.plugin.v1.0.0.js"},
+  {name:"网易云电台",version:"1.0.0",file:"neteaseradio-source.plugin.v1.0.0.js"},
+  {name:"CCTV听音",version:"1.0.0",file:"cctv-source.plugin.v1.0.0.js"},
+  {name:"Jamendo",version:"1.0.1",file:"jamendo-source.plugin.v1.0.1.js"},
+  {name:"聚合源",version:"1.9.15",file:"agg-source.plugin.v1.9.15.js"}
+];
+function linksOf(file){
+  return '<a class="lnk main" href="/musicfree-plugins/plugins/' + encodeURIComponent(file) + '">⚡ Pages 直链</a>'
+    + '<a class="lnk" href="https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/'
+    + encodeURIComponent(file) + '">fastly</a>'
+    + '<a class="lnk" href="https://gcore.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/'
+    + encodeURIComponent(file) + '">gcore</a>'
+    + '<a class="lnk" href="https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/'
+    + encodeURIComponent(file) + '">raw</a>';
+}
+function render(list){
+  var g=document.getElementById('grid');
+  g.innerHTML=list.map(function(p){
+    var file=(p.url||'').split('/plugins/').pop()||p.file;
+    return '<div class="pcard"><div class="top"><span class="name">'+p.name+'</span>'
+      +'<span class="ver">v'+p.version+'</span></div><div class="links">'+linksOf(file)+'</div></div>';
+  }).join('');
+  document.getElementById('stat-count').textContent=list.length;
+  document.getElementById('update-time').textContent='数据更新于 '+new Date().toLocaleString('zh-CN');
+}
+fetch('plugins.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():Promise.reject()})
+  .then(function(d){render(d.plugins||FALLBACK)}).catch(function(){render(FALLBACK)});
+
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-copy]');if(!b)return;
+  var t=document.getElementById(b.getAttribute('data-copy')).textContent;
+  function done(){var o=b.textContent;b.textContent='✓ 已复制';b.classList.add('copied');
+    setTimeout(function(){b.textContent=o;b.classList.remove('copied')},1600)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,done)}
+  else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy')}catch(x){}document.body.removeChild(ta);done()}
+});
+</script>
+</body>
+</html>

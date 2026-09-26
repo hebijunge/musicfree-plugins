@@ -1,0 +1,43 @@
+name: mirror-jihulab
+
+# 半自动 jihulab 镜像：main 有推送即镜像到 jihulab（GitLab 国内镜像）。
+# 启用条件（缺一则自动跳过，不会报错红叉）：
+#   仓库 Secrets 配置 JIHULAB_TOKEN（jihulab PAT，write_repository 权限）
+#   仓库 Secrets 或 Variables 配置 JIHULAB_PATH（形如 yourname/musicfree-plugins）
+# 安全约定：token 只存 GitHub Secrets，不写入任何代码文件。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip unless configured
+        id: guard
+        env:
+          TK: ${{ secrets.JIHULAB_TOKEN }}
+          PATH_: ${{ secrets.JIHULAB_PATH }}
+        run: |
+          if [ -z "$TK" ] || [ -z "$PATH_" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "JIHULAB_TOKEN/JIHULAB_PATH 未配置，跳过 jihulab 镜像（这是预期行为，非失败）"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.guard.outputs.configured == 'true'
+        with:
+          fetch-depth: 0
+      - name: Push mirror to jihulab
+        if: steps.guard.outputs.configured == 'true'
+        env:
+          TK: ${{ secrets.JIHULAB_TOKEN }}
+          PATH_: ${{ secrets.JIHULAB_PATH }}
+        run: |
+          git push --force "https://oauth2:${TK}@jihulab.com/${PATH_}.git" "main:main"
+          echo "已镜像到 https://jihulab.com/${PATH_}"
