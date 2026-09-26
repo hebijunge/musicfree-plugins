@@ -72,6 +72,11 @@
       "version": "1.0.1"
     },
     {
+      "name": "博看听书",
+      "version": "1.0.0",
+      "url": "https://gh.927223.xyz/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/bokantingshu-source.plugin.v1.0.0.js"
+    },
+    {
       "name": "街声",
       "url": "https://gh.927223.xyz/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/streetvoice-source.plugin.v1.0.0.js",
       "version": "1.0.0"
