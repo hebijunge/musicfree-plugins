@@ -160,6 +160,11 @@
       "name": "djuu DJ",
       "url": "https://gh.acmsz.top/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djuu-source.plugin.v1.0.0.js",
       "version": "1.0.0"
+    },
+    {
+      "name": "相声评书",
+      "url": "https://gh.acmsz.top/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/xiangsheng-pingshu-source.plugin.v1.0.0.js",
+      "version": "1.0.0"
     }
   ]
 }
