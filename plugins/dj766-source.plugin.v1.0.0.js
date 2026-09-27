@@ -1,5 +1,6 @@
-// DJ766 (dj766.com) - MusicFree Plugin v1.0.0
+// DJ766 (dj766.com) - MusicFree Plugin v1.1.0
 // 同清风DJ CMS：data-* 内联 id/name/artist/cover/audio
+// 高品320K: play→down.urlkj.com, 去掉/m4a2022/层
 
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -35,9 +36,9 @@ function parseList(html) {
 
 module.exports = {
     platform: 'DJ766',
-    version: '1.0.0',
+    version: '1.1.0',
     author: 'hebijunge',
-    description: 'DJ766舞曲网 - 分类/榜单/封面/直链',
+    description: 'DJ766舞曲网 - 分类/榜单/封面/高品320K直链',
     srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/dj766-source.plugin.v1.0.0.js',
     supportedSearchType: ['music'],
 
@@ -71,12 +72,19 @@ module.exports = {
         return { isEnd: data.length < 20, musicList: data, topListItem };
     },
 
-    async getMediaSource(musicItem) {
-        if (musicItem._audio) return { url: musicItem._audio };
-        const res = await axios.get(SITE + '/play/' + musicItem.id + '.html', { headers: { 'User-Agent': UA, Referer: SITE + '/' } });
-        const m = String(res.data).match(/var\s+playurl\s*=\s*["']([^"']+)["']/);
-        if (!m) throw new Error('取链失败');
-        return { url: m[1] };
+    async getMediaSource(musicItem, quality) {
+        let url = musicItem._audio;
+        if (!url) {
+            const res = await axios.get(SITE + '/play/' + musicItem.id + '.html', { headers: { 'User-Agent': UA, Referer: SITE + '/' } });
+            const m = String(res.data).match(/var\s+playurl\s*=\s*["']([^"']+)["']/);
+            if (!m) throw new Error('取链失败');
+            url = m[1];
+        }
+        // 高品320K: play→down, 去掉 /m4a2022/ 路径层
+        if (quality === 'high' || quality === 'super') {
+            url = url.replace('play.urlkj.com', 'down.urlkj.com').replace('/m4a2022/', '/');
+        }
+        return { url };
     },
 
     async getLyric() { return { rawLrc: '' }; }
