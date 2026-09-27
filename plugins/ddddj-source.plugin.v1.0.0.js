@@ -1,9 +1,8 @@
-// 清风DJ (ddddj.com) - MusicFree Plugin v1.1.0
+// 清风DJ (ddddj.com) - MusicFree Plugin v1.2.0
 // 搜索: /search.html?keys={kw}
 // 列表: /genre/{slug}/{type}-0-0-0-{page}-1.html
 // 榜单: /ranks/sole/{type}-0-0-0-{page}.html
-// data-* 属性直接带 id/name/artist/cover/audio
-// 音质: 试听=压缩版(m4a路径), 高品320K=下载页(混淆JS暂未逆向)
+// 音质: 试听=play.urlkj.com/m4a2022/(压缩128K), 高品320K=down.urlkj.com/(去掉m4a2022层)
 
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -45,9 +44,9 @@ function parseList(html) {
 
 module.exports = {
     platform: '清风DJ',
-    version: '1.1.0',
+    version: '1.2.0',
     author: 'hebijunge',
-    description: '清风DJ舞曲网 - 分类/榜单/封面/试听直链(高品320K需下载页)',
+    description: '清风DJ舞曲网 - 分类/榜单/封面/高品320K直链',
     srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/ddddj-source.plugin.v1.0.0.js',
     supportedSearchType: ['music'],
 
@@ -88,15 +87,21 @@ module.exports = {
 
     async getMediaSource(musicItem, quality) {
         // 优先用列表页直接给的 audio（试听版）
-        if (musicItem._audio) return { url: musicItem._audio };
-        // 请求播放页提取 playurl
-        const res = await axios.get(SITE + '/play/' + musicItem.id + '.html', {
-            headers: { 'User-Agent': UA, Referer: SITE + '/' }
-        });
-        const m = String(res.data).match(/var\s+playurl\s*=\s*["']([^"']+)["']/);
-        if (!m) throw new Error('取链失败');
-        // 注：试听版是压缩处理的m4a，高品320K需从下载页 /down/{id}.html 获取（混淆JS暂未逆向）
-        return { url: m[1] };
+        let url = musicItem._audio;
+        if (!url) {
+            // 请求播放页提取 playurl
+            const res = await axios.get(SITE + '/play/' + musicItem.id + '.html', {
+                headers: { 'User-Agent': UA, Referer: SITE + '/' }
+            });
+            const m = String(res.data).match(/var\s+playurl\s*=\s*["']([^"']+)["']/);
+            if (!m) throw new Error('取链失败');
+            url = m[1];
+        }
+        // 高品320K: play→down, 去掉 /m4a2022/ 路径层
+        if (quality === 'high' || quality === 'super') {
+            url = url.replace('play.urlkj.com', 'down.urlkj.com').replace('/m4a2022/', '/');
+        }
+        return { url };
     },
 
     async getLyric() { return { rawLrc: '' }; }
