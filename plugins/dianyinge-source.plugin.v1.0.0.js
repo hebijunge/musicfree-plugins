@@ -1,54 +1,185 @@
-// 电音阁 (dianyinge.com) - MusicFree Plugin v1.0.0
-// 同清风DJ CMS：div.isgood_list + title + img
+// 电音阁 (dianyinge.com) MusicFree 插件 v1.1.0
+// 服务端渲染；封面域 dyg.dianyinge.com，播放域 ys.dianyinge.com
+// 搜索: /index/search/index/keyword/{kw}/p/{p}     → div.isgood_list
+// 分类: /cate/{main}/0/1/{page}（7主分类）         → div.isgood_list
+// 榜单: /rank/{1..5}（新歌/人气/收藏/点赞/下载）   → div.isgood_list
+// 歌单: /radio_more/3/{page} 列表 → /radio/{sid}   → #musicct a[musicid]
+// 取链: /play/{id}.html → playurl="https://ys.dianyinge.com/...mp4"
+// 注: 单一直链（mp4/AAC），页面标 320kbps，无多档切换，不伪造
 
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const SITE = 'https://www.dianyinge.com';
-const UA = 'Mozilla/5.0';
+const ORIGIN = 'https://www.dianyinge.com';
+const PLATFORM = '电音阁';
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36';
+const TIMEOUT = 10000;
 
-function parseList(html) {
+const RANKS = [
+    [1, '新歌排行榜'], [2, '人气排行榜'], [3, '收藏排行榜'],
+    [4, '点赞排行榜'], [5, '下载排行榜'],
+];
+
+const CATEGORIES = [
+    [13, '独家舞曲'], [4, '国潮中文DJ'], [2, '夜店商业舞曲'],
+    [1, '国际电音舞曲'], [6, '套曲串烧'], [7, '流行音乐'], [3, '3D环绕'],
+];
+
+async function get(url) {
+    return axios.get(url, {
+        headers: { 'User-Agent': UA, Accept: 'text/html,application/xhtml+xml,*/*;q=0.8' },
+        timeout: TIMEOUT,
+    });
+}
+
+function cleanCover(src) {
+    if (!src) return '';
+    return src.split('?x-oss-process')[0];
+}
+
+// 解析 div.isgood_list（搜索/分类/榜单通用）
+function parseSongList(html) {
     const $ = cheerio.load(html);
     const data = [];
     $('div.isgood_list').each((i, el) => {
-        const $a = $(el).find('a[href*="/play/"]').first();
+        const $el = $(el);
+        const $a = $el.find('a[href*="/play/"]').first();
         const href = $a.attr('href') || '';
         const m = href.match(/\/play\/(\d+)\.html/);
         if (!m) return;
-        const title = $a.attr('title') || $a.text().trim();
-        const $img = $(el).find('img').first();
-        const artwork = $img.attr('src');
-        if (!title || title.length < 2) return;
-        data.push({ id: m[1], title, artist: '电音阁', artwork });
+        const title = ($a.attr('title') || $a.text() || '').replace(/\s+/g, ' ').trim();
+        if (!title) return;
+        data.push({
+            id: m[1],
+            title,
+            artist: PLATFORM,
+            artwork: cleanCover($el.find('img').first().attr('src')),
+        });
+    });
+    return data;
+}
+
+// 解析歌单详情 #musicct
+function parseSheetTracks(html) {
+    const $ = cheerio.load(html);
+    const data = [];
+    $('a[href*="musicid="]').each((i, a) => {
+        const href = $(a).attr('href') || '';
+        const m = href.match(/musicid=(\d+)/);
+        if (!m) return;
+        let title = ($(a).attr('title') || $(a).text() || '').replace(/\s+/g, ' ').trim();
+        title = title.replace(/^\d+\./, '').trim();
+        if (!title) return;
+        data.push({ id: m[1], title, artist: PLATFORM });
+    });
+    return data;
+}
+
+// 解析歌单列表卡片
+function parseSheetCards(html) {
+    const $ = cheerio.load(html);
+    const data = [];
+    $('a[href*="/radio/"]').each((i, a) => {
+        const href = $(a).attr('href') || '';
+        const m = href.match(/\/radio\/(\d+)\.html/);
+        if (!m) return;
+        const sid = m[1];
+        if (data.some(d => d.sheetId === sid)) return;
+        const title = ($(a).attr('title') || $(a).find('.radio_list_left_c_title').text() || '').trim();
+        if (!title) return;
+        data.push({
+            id: 'sheet_' + sid,
+            title,
+            artwork: cleanCover($(a).find('img').first().attr('src')),
+            kind: 'sheet',
+            sheetId: sid,
+        });
     });
     return data;
 }
 
 module.exports = {
-    platform: '电音阁',
-    version: '1.0.0',
+    platform: PLATFORM,
+    version: '1.1.0',
     author: 'hebijunge',
-    description: '电音阁 - DJ舞曲/封面/搜索',
+    description: '电音阁DJ 国潮/商业/套曲/3D环绕，支持搜索、7分类、5榜单、歌单、封面、320k试听',
     srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/dianyinge-source.plugin.v1.0.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {
         if (type !== 'music') return { isEnd: true, data: [] };
-        const res = await axios.get(SITE + '/index/search/index/keyword/' + encodeURIComponent(query) + '/p/' + (page || 1), {
-            headers: { 'User-Agent': UA }
-        });
-        const data = parseList(res.data);
-        return { isEnd: data.length < 20, data };
+        const p = Math.max(1, Number(page) || 1);
+        const url = ORIGIN + '/index/search/index/keyword/' + encodeURIComponent(query) + '/p/' + p;
+        const res = await get(url);
+        const html = typeof res.data === 'string' ? res.data : '';
+        const data = parseSongList(html);
+        const isEnd = !new RegExp('/keyword/[^/]+/p/' + (p + 1) + '\\b').test(html);
+        return { isEnd, data };
     },
 
     async getMediaSource(musicItem) {
-        const res = await axios.get(SITE + '/play/' + musicItem.id + '.html', { headers: { 'User-Agent': UA } });
-        const m = String(res.data).match(/playurl\s*=\s*["']([^"']+)["']/);
+        const id = String(musicItem.id);
+        const res = await get(ORIGIN + '/play/' + id + '.html');
+        const html = typeof res.data === 'string' ? res.data : '';
+        const m = html.match(/playurl\s*=\s*["'](https?:\/\/[^"']+)["']/);
         if (!m) throw new Error('取链失败');
-        let url = m[1];
-        if (!url.startsWith('http')) url = 'https://ys.dianyinge.com' + url;
-        return { url };
+        return {
+            url: m[1],
+            headers: { Referer: ORIGIN + '/' },
+        };
     },
 
-    async getLyric() { return { rawLrc: '' }; }
+    async getLyric() { return { rawLrc: '' }; },
+
+    async getTopLists() {
+        const groups = [
+            {
+                title: '排行榜',
+                data: RANKS.map(([r, t]) => ({ id: 'rank_' + r, title: t, kind: 'rank', rank: r })),
+            },
+            {
+                title: '舞曲分类',
+                data: CATEGORIES.map(([c, t]) => ({
+                    id: 'cate_' + c, title: t, kind: 'category', cate: c,
+                })),
+            },
+        ];
+        try {
+            const res = await get(ORIGIN + '/radio_more/3/1');
+            const sheets = parseSheetCards(typeof res.data === 'string' ? res.data : '');
+            if (sheets.length) groups.push({ title: '推荐歌单', data: sheets });
+        } catch (e) {
+            // 歌单抓取失败不影响其他
+        }
+        return groups;
+    },
+
+    async getTopListDetail(topListItem, page) {
+        const p = Math.max(1, Number(page) || 1);
+        const kind = topListItem.kind;
+        if (kind === 'sheet') {
+            const res = await get(ORIGIN + '/radio/' + topListItem.sheetId + '.html');
+            const html = typeof res.data === 'string' ? res.data : '';
+            return { isEnd: true, musicList: parseSheetTracks(html) };
+        }
+        let url;
+        if (kind === 'rank') url = ORIGIN + '/rank/' + topListItem.rank;
+        else if (kind === 'category') url = ORIGIN + '/cate/' + topListItem.cate + '/0/1/' + p;
+        else throw new Error('未知榜单类型');
+        const res = await get(url);
+        const html = typeof res.data === 'string' ? res.data : '';
+        const data = parseSongList(html);
+        let isEnd = true;
+        if (kind === 'category') {
+            isEnd = !new RegExp('/cate/' + topListItem.cate + '/0/1/' + (p + 1) + '\\b').test(html);
+        }
+        return { isEnd, musicList: data };
+    },
+
+    async getMusicSheetInfo(sheetItem) {
+        const sid = sheetItem.sheetId || String(sheetItem.id).replace(/^sheet_/, '');
+        const res = await get(ORIGIN + '/radio/' + sid + '.html');
+        const html = typeof res.data === 'string' ? res.data : '';
+        return { isEnd: true, musicList: parseSheetTracks(html) };
+    },
 };
