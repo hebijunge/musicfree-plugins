@@ -43,9 +43,9 @@ function parseList(html) {
 
 module.exports = {
     platform: 'QQDJ',
-    version: '1.1.0',
+    version: '1.2.0',
     author: 'hebijunge',
-    description: '清风DJ音乐网 - 分类/封面/高音质',
+    description: '清风DJ音乐网 - 分类/封面/高音质(320K)',
     srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qqdjs-source.plugin.v1.0.0.js',
     supportedSearchType: ['music'],
 
@@ -76,13 +76,20 @@ module.exports = {
     },
 
     async getMediaSource(musicItem, quality) {
-        if (musicItem._audio) return { url: musicItem._audio };
-        const res = await axios.get(SITE + '/play/' + musicItem.id + '.html', {
-            headers: { 'User-Agent': UA }
-        });
-        const m = res.data.match(/data-audio="([^"]+)"/);
-        if (!m) throw new Error('未找到播放链接');
-        return { url: m[1] };
+        let url = musicItem._audio || '';
+        if (!url) {
+            const res = await axios.get(SITE + '/play/' + musicItem.id + '.html', {
+                headers: { 'User-Agent': UA }
+            });
+            const m = res.data.match(/data-audio="([^"]+)"/);
+            if (!m) throw new Error('未找到播放链接');
+            url = m[1];
+        }
+        // 高品320K: play → down，去掉签名参数
+        if ((quality === 'high' || quality === 'super') && url.includes('/play/')) {
+            url = url.replace('/play/', '/down/').split('?')[0];
+        }
+        return { url };
     },
 
     async getLyric() { return { rawLrc: '' }; }
