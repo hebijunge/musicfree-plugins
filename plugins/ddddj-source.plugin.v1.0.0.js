@@ -15,8 +15,8 @@ module.exports = {
 
     async search(query, page, type) {
         if (type !== 'music') return { isEnd: true, data: [] };
-        const res = await axios.get('https://www.ddddj.com/search', {
-            params: { keyword: query, page: page || 1 },
+        const res = await axios.get('https://www.ddddj.com/search.html', {
+            params: { keys: query, page: page || 1 },
             headers: { 'User-Agent': 'Mozilla/5.0' }
         });
         const $ = cheerio.load(res.data);
