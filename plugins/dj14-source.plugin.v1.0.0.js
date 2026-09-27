@@ -1,106 +1,183 @@
-// DJ14水晶舞曲网 - MusicFree Plugin v1.1.0
-// 搜索: /search?keys={kw} → /music/{id}.html
-// 分类: /genre/c{id}.html
-// 榜单: /top/mixes.html 等
-// 取链: 详情页 __PLAYLIST_DATA__ JSON → mp3 直链
+// 水晶舞曲网 (dj14.com) MusicFree 插件 v1.2.0
+// 站点使用 dj82 程序，资源存储于 cdn.dj1198.com
+// 搜索:   GET /search?keys={kw}&cid=0&type=1&page={p}   → 表格 tr.sbg，20条/页
+// 分类:   GET /genre/{cid}.html                        → tr.sbg，27条/页
+//         翻页 GET /genre/{cid}/0-0-0-0-{p}.html
+// 榜单:   GET /top/{mixes|club|bar|electro|dancing}.html → tr.sbg，单页约67条
+// 取链:   GET /music/{id}.html，解析 window.__PLAYLIST_DATA__ 中 id 匹配条目的 mp3
+//         免登录可得 128kbps MP3（cdn.dj1198.com）
+// 高品:   320kbps(约183MB) 需会员 + DJ币，免登录不可得，不伪造
+// 封面:   列表/搜索直接返回 cdn.dj1198.com 真实封面
 
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const SITE = 'https://dj14.com';
-const UA = 'Mozilla/5.0';
+const ORIGIN = 'https://dj14.com';
+const PLATFORM = '水晶舞曲';
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36';
+const TIMEOUT = 10000;
+const SEARCH_SIZE = 20;
+const GENRE_SIZE = 27;
 
-const CATEGORIES = [
-    { id: 1, name: '串烧舞曲' },
-    { id: 5, name: '慢歌连版' },
-    { id: 8, name: '中文Remix' },
-    { id: 13, name: '英文Remix' },
-    { id: 1117, name: '酒吧套曲' },
-    { id: 1135, name: '独家推荐' },
-    { id: 1139, name: 'EDM电音' },
-    { id: 1136, name: '越南鼓套曲' },
-    { id: 1137, name: '国潮中英文' }
-];
-
+// 排行榜
 const RANKS = [
-    { path: '/top/mixes.html', name: '串烧排行榜' },
-    { path: '/top/club.html', name: '慢歌连版榜' },
-    { path: '/top/bar.html', name: '华语Remix榜' },
-    { path: '/top/electro.html', name: '外语Remix榜' },
-    { path: '/top/dancing.html', name: '酒吧套曲榜' }
+    { path: 'mixes', title: '串烧舞曲排行榜' },
+    { path: 'club', title: '慢歌连版排行榜' },
+    { path: 'bar', title: '华语Remix排行榜' },
+    { path: 'electro', title: '外语Remix排行榜' },
+    { path: 'dancing', title: '酒吧套曲排行榜' },
 ];
 
-function parseList(html) {
+// 风格分类（一级 + 常用子分类）
+const CATEGORIES = [
+    { path: 'c1', title: '串烧舞曲' },
+    { path: 'c2', title: '中文串烧' },
+    { path: 'c3', title: '英文串烧' },
+    { path: 'c4', title: '中英串烧' },
+    { path: 'c1113', title: '喊麦串烧' },
+    { path: 'c1114', title: '现场串烧' },
+    { path: 'c1140', title: '经典复古Disco' },
+    { path: 'c1115', title: '越南鼓串烧' },
+    { path: 'c5', title: '慢歌连版' },
+    { path: 'c6', title: '中文慢歌' },
+    { path: 'c7', title: '英文慢歌' },
+    { path: 'c1116', title: '发烧人声' },
+    { path: 'c8', title: '中文Remix' },
+    { path: 'c9', title: '站长推荐' },
+    { path: 'c10', title: 'Dance Club' },
+    { path: 'c11', title: 'Electro' },
+    { path: 'c12', title: 'ProgHouse' },
+    { path: 'c1121', title: 'VinaHouse越南鼓' },
+    { path: 'c1122', title: 'Funky House' },
+    { path: 'c1123', title: 'Melbourne' },
+    { path: 'c1124', title: 'Bounce' },
+    { path: 'c1125', title: 'Electro House' },
+    { path: 'c1145', title: 'Lak/House' },
+    { path: 'c1148', title: '经典Disco' },
+    { path: 'c13', title: '英文Remix' },
+    { path: 'c1130', title: 'Prog/House' },
+    { path: 'c17', title: 'Techno/Trance' },
+    { path: 'c1127', title: 'Techno/EDM' },
+    { path: 'c1128', title: 'Disco/Club' },
+    { path: 'c1131', title: 'ElectroHouse' },
+    { path: 'c1132', title: 'Psy Trance' },
+    { path: 'c1147', title: 'Mashup/Hardstyle' },
+    { path: 'c1117', title: '酒吧套曲' },
+    { path: 'c1135', title: '独家推荐' },
+    { path: 'c1139', title: 'EDM电音' },
+    { path: 'c1136', title: '越南鼓套曲' },
+    { path: 'c1137', title: '国潮中英文' },
+    { path: 'c1138', title: '经典舞曲' },
+];
+
+async function get(url) {
+    return axios.get(url, {
+        headers: {
+            'User-Agent': UA,
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        },
+        timeout: TIMEOUT,
+    });
+}
+
+// 解析表格行 tr.sbg
+function parseRows(html) {
     const $ = cheerio.load(html);
     const data = [];
-    $('a[href*="/music/"]').each((i, el) => {
-        const href = $(el).attr('href') || '';
-        const m = href.match(/\/music\/(\d+)\.html/);
-        if (!m) return;
-        const title = $(el).text().trim();
-        if (!title || title.length < 2) return;
-        const $item = $(el).closest('.list-item, .music-item, li, .item') || $(el);
-        data.push({
-            id: m[1],
-            title: title,
-            artist: 'DJ14',
-            artwork: $item.find('img').attr('src') || ''
-        });
+    $('tr.sbg').each((i, row) => {
+        const $r = $(row);
+        let id = $r.find('input.sortid').val();
+        if (!id) id = $r.find('a.play').attr('data-id');
+        if (!id) return;
+        const $titleA = $r.find('.list_play_img_title .t1 a').first();
+        const title = ($titleA.text() || '').replace(/\s+/g, ' ').trim();
+        if (!title) return;
+        const artwork = $r.find('.list_play_img img').first().attr('src') || '';
+        const $dj = $r.find('.t2 a[href*="/djshow/"]').first();
+        const artist = ($dj.text() || '').trim() || PLATFORM;
+        // 时长：TIME 76.17（分钟）
+        let duration;
+        const t2Text = $r.find('.t2').text();
+        const m = t2Text.match(/TIME[:\s]*([\d.]+)/);
+        if (m) duration = Math.round(parseFloat(m[1]) * 60);
+        data.push({ id: String(id), title, artist, artwork, duration });
     });
-    const seen = new Set();
-    return data.filter(d => !seen.has(d.id) && seen.add(d.id));
+    return data;
 }
 
 module.exports = {
-    platform: 'DJ14',
-    version: '1.1.0',
+    platform: PLATFORM,
+    version: '1.2.0',
     author: 'hebijunge',
-    description: 'DJ14水晶舞曲网 - 分类/榜单/封面/高音质',
+    description: '水晶舞曲网 DJ串烧/Remix，支持搜索、分类、榜单、封面、播放（128kbps）',
     srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/dj14-source.plugin.v1.0.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {
         if (type !== 'music') return { isEnd: true, data: [] };
-        const res = await axios.get(SITE + '/search', {
-            params: { keys: query, page },
-            headers: { 'User-Agent': UA }
-        });
-        const data = parseList(res.data);
-        return { isEnd: data.length < 10, data };
+        const p = Math.max(1, Number(page) || 1);
+        const res = await get(ORIGIN + '/search?keys=' + encodeURIComponent(query) + '&cid=0&type=1&page=' + p);
+        const data = parseRows(res.data);
+        return { isEnd: data.length < SEARCH_SIZE, data };
+    },
+
+    async getMediaSource(musicItem) {
+        const id = String(musicItem.id);
+        const res = await get(ORIGIN + '/music/' + id + '.html');
+        const html = typeof res.data === 'string' ? res.data : '';
+        const m = html.match(/window\.__PLAYLIST_DATA__\s*=\s*(\[[\s\S]*?\])\s*;/);
+        if (!m) throw new Error('无法解析播放数据');
+        let list;
+        try {
+            list = JSON.parse(m[1]);
+        } catch (e) {
+            throw new Error('播放数据格式错误');
+        }
+        const cur = list.filter(it => String(it.id) === id && it.mp3)[0];
+        if (!cur || !cur.mp3) throw new Error('未获取到可用播放链接（320k 高品需会员）');
+        // 免登录仅 128kbps MP3 单档，所有音质请求均返回该地址，不伪造高品
+        return { url: cur.mp3 };
     },
 
     async getTopLists() {
         return [
-            { title: '分类', data: CATEGORIES.map(c => ({ id: 'cat_' + c.id, title: c.name })) },
-            { title: '榜单', data: RANKS.map((r, i) => ({ id: 'rank_' + i, title: r.name })) }
+            {
+                title: '排行榜',
+                data: RANKS.map(r => ({
+                    id: 'top_' + r.path, title: r.title,
+                    kind: 'top', path: r.path,
+                })),
+            },
+            {
+                title: '风格分类',
+                data: CATEGORIES.map(c => ({
+                    id: 'genre_' + c.path, title: c.title,
+                    kind: 'genre', path: c.path,
+                })),
+            },
         ];
     },
 
     async getTopListDetail(topListItem, page) {
-        const id = topListItem.id;
+        const p = Math.max(1, Number(page) || 1);
+        const kind = topListItem.kind;
+        const path = topListItem.path;
         let url;
-        if (id.startsWith('cat_')) {
-            url = SITE + '/genre/c' + id.slice(4) + '.html';
-            if (page > 1) url = SITE + '/genre/c' + id.slice(4) + '-' + page + '.html';
-        } else if (id.startsWith('rank_')) {
-            const idx = parseInt(id.slice(5));
-            url = SITE + RANKS[idx].path;
-        } else throw new Error('未知分类');
-        const res = await axios.get(url, { headers: { 'User-Agent': UA } });
-        const data = parseList(res.data);
-        return { isEnd: data.length < 10, musicList: data, topListItem };
+        let isEnd;
+        if (kind === 'top') {
+            url = ORIGIN + '/top/' + path + '.html';
+            isEnd = true; // 榜单单页
+        } else if (kind === 'genre') {
+            url = p === 1
+                ? ORIGIN + '/genre/' + path + '.html'
+                : ORIGIN + '/genre/' + path + '/0-0-0-0-' + p + '.html';
+            isEnd = false; // 由条数判断
+        } else {
+            throw new Error('未知榜单类型');
+        }
+        const res = await get(url);
+        const data = parseRows(res.data);
+        if (kind === 'genre') isEnd = data.length < GENRE_SIZE;
+        return { isEnd, musicList: data };
     },
-
-    async getMediaSource(musicItem, quality) {
-        const res = await axios.get(SITE + '/music/' + musicItem.id + '.html', {
-            headers: { 'User-Agent': UA }
-        });
-        const m = res.data.match(/__PLAYLIST_DATA__\s*=\s*(\[[\s\S]*?\]\s*;)/);
-        if (!m) throw new Error('未找到播放数据');
-        const list = JSON.parse(m[1].replace(/;\s*$/, ''));
-        if (!list.length || !list[0].mp3) throw new Error('无可用音频');
-        return { url: list[0].mp3 };
-    },
-
-    async getLyric() { return { rawLrc: '' }; }
 };
