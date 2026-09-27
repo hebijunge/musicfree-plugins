@@ -1916,6 +1916,8 @@ function probeHeadSize(url, timeoutMs) {
 
 
 function resolveQishuiBugpk(raw) {
+  // [DISABLED 2026-09-27] api.bugpk.com probe timeout unreachable, bypass; delete next line to restore
+  return Promise.reject(new Error('bugpk disabled: api.bugpk.com unreachable (probe 2026-09-27)'));
   if (!raw || !raw.trackId) return Promise.reject(new Error('qishui no trackId'));
   var once = function () {
     return axios.get('https://api.bugpk.com/api/qsmusic', {
@@ -2896,6 +2898,8 @@ function resolveOiapi(raw, quality) {
 // ⚠️ 参数名是 ids（实测 id 会报 code 400「缺少url或ids参数」）；单 IP 限 2 QPS。
 // VIP 歌 7 档全部回落 outer/url（128k）→ 免费歌才可能有高档，免费歌 hires 实测真 CDN 直链。
 function resolveBugpk(raw, quality) {
+  // [DISABLED 2026-09-27] api.bugpk.com probe timeout unreachable, bypass; delete next line to restore
+  return Promise.reject(new Error('bugpk disabled: api.bugpk.com unreachable (probe 2026-09-27)'));
   var levelMap = { standard: 'standard', low: 'standard', high: 'exhigh', super: 'lossless', hires: 'hires' };
   return axios.get('https://api.bugpk.com/api/163_music', {
     // [v1.1.0 实测修正] bugpk 163_music 的单曲查询参数是 ids（不是 id——id 会报 code 400「缺少url或ids参数」）
@@ -3417,7 +3421,7 @@ var LYRIC_ADAPTERS = {
     } catch (e1) { /* 接力 bugpk */ }
     // ② bugpk qsmusic KRC 逐字歌词
     try {
-      var bk = await axios.get('https://api.bugpk.com/api/qsmusic', {
+      throw new Error('[DISABLED 2026-09-27] bugpk krc unreachable'); var bk = await axios.get('https://api.bugpk.com/api/qsmusic', {
         params: { url: qishuiSharePageUrl(raw.trackId), type: 'json' },
         timeout: CHAN_TIMEOUT.bugpk,
         headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
@@ -3477,7 +3481,7 @@ async function getWordByWordLyricImpl(musicItem) {
   } catch (e1) { /* 接力 bugpk */ }
   // ③ bugpk qsmusic KRC 逐字歌词 → QRC（回填缓存）
   try {
-    var bk = await axios.get('https://api.bugpk.com/api/qsmusic', {
+    throw new Error('[DISABLED 2026-09-27] bugpk krc unreachable'); var bk = await axios.get('https://api.bugpk.com/api/qsmusic', {
       params: { url: qishuiSharePageUrl(trackId), type: 'json' },
       timeout: CHAN_TIMEOUT.bugpk,
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }

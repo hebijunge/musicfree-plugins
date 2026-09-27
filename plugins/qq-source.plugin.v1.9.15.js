@@ -2065,6 +2065,8 @@ function qqLoginState() {
 // {code:0,msg:"未找到对应数据"} 或「版权限制或该音乐不存在！」。单 IP 限速 2 QPS（429 有 retry_after）。
 // 仅作链尾兜底（128k），actualQuality 如实标注；HTTPS 无签名无 Cookie。
 function resolveQqBugpk(raw, quality) {
+  // [DISABLED 2026-09-27] api.bugpk.com probe timeout unreachable, bypass; delete next line to restore
+  return Promise.reject(new Error('bugpk disabled: api.bugpk.com unreachable (probe 2026-09-27)'));
   if (!raw || !raw.mid) return Promise.reject(new Error('bugpk no mid'));
   return axios.get('https://api.bugpk.com/api/music', {
     params: { id: raw.mid, media: 'tencent', type: 'song' },
@@ -3098,6 +3100,39 @@ function resolveQqVkeysLegacy(raw, quality) {
     var d = body.data || {};
     if (!d.url) throw new Error('vkeys-legacy no url');
     return { url: String(d.url), actualQuality: VKEYS_LEGACY_ACTUAL[q], channel: 'qq:vkeys-legacy' };
+  });
+}
+
+// ---------- [v1.9.16] a.aa.cab QQ 取链（2026-09-27 实测） ----------
+// GET https://a.aa.cab/qq.music?msg={歌名}&n=1&type=128 → C400 m4a 直链
+function resolveQqAaCab(raw, quality) {
+  if (!raw || !raw.name) return Promise.reject(new Error('aacab no name'));
+  var t = (quality === 'super' || quality === 'hires') ? 320 : 128;
+  return axios.get('https://a.aa.cab/qq.music', {
+    params: { msg: raw.name, n: 1, type: t },
+    timeout: chainSegTimeout(RELAY_TIMEOUT),
+    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
+  }).then(function (res) {
+    var body = res.data || {};
+    if (body.code !== 0) throw new Error('aacab code=' + body.code);
+    var d = body.data || {};
+    if (!d.music) throw new Error('aacab no music');
+    return { url: String(d.music), actualQuality: t >= 320 ? '320k' : '128k', channel: 'qq:aacab' };
+  });
+}
+
+// ---------- [v1.9.16] 103.79 QQ flac 取链（2026-09-27 实测） ----------
+function resolveQq103(raw, quality) {
+  if (!raw || !raw.mid) return Promise.reject(new Error('103 no mid'));
+  if (quality !== 'super' && quality !== 'hires') return Promise.reject(new Error('103 only flac'));
+  return axios.get('http://103.79.184.97/api/music/url', {
+    params: { source: 'tx', songId: raw.mid, quality: 'flac', key: '6C1F-53W0-GRKI-EVFG' },
+    timeout: chainSegTimeout(RELAY_TIMEOUT),
+    headers: { 'User-Agent': 'Mozilla/5.0' }
+  }).then(function (res) {
+    var body = res.data || {};
+    if (body.code !== 200 || !body.url) throw new Error('103 no url');
+    return { url: String(body.url), actualQuality: 'flac', channel: 'qq:103' };
   });
 }
 

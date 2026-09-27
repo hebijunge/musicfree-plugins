@@ -1661,6 +1661,8 @@ function resolveOiapi(raw, quality) {
 // ⚠️ 参数名是 ids（实测 id 会报 code 400「缺少url或ids参数」）；单 IP 限 2 QPS。
 // VIP 歌 7 档全部回落 outer/url（128k）→ 免费歌才可能有高档，免费歌 hires 实测真 CDN 直链。
 function resolveBugpk(raw, quality) {
+  // [DISABLED 2026-09-27] api.bugpk.com probe timeout unreachable, bypass; delete next line to restore
+  return Promise.reject(new Error('bugpk disabled: api.bugpk.com unreachable (probe 2026-09-27)'));
   // [v1.3.0 P1] atmos/master/dolby 无对应上游档位 → 降级 hires
   var levelMap = { standard: 'standard', low: 'standard', high: 'exhigh', super: 'lossless', hires: 'hires', atmos: 'hires', master: 'hires', dolby: 'hires' };
   return axios.get('https://api.bugpk.com/api/163_music', {
@@ -1676,6 +1678,21 @@ function resolveBugpk(raw, quality) {
     // outer/url 回落链（VIP 歌）：守卫/白名单会复核，这里直接交出去
     var aq = /outer\/url/.test(u) ? '128k' : internalToHostQuality(quality);
     return { url: u, actualQuality: aq, channel: 'bugpk-163' };
+  });
+}
+
+// ---------- [v1.9.16] 103.79 网易云 flac 取链（2026-09-27 实测） ----------
+function resolveNetease103(raw, quality) {
+  if (!raw || !raw.id) return Promise.reject(new Error('103 no id'));
+  if (quality !== 'super' && quality !== 'hires') return Promise.reject(new Error('103 only flac'));
+  return axios.get('http://103.79.184.97/api/music/url', {
+    params: { source: 'wy', songId: raw.id, quality: 'flac', key: '6C1F-53W0-GRKI-EVFG' },
+    timeout: RELAY_TIMEOUT,
+    headers: { 'User-Agent': 'Mozilla/5.0' }
+  }).then(function (res) {
+    var body = res.data || {};
+    if (body.code !== 200 || !body.url) throw new Error('103 no url');
+    return { url: String(body.url), actualQuality: 'flac', channel: 'wy:103' };
   });
 }
 

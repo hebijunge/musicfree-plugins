@@ -11164,6 +11164,8 @@ function resolveOiapi(raw, quality) {
 // ⚠️ 参数名是 ids（实测 id 会报 code 400「缺少url或ids参数」）；单 IP 限 2 QPS。
 // VIP 歌 7 档全部回落 outer/url（128k）→ 免费歌才可能有高档，免费歌 hires 实测真 CDN 直链。
 function resolveBugpk(raw, quality) {
+  // [DISABLED 2026-09-27] api.bugpk.com probe timeout unreachable, bypass; delete next line to restore
+  return Promise.reject(new Error('bugpk disabled: api.bugpk.com unreachable (probe 2026-09-27)'));
   // [v1.3.0 P1] atmos/master/dolby 无对应上游档位 → 降级 hires
   var levelMap = { standard: 'standard', low: 'standard', high: 'exhigh', super: 'lossless', hires: 'hires', atmos: 'hires', master: 'hires', dolby: 'hires' };
   return axios.get('https://api.bugpk.com/api/163_music', {
@@ -15029,6 +15031,8 @@ function probeHeadSize(url, timeoutMs) {
 
 
 function resolveQishuiBugpk(raw) {
+  // [DISABLED 2026-09-27] api.bugpk.com probe timeout unreachable, bypass; delete next line to restore
+  return Promise.reject(new Error('bugpk disabled: api.bugpk.com unreachable (probe 2026-09-27)'));
   if (!raw || !raw.trackId) return Promise.reject(new Error('qishui no trackId'));
   var once = function () {
     return axios.get('https://api.bugpk.com/api/qsmusic', {
@@ -16009,6 +16013,8 @@ function resolveOiapi(raw, quality) {
 // ⚠️ 参数名是 ids（实测 id 会报 code 400「缺少url或ids参数」）；单 IP 限 2 QPS。
 // VIP 歌 7 档全部回落 outer/url（128k）→ 免费歌才可能有高档，免费歌 hires 实测真 CDN 直链。
 function resolveBugpk(raw, quality) {
+  // [DISABLED 2026-09-27] api.bugpk.com probe timeout unreachable, bypass; delete next line to restore
+  return Promise.reject(new Error('bugpk disabled: api.bugpk.com unreachable (probe 2026-09-27)'));
   var levelMap = { standard: 'standard', low: 'standard', high: 'exhigh', super: 'lossless', hires: 'hires' };
   return axios.get('https://api.bugpk.com/api/163_music', {
     // [v1.1.0 实测修正] bugpk 163_music 的单曲查询参数是 ids（不是 id——id 会报 code 400「缺少url或ids参数」）
@@ -16530,7 +16536,7 @@ var LYRIC_ADAPTERS = {
     } catch (e1) { /* 接力 bugpk */ }
     // ② bugpk qsmusic KRC 逐字歌词
     try {
-      var bk = await axios.get('https://api.bugpk.com/api/qsmusic', {
+      throw new Error('[DISABLED 2026-09-27] bugpk krc unreachable'); var bk = await axios.get('https://api.bugpk.com/api/qsmusic', {
         params: { url: qishuiSharePageUrl(raw.trackId), type: 'json' },
         timeout: CHAN_TIMEOUT.bugpk,
         headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
@@ -16577,7 +16583,7 @@ async function getWordByWordLyricImpl(musicItem) {
   } catch (e1) { /* 接力 bugpk */ }
   // ③ bugpk qsmusic KRC 逐字歌词 → QRC（回填缓存）
   try {
-    var bk = await axios.get('https://api.bugpk.com/api/qsmusic', {
+    throw new Error('[DISABLED 2026-09-27] bugpk krc unreachable'); var bk = await axios.get('https://api.bugpk.com/api/qsmusic', {
       params: { url: qishuiSharePageUrl(trackId), type: 'json' },
       timeout: CHAN_TIMEOUT.bugpk,
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
@@ -24639,6 +24645,8 @@ function qqLoginState() {
 // {code:0,msg:"未找到对应数据"} 或「版权限制或该音乐不存在！」。单 IP 限速 2 QPS（429 有 retry_after）。
 // 仅作链尾兜底（128k），actualQuality 如实标注；HTTPS 无签名无 Cookie。
 function resolveQqBugpk(raw, quality) {
+  // [DISABLED 2026-09-27] api.bugpk.com probe timeout unreachable, bypass; delete next line to restore
+  return Promise.reject(new Error('bugpk disabled: api.bugpk.com unreachable (probe 2026-09-27)'));
   if (!raw || !raw.mid) return Promise.reject(new Error('bugpk no mid'));
   return axios.get('https://api.bugpk.com/api/music', {
     params: { id: raw.mid, media: 'tencent', type: 'song' },
@@ -25672,6 +25680,51 @@ function resolveQqVkeysLegacy(raw, quality) {
     var d = body.data || {};
     if (!d.url) throw new Error('vkeys-legacy no url');
     return { url: String(d.url), actualQuality: VKEYS_LEGACY_ACTUAL[q], channel: 'qq:vkeys-legacy' };
+  });
+}
+
+// ---------- [v1.9.16] a.aa.cab QQ 取链备源（2026-09-27 实测） ----------
+// GET https://a.aa.cab/qq.music?msg={歌名}&n=1&type=128
+// 返回 {code:0,data:{music:直链, cover, mid, ...}}。type=128 实测返回 C400 m4a (audio/mp4, ~2.7MB/3min)。
+// 注意：按歌名搜索取第一条，不是按 mid；适合做链尾兜底。
+function resolveQqAaCab(raw, quality) {
+  if (!raw || !raw.name) return Promise.reject(new Error('aacab no name'));
+  var typeMap = { standard: 128, high: 320, super: 320 };
+  var t = typeMap[quality] || 128;
+  return axios.get('https://a.aa.cab/qq.music', {
+    params: { msg: raw.name, n: 1, type: t },
+    timeout: chainSegTimeout(RELAY_TIMEOUT),
+    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
+  }).then(function (res) {
+    var body = res.data || {};
+    if (body.code !== 0) throw new Error('aacab code=' + body.code);
+    var d = body.data || {};
+    if (!d.music) throw new Error('aacab no music url');
+    return { url: String(d.music), actualQuality: t >= 320 ? '320k' : '128k', channel: 'qq:aacab' };
+  });
+}
+
+// ---------- [v1.9.16] 103.79.184.97 多源 flac 取链（2026-09-27 实测） ----------
+// GET http://103.79.184.97/api/music/url?source={wy|tx|kg}&songId={id}&quality=flac&key=6C1F-53W0-GRKI-EVFG
+// 实测：wy 孤勇者 flac → music.126.net 直链 29MB；tx 夜车 flac → kuwo.cn 直链。仅 quality=flac 可用。
+function resolveMulti103(raw, quality) {
+  if (!raw) return Promise.reject(new Error('103 no raw'));
+  // 仅 flac/super 档接入
+  if (quality !== 'super' && quality !== 'hires' && quality !== 'flac') {
+    return Promise.reject(new Error('103 only flac supported'));
+  }
+  var sourceMap = { netease: 'wy', wy: 'wy', qq: 'tx', tx: 'tx', kugou: 'kg', kg: 'kg' };
+  var src = sourceMap[raw._source] || 'wy';
+  var sid = raw.id || raw.mid || raw.hash;
+  if (!sid) return Promise.reject(new Error('103 no song id'));
+  return axios.get('http://103.79.184.97/api/music/url', {
+    params: { source: src, songId: sid, quality: 'flac', key: '6C1F-53W0-GRKI-EVFG' },
+    timeout: chainSegTimeout(RELAY_TIMEOUT),
+    headers: { 'User-Agent': 'Mozilla/5.0' }
+  }).then(function (res) {
+    var body = res.data || {};
+    if (body.code !== 200 || !body.url) throw new Error('103 no url');
+    return { url: String(body.url), actualQuality: 'flac', channel: 'multi:103' };
   });
 }
 
