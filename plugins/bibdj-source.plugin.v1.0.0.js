@@ -19,7 +19,7 @@ function parseList(html) {
         const m = href.match(/\/play\/(\d+)\.html/);
         if (!m) return;
         const $img = $(el).find('img');
-        const title = $img.attr('alt') || $(el).text().trim();
+        const title = $(el).attr('title') || $img.attr('alt') || $(el).text().trim();
         if (!title || title.length < 2) return;
         data.push({
             id: m[1],
