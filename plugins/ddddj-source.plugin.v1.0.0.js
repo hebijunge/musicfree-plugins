@@ -1,41 +1,96 @@
 // 清风DJ (ddddj.com) - MusicFree Plugin v1.0.0
-// 搜索: /search?keyword={kw}
-// 取链: /play/{id}.html → var playurl (pan.urlkj.com 带签名)
+// 搜索: /search.html?keys={kw}
+// 列表: /genre/{slug}/{type}-0-0-0-{page}.html
+// 榜单: /ranks/sole/{type}-0-0-0-{page}.html
+// data-* 属性直接带 id/name/artist/cover/audio
 
 const axios = require('axios');
 const cheerio = require('cheerio');
+
+const SITE = 'https://www.ddddj.com';
+const UA = 'Mozilla/5.0';
+
+const GENRES = [
+    { slug: 'cswq', name: '串烧舞曲' }, { slug: 'mycs', name: '慢摇串烧' },
+    { slug: 'xcwq', name: '现场串烧' }, { slug: 'mccs', name: '喊麦现场' },
+    { slug: 'gqlb', name: '慢歌连版' }, { slug: 'zwwq', name: '中文舞曲' },
+    { slug: 'proghouse', name: 'ProgHouse' }, { slug: 'lakhouse', name: 'LakHouse' },
+    { slug: 'electro', name: 'Electro' }, { slug: 'funkyhouse', name: 'FunkyHouse' },
+    { slug: 'vinahouse', name: 'VinaHouse' }, { slug: 'ywwq', name: '英文舞曲' }
+];
+
+const RANKS = [
+    { id: '1', name: '独家推荐' }, { id: '2', name: '独家中文' }, { id: '3', name: '独家英文' }
+];
+
+function parseList(html) {
+    const $ = cheerio.load(html);
+    const data = [];
+    $('div.isgood_list').each((i, el) => {
+        const id = $(el).attr('data-id');
+        const name = $(el).attr('data-name');
+        const artist = $(el).attr('data-artist') || '清风DJ';
+        const cover = $(el).attr('data-cover');
+        const audio = $(el).attr('data-audio');
+        if (!id || !name) return;
+        data.push({
+            id, title: name, artist,
+            artwork: cover,
+            _audio: audio || undefined
+        });
+    });
+    return data;
+}
 
 module.exports = {
     platform: '清风DJ',
     version: '1.0.0',
     author: 'hebijunge',
-    description: '清风DJ舞曲网 - pan.urlkj.com CDN',
+    description: '清风DJ舞曲网 - 分类/榜单/封面/试听直链',
     srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/ddddj-source.plugin.v1.0.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {
         if (type !== 'music') return { isEnd: true, data: [] };
-        const res = await axios.get('https://www.ddddj.com/search.html', {
+        const res = await axios.get(SITE + '/search.html', {
             params: { keys: query, page: page || 1 },
-            headers: { 'User-Agent': 'Mozilla/5.0' }
+            headers: { 'User-Agent': UA }
         });
-        const $ = cheerio.load(res.data);
-        const data = [];
-        $('a[href*="/play/"]').each((i, el) => {
-            const href = $(el).attr('href') || '';
-            const m = href.match(/\/play\/(\d+)\.html/);
-            if (!m) return;
-            const title = $(el).text().trim();
-            if (!title || title.length < 2) return;
-            data.push({ id: m[1], title, artist: '清风DJ' });
-        });
-        const seen = new Set();
-        return { isEnd: data.length < 20, data: data.filter(d => !seen.has(d.id) && seen.add(d.id)) };
+        const data = parseList(res.data);
+        return { isEnd: data.length < 20, data };
+    },
+
+    async getTopLists() {
+        const groups = [
+            { title: '分类', data: GENRES.map(g => ({ id: 'genre_' + g.slug, title: g.name })) },
+            { title: '榜单', data: RANKS.map(r => ({ id: 'rank_' + r.id, title: r.name })) }
+        ];
+        return groups;
+    },
+
+    async getTopListDetail(topListItem, page) {
+        const id = topListItem.id;
+        let url;
+        if (id.startsWith('genre_')) {
+            const slug = id.slice(6);
+            url = SITE + '/genre/' + slug + '/0-0-0-' + (page || 1) + '-1.html';
+        } else if (id.startsWith('rank_')) {
+            const type = id.slice(5);
+            url = SITE + '/ranks/sole/' + type + '-0-0-0-' + (page || 1) + '.html';
+        } else {
+            throw new Error('未知分类');
+        }
+        const res = await axios.get(url, { headers: { 'User-Agent': UA } });
+        const data = parseList(res.data);
+        return { isEnd: data.length < 20, musicList: data, topListItem };
     },
 
     async getMediaSource(musicItem, quality) {
-        const res = await axios.get('https://www.ddddj.com/play/' + musicItem.id + '.html', {
-            headers: { 'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.ddddj.com/' }
+        // 优先用列表页直接给的 audio
+        if (musicItem._audio) return { url: musicItem._audio };
+        // 否则请求播放页提取
+        const res = await axios.get(SITE + '/play/' + musicItem.id + '.html', {
+            headers: { 'User-Agent': UA, Referer: SITE + '/' }
         });
         const m = String(res.data).match(/var\s+playurl\s*=\s*["']([^"']+)["']/);
         if (!m) throw new Error('取链失败');
