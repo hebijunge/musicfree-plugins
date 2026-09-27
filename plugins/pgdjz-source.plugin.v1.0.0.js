@@ -1,6 +1,6 @@
 // 皮狗DJ (pgdjz.com) - MusicFree Plugin v1.0.0
 // 搜索: /dance/search.html?key={kw}
-// 取链: /ajax/danceplayer?id={id} → {code:1,playurl}
+// 取链: POST /ajax/danceplayer → {code:1,playurl}
 
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -34,7 +34,10 @@ module.exports = {
     },
 
     async getMediaSource(musicItem, quality) {
-        const res = await axios.get('https://www.pgdjz.com/ajax/danceplayer?id=' + musicItem.id);
+        const res = await axios.post('https://www.pgdjz.com/ajax/danceplayer',
+            'id=' + musicItem.id + '&ids=&historyid=',
+            { headers: { 'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.pgdjz.com/dance/' + musicItem.id + '.html' } }
+        );
         if (!res.data || res.data.code !== 1 || !res.data.playurl) throw new Error('取链失败');
         return { url: res.data.playurl };
     },
