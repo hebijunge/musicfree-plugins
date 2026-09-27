@@ -1718,6 +1718,26 @@ function resolveNeteaseS0o1(raw, quality) {
   });
 }
 
+// ---------- [v1.9.16] 3e0.cn Meting 网易云兜底（2026-09-27 实测） ----------
+// GET https://music.3e0.cn/?server=netease&type=url&id={163id}
+// 孤勇者返回 10MB mp3 直链（跟随跳转后），~300ms
+// QQ/酷狗/酷我都不支持（返回 HTML 空），只做网易低音质兜底
+function resolveNetease3e0(raw, quality) {
+  if (!raw || !raw.id) return Promise.reject(new Error('3e0 no id'));
+  return axios.get('https://music.3e0.cn/', {
+    params: { server: 'netease', type: 'url', id: raw.id },
+    timeout: RELAY_TIMEOUT,
+    headers: { 'User-Agent': 'Mozilla/5.0' },
+    maxRedirects: 0,
+    validateStatus: function (s) { return s >= 200 && s < 400; }
+  }).then(function (res) {
+    var u = res.headers.location || (res.data && res.data[0] && res.data[0].url);
+    if (!u) throw new Error('3e0 no url');
+    if (!/^https?:\/\//.test(u)) throw new Error('3e0 url bad');
+    return { url: String(u), actualQuality: '128k', channel: 'wy:3e0' };
+  });
+}
+
 // [v1.3.1 P1] 新增第三方取链通道：听会音乐 + ikun音源（接口文档 §15.4/§15.15/附录H.1，2026-09-07 沙箱实测）
 // 实测结论（VIP 孤勇者 1901371647 Range 头 4KB 验证）：
 // - 听会 GET http://47.109.94.179/music_v1.php?id=&level=standard|exhigh|lossless|hires|jymaster
