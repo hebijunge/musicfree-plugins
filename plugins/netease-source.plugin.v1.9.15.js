@@ -1696,6 +1696,28 @@ function resolveNetease103(raw, quality) {
   });
 }
 
+// ---------- [v1.9.16] s0o1 网易云母带直链（2026-09-27 实测） ----------
+// GET https://api.s0o1.com/API/wyy_music?id={163id}
+// 孤勇者 1901371647 返回官方 CDN flac 51.16MB（m701.music.126.net），HEAD 200 audio/* 53MB，自带 LRC+封面
+// 固定给"超清母带"，不接受 quality/level/br 参数；只对 VIP/热门曲有效（普通曲 data.url 空）
+// 只支持网易云，其他路径全 404
+function resolveNeteaseS0o1(raw, quality) {
+  if (!raw || !raw.id) return Promise.reject(new Error('s0o1 no id'));
+  if (quality !== 'hires' && quality !== 'master' && quality !== 'atmos' && quality !== 'super') {
+    return Promise.reject(new Error('s0o1 only high'));
+  }
+  return axios.get('https://api.s0o1.com/API/wyy_music', {
+    params: { id: raw.id },
+    timeout: RELAY_TIMEOUT,
+    headers: { 'User-Agent': 'Mozilla/5.0' }
+  }).then(function (res) {
+    var body = res.data || {};
+    if (!body.success || !body.data || !body.data.url) throw new Error('s0o1 no url');
+    if (!/^https?:\/\//.test(body.data.url)) throw new Error('s0o1 url bad');
+    return { url: String(body.data.url), actualQuality: 'hires', channel: 'wy:s0o1' };
+  });
+}
+
 // [v1.3.1 P1] 新增第三方取链通道：听会音乐 + ikun音源（接口文档 §15.4/§15.15/附录H.1，2026-09-07 沙箱实测）
 // 实测结论（VIP 孤勇者 1901371647 Range 头 4KB 验证）：
 // - 听会 GET http://47.109.94.179/music_v1.php?id=&level=standard|exhigh|lossless|hires|jymaster
