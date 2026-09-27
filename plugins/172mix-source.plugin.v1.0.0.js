@@ -24,7 +24,9 @@ function parseItems(html) {
         if (!m) return;
         const title = ($(el).attr('title') || $(el).text() || '').replace(/^(试听|下载|收藏)/, '').trim();
         if (!title || title.length < 2) return;
-        data.push({ id: m[1], title, artist: '172Mix' });
+        const $img = $(el).find('img').first();
+        const artwork = $img.attr('data-src') || $img.attr('src') || '';
+        data.push({ id: m[1], title, artist: '172Mix', artwork: artwork ? (artwork.startsWith('http') ? artwork : SITE + artwork) : undefined });
     });
     const seen = new Set();
     return data.filter(d => !seen.has(d.id) && seen.add(d.id));
@@ -32,9 +34,9 @@ function parseItems(html) {
 
 module.exports = {
     platform: '172Mix',
-    version: '1.0.0',
+    version: '1.1.0',
     author: 'hebijunge',
-    description: '172Mix电音 - 分类/搜索/播放',
+    description: '172Mix电音 - 分类/搜索/封面/播放',
     srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/172mix-source.plugin.v1.0.0.js',
     supportedSearchType: ['music'],
 
