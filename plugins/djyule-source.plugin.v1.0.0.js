@@ -1,47 +1,59 @@
-// DJ娱乐 (djyule.com) - MusicFree Plugin v1.1.0
-// 搜索: https://so.djyule.com/Default.asp?DJkey=xxx&page=N
+// DJ娱乐 (djyule.com) - MusicFree Plugin v1.2.0
+// 搜索: https://appso.djyule.com/search.asp?key=xxx&page=N (XML)
 // 播放: https://sj.djyule.com/player.asp?id=xxx → <source src> 直链
-// 榜单: DJ娱乐榜(sj.djyule.com/phb) + 体验精选320k(appxml.djyule.com/tiyan320.xml)
+// 榜单: DJ娱乐榜 + 体验精选320k(tiyan320.xml)
 // 歌词: https://www.djyule.com/showLRC.asp?id=xxx
-// 免登录, MP3直链
+// 免登录
 
 const axios = require('axios');
 const cheerio = require('cheerio');
 
 const SJ = 'https://sj.djyule.com';
-const SO = 'https://so.djyule.com';
-const BASE = 'https://www.djyule.com';
+const APP = 'https://appso.djyule.com';
 const APPXML = 'https://appxml.djyule.com';
-const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36';
+const BASE = 'https://www.djyule.com';
+const UA = 'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 Chrome/120.0.0.0 Mobile';
 
-function cleanTitle(text) {
-    return text
-        .replace(/^\d+\.\s*/, '')
-        .replace(/\s*\d+:\d+(?::\d+)?\s*$/, '')
-        .replace(/\s*\d+℃\s*/g, '')
-        .replace(/\s*\d{4}-\d+-\d+\s*$/, '')
-        .replace(/^查看\s*/, '')
-        .trim();
-}
-
-function parseSearch(html) {
-    const $ = cheerio.load(html);
+function parseSongXml(xml) {
+    const $ = cheerio.load(xml, { xmlMode: true });
     const data = [];
-    const seen = {};
-    $('tr').each((i, el) => {
-        const href = $(el).find('a[href*="music_ID="]').attr('href') || '';
-        const m = href.match(/music_ID=(\d+)/);
-        if (!m || seen[m[1]]) return;
-        seen[m[1]] = true;
-        const text = $(el).text().replace(/\s+/g, ' ').trim();
-        const title = cleanTitle(text);
-        if (title.length < 2) return;
-        data.push({ id: m[1], title: title, artist: 'DJ娱乐' });
+    $('CATALOG > plants > PLANT').each((i, el) => {
+        const $el = $(el);
+        const id = $el.find('ID').text().trim();
+        const name = $el.find('NAME').text().trim();
+        const time = $el.find('TIME').text().trim();
+        const zzname = $el.find('ZZname').text().trim();
+        if (!id || !name) return;
+        data.push({
+            id: id,
+            title: name,
+            artist: zzname || 'DJ娱乐',
+            duration: time
+        });
     });
     return data;
 }
 
-function parseRank(html) {
+function parseTiyanXml(xml) {
+    const $ = cheerio.load(xml, { xmlMode: true });
+    const data = [];
+    $('PLANT').each((i, el) => {
+        const $el = $(el);
+        const name = $el.find('NAME').text().trim();
+        const url320 = $el.find('PLAYURL320').text().trim();
+        const url64 = $el.find('PLAYURL64').text().trim();
+        if (!name) return;
+        data.push({
+            id: 'ty_' + i,
+            title: name,
+            artist: '体验精选',
+            _playUrl: url320 || url64
+        });
+    });
+    return data;
+}
+
+function parseRankHtml(html) {
     const $ = cheerio.load(html);
     const data = [];
     const seen = {};
@@ -57,46 +69,27 @@ function parseRank(html) {
     return data;
 }
 
-function parseTiyanXml(xml) {
-    const $ = cheerio.load(xml, { xmlMode: true });
-    const data = [];
-    $('PLANT').each((i, el) => {
-        const $el = $(el);
-        const name = $el.find('NAME').text().trim();
-        const url320 = $el.find('PLAYURL320').text().trim();
-        const url64 = $el.find('PLAYURL64').text().trim();
-        const time = $el.find('TIME').text().trim();
-        if (!name) return;
-        data.push({
-            id: 'ty_' + i,
-            title: name,
-            artist: '体验精选',
-            duration: time,
-            _playUrl: url320 || url64
-        });
-    });
-    return data;
-}
-
 module.exports = {
     cacheControl: 'no-cache',
     name: 'DJ娱乐',
     platform: 'DJ娱乐',
-    version: '1.1.0',
+    version: '1.2.0',
     author: 'hebijunge',
-    description: 'DJ娱乐网 - MP3直链/搜索/排行榜/体验精选320k/歌词',
+    description: 'DJ娱乐网 - App XML搜索/排行榜/体验精选320k/歌词',
     srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djyule-source.plugin.v1.0.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {
         if (type !== 'music') return { isEnd: true, data: [] };
         const p = page || 1;
-        const res = await axios.get(SO + '/Default.asp', {
-            params: { DJkey: query, px: 'new', page: p },
+        const res = await axios.get(APP + '/search.asp', {
+            params: { key: query, page: p },
             headers: { 'User-Agent': UA }
         });
-        const data = parseSearch(res.data);
-        return { isEnd: data.length < 10, data };
+        const data = parseSongXml(res.data);
+        const $ = cheerio.load(res.data, { xmlMode: true });
+        const pagecount = parseInt($('pagecount').text()) || 1;
+        return { isEnd: p >= pagecount, data };
     },
 
     async getTopLists() {
@@ -115,7 +108,7 @@ module.exports = {
             return { isEnd: true, musicList: data, topListItem };
         }
         const res = await axios.get(SJ + '/phb/', { headers: { 'User-Agent': UA } });
-        const data = parseRank(res.data);
+        const data = parseRankHtml(res.data);
         return { isEnd: true, musicList: data, topListItem };
     },
 
@@ -136,9 +129,7 @@ module.exports = {
                 headers: { 'User-Agent': UA }
             });
             const text = String(res.data || '').trim();
-            if (text.length > 10 && text.indexOf('[') === 0) {
-                return { rawLrc: text };
-            }
+            if (text.length > 10 && text.indexOf('[') === 0) return { rawLrc: text };
         } catch (e) {}
         throw new Error('暂无歌词');
     }
