@@ -677,6 +677,7 @@ async function getMusicDetailPageUrlImpl(musicItem) {
 // ==================== 插件对象 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/lrts-source.plugin.v1.0.1.js',
   name: '懒人听书',
   platform: 'lrts',
   version: '1.0.1',

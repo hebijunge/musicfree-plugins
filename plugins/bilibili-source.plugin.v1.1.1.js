@@ -886,6 +886,7 @@ async function getLyricImpl(musicItem) {
 }
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/bilibili-source.plugin.v1.1.1.js',
   name: 'B站',
   platform: 'bilibili',
   version: '1.1.1', // [v1.1.1] AI 字幕作歌词（getLyric 空 stub 转实现：wbi/v2 字幕列表 + zh/en 双语降级，详见头部 changelog）

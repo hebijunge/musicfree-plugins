@@ -718,6 +718,7 @@ function getAlbumInfo(albumItem, page) { return getAlbumInfoImpl(albumItem, page
 // ==================== 插件定义 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qingting-source.plugin.v1.0.0.js',
   name: '蜻蜓FM',
   platform: 'qingting',
   version: '1.0.0',

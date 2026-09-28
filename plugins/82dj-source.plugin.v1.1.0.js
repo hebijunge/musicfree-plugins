@@ -44,11 +44,13 @@ function parseList(html) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: '82DJ',
     platform: '82DJ',
     version: '1.1.0',
     author: 'hebijunge',
     description: '82DJ舞曲网 - 分类/榜单/封面/高品320K直链',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/82dj-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/82dj-source.plugin.v1.1.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

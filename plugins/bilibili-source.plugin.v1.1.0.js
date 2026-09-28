@@ -782,6 +782,7 @@ var plugin = {
   version: '1.1.0', // [v1.1.0] P0-3/P1-8/9/10/11 全量修复
   author: '研发2号',
   appVersion: '>=0.6',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/bilibili-source.plugin.v1.1.0.js',
   description: '哔哩哔哩独立源插件 v1.1.0：在 v1.0.1 基础上按 MusicFree v1.0.0 宿主契约全量参数对齐——补 IMusicItem.platform（formatMusicItem/getAlbumInfo 分P/importMusicItem/收藏夹导入共 4 构造位点）、getMediaSource 补 quality 字段、getLyric 补空实现 stub（B 站无官方歌词接口）、补 supportedVideoQualities 声明（空集，B 站为音频源不提供视频流）、getTopListDetail 补 topListItem 回传。其余功能（搜索/取链/详情/分P/导入/评论/榜单）与 v1.0.1 一致。',
   cacheControl: 'no-store', // 播放链接为短时效签名 URL，必须现取
   supportedSearchType: ['music'],

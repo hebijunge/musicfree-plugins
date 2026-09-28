@@ -33,11 +33,13 @@ function parseList(html) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: '宝贝DJ',
     platform: '宝贝DJ',
     version: '1.1.0',
     author: 'hebijunge',
     description: '宝贝DJ音乐网 - 分类/榜单/封面/128K/320K双档',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/bibdj-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/bibdj-source.plugin.v1.1.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

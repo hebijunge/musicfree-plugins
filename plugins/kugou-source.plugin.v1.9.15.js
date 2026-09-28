@@ -3535,6 +3535,7 @@ async function getLyricImpl(musicItem) {
 // ==================== 插件定义 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/kugou-source.plugin.v1.9.15.js',
   name: '酷狗音乐',
   platform: 'kugou',
   // [v1.3.0 P1-4] 版本号与文件名对齐（v1.2.1 时代 manifest 误标 1.2.0）。

@@ -772,6 +772,7 @@ async function getMusicComments(musicItem, page) {
 }
 
 module.exports = {
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djshow.plugin.v1.0.0.js',
     name: 'DJ秀',
     platform: 'DJ秀',
     version: '1.0.0',

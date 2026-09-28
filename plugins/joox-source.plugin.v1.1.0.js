@@ -604,6 +604,7 @@
 
   // ==================== 插件定义 ====================
   var plugin = {
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/joox-source.plugin.v1.1.0.js',
     name: 'JOOX音乐',
     platform: 'joox',
     version: VERSION,

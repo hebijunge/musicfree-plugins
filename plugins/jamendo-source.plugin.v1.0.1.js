@@ -186,6 +186,8 @@ async function fetchAlbumTracks(albumId, page, artistFallback) {
 }
 
 module.exports = {
+    name: 'Jamendo',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/jamendo-source.plugin.v1.0.1.js',
     platform: 'jamendo',
     version: '1.0.1',
     author: '研发2号',
@@ -195,7 +197,7 @@ module.exports = {
     userVariables: [
         {
             key: 'clientId',
-            name: 'Jamendo Client ID',
+            name: 'Jamendo',
             hint: '在 https://developer.jamendo.com 注册并在 My Apps 创建应用获取（免费）',
         },
     ],

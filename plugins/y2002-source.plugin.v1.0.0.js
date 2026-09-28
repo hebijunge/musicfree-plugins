@@ -610,6 +610,7 @@ async function getLyricImpl() {
 // ==================== 插件对象 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/y2002-source.plugin.v1.0.0.js',
   name: 'Y2002电音',
   platform: PLATFORM,
   version: '1.0.0',

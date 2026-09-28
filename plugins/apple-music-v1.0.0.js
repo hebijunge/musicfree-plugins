@@ -1466,6 +1466,7 @@ function getMusicDetailPageUrlImpl(musicItem) {
 // ==================== 插件导出（宿主契约对齐 kuwo/kugou standalone 插件） ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/apple-music-v1.0.0.js',
   name: 'Apple Music',
   platform: PLATFORM,
   version: '1.0.0',

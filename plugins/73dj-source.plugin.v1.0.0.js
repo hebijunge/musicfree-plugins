@@ -15,6 +15,8 @@ async function getGB(url) {
 }
 
 module.exports = {
+    name: '73DJ',
+    cacheControl: 'no-store',
     platform: '73DJ',
     version: '1.0.0',
     author: 'hebijunge',

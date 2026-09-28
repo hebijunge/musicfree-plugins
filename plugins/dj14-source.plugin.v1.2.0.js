@@ -106,11 +106,13 @@ function parseRows(html) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: '水晶舞曲',
     platform: PLATFORM,
     version: '1.2.0',
     author: 'hebijunge',
     description: '水晶舞曲网 DJ串烧/Remix，支持搜索、分类、榜单、封面、播放（128kbps）',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/dj14-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/dj14-source.plugin.v1.2.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

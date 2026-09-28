@@ -147,7 +147,7 @@
       "version": "1.0.1"
     },
     {
-      "name": "聚合源",
+      "name": "聚合",
       "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/agg-source.plugin.v1.9.15.js",
       "version": "1.9.15"
     },
@@ -168,87 +168,87 @@
     },
     {
       "name": "皮狗DJ",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/pgdjz-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/pgdjz-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {
       "name": "DJKK",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/djkk-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/djkk-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {
       "name": "汽车DJ",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/qichedj-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/qichedj-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {
       "name": "水晶舞曲",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/dj14-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/dj14-source.plugin.v1.2.0.js",
       "version": "1.2.0"
     },
     {
       "name": "清风DJ",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/ddddj-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/ddddj-source.plugin.v1.2.0.js",
       "version": "1.2.0"
     },
     {
       "name": "DJ766",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/dj766-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/dj766-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {
       "name": "82DJ",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/82dj-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/82dj-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {
       "name": "QQDJ",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/qqdjs-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/qqdjs-source.plugin.v1.2.0.js",
       "version": "1.2.0"
     },
     {
       "name": "36DJ",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/36dj-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/36dj-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {
       "name": "宝贝DJ",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/bibdj-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/bibdj-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {
       "name": "172Mix",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/172mix-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/172mix-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {
       "name": "DJ耶耶耶",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/djyyy-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/djyyy-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {
       "name": "黑色音频",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/hy57-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/hy57-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {
       "name": "好听轻音乐",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/htqyy-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/htqyy-source.plugin.v1.2.0.js",
       "version": "1.2.0"
     },
     {
       "name": "我是DJ",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/54dj-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/54dj-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {
       "name": "电音阁",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/dianyinge-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/dianyinge-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {
       "name": "SpaceDJ",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/spacedj-source.plugin.v1.0.0.js",
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/spacedj-source.plugin.v1.1.0.js",
       "version": "1.1.0"
     },
     {

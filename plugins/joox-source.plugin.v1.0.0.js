@@ -324,6 +324,7 @@
     version: VERSION,
     author: '研发3号',
     description: 'JOOX 独立源插件 v1.0.0（首发双通道版）：主通道 gdstudio 公共聚合 API joox 源（VIP 全曲可取，实测仅 128k MP3 / 999 无损 FLAC 两档有效，限速 50 次/5 分钟）；备源官方直连（固定 Cookie+XFF 免登录，搜索 openjoox/v3 + 单曲页 __NEXT_DATA__ 取链——web_get_songinfo 已下线 404；免费歌完整 MP3，VIP 仅 30s 官方试听如实标注不绕付费）。歌词双通道（gdstudio → 官方 web_lyric JSONP+Base64），支持 joox.com 单曲链接导入。已知边界：中文关键词搜索结果多为 VIP 曲目（官方直连形态下仅 30s 试听）；gdstudio 超限 429/503 自动冷却 60s 并接力备源。',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/joox-source.plugin.v1.0.0.js',
     supportedSearchType: ['music'],
     defaultSearchType: 'music',
     primaryKey: ['id'],

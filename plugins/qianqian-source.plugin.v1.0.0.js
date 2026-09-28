@@ -1440,10 +1440,12 @@ async function getMediaSourceImpl(musicItem, quality) {
 // ==================== 插件对象 ====================
 
 var plugin = {
+  name: '千千音乐',
   platform: 'qianqian',
   version: '1.0.0',
   author: '研发3号',
   description: '千千音乐（91Q/Taihe）独立源插件 v1.0.0：MD5 签名（ASCII 升序+Secret 末尾追加，纯 JS 实现无 Buffer 依赖）；搜索歌曲（VIP 过滤）/搜索专辑（关键词净化重试）；播放取链走 /v1/song/tracklink 四档回退（3000 无损/320 极高/128 标准/64 低品 aac，path 空回退试听链），链接经音流口径严格校验（Content-Length 与声明 size 比对虚标拦截 + 魔数白名单 fail-closed + 试听/码率守卫）；千千全档失败自动酷我兜底（oiapi+官方 mobi.s 双通道竞速，严格同曲校验防串歌，结果如实标记来源）；歌词两步流程原文返回；歌单走分类列表+详情（搜索歌单 type=6 上游已失效不实现）；专辑/歌单导入与分享链接解析；无官方榜单 API，榜单入口以精选歌单顶位',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qianqian-source.plugin.v1.0.0.js',
   primaryKey: ['id'],
   supportedSearchType: ['music', 'album'], // 搜索歌单 type=6 已失效（文档 3.3 实测），不实现
   defaultSearchType: 'music',

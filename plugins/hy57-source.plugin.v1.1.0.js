@@ -59,11 +59,13 @@ function parseRows(html) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: '黑色音频',
     platform: PLATFORM,
     version: '1.1.0',
     author: 'hebijunge',
     description: '黑色音频DJ 电子/HOUSE/串烧舞曲，支持搜索、36曲风分类、歌词、M4A试听',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/hy57-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/hy57-source.plugin.v1.1.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

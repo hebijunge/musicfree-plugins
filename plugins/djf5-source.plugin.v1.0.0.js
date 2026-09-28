@@ -6,6 +6,8 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 module.exports = {
+    name: 'DJF5',
+    cacheControl: 'no-store',
     platform: 'DJF5',
     version: '1.0.0',
     author: 'hebijunge',

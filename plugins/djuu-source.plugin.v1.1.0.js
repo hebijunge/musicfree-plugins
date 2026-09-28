@@ -551,6 +551,7 @@ function getRecommendSheetByIdImpl(id, page) {
 
 // ==================== 插件定义 ====================
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djuu-source.plugin.v1.1.0.js',
   name: 'djuu DJ',
   platform: PLATFORM,
   version: VERSION,

@@ -100,11 +100,13 @@ function parseSheet(html, cover) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: 'DJ耶耶耶',
     platform: PLATFORM,
     version: '1.1.0',
     author: 'hebijunge',
     description: 'DJ耶耶耶网 串烧/慢摇/交谊/DJ舞曲，支持搜索、频道分类、歌单、播放（64kbps试听）',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djyyy-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djyyy-source.plugin.v1.1.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

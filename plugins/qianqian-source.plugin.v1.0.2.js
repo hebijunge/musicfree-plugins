@@ -1465,6 +1465,7 @@ async function getMediaSourceImpl(musicItem, quality) {
 // ==================== 插件对象 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qianqian-source.plugin.v1.0.2.js',
   name: '千千音乐',
   platform: 'qianqian',
   version: '1.0.2',

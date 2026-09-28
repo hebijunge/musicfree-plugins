@@ -35,11 +35,13 @@ function parseList(html) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: 'DJ766',
     platform: 'DJ766',
     version: '1.1.0',
     author: 'hebijunge',
     description: 'DJ766舞曲网 - 分类/榜单/封面/高品320K直链',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/dj766-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/dj766-source.plugin.v1.1.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

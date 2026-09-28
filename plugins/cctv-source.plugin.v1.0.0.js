@@ -120,6 +120,8 @@ async function fetchEpisodes(pageUrl, page) {
 // ---------- 插件主体 ----------
 
 module.exports = {
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/cctv-source.plugin.v1.0.0.js',
+    name: 'CCTV听音',
     platform: 'cctv',
     version: '1.0.0',
     author: '研发2号',

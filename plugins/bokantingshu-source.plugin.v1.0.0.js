@@ -548,6 +548,7 @@ async function getMusicInfoImpl(musicItem) {
 // ==================== 插件对象 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/bokantingshu-source.plugin.v1.0.0.js',
   name: '博看听书',
   platform: 'bookan',
   version: '1.0.0',

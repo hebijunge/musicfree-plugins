@@ -7,6 +7,8 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 module.exports = {
+    name: '小熊电音',
+    cacheControl: 'no-store',
     platform: '小熊电音',
     version: '1.0.0',
     author: 'hebijunge',

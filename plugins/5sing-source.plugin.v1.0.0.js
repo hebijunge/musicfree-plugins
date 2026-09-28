@@ -472,6 +472,7 @@ async function importMusicSheetImpl(urlLike) {
 // ==================== 插件导出 ====================
 
 module.exports = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/5sing-source.plugin.v1.0.0.js',
   name: '5sing',
   platform: '5sing',
   version: '1.0.0',

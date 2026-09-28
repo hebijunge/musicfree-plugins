@@ -30986,7 +30986,7 @@ async function aggDoctor() {
 // 插件主体（IPluginDefine）
 
 var plugin = {
-  name: '聚合源',
+  name: '聚合',
   platform: 'agg',
   // v1.1.0 工单三：manifest 元信息补齐（appVersion 仍不声明——版本门槛误伤口径 §1.9；
   // srcUrl 为发布渠道预留字段位，渠道未定前暂空）

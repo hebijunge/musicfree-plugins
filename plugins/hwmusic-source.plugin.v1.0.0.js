@@ -1171,6 +1171,7 @@ function getSheetInfoImpl() { return Promise.reject(new Error('华为音乐：�
 
 // ==================== MusicFree 插件清单 ====================
 const plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/hwmusic-source.plugin.v1.0.0.js',
   name: '华为音乐',
   platform: '华为音乐', // 音乐源标识，应与其他插件不同
   version: '1.0.0',

@@ -140,10 +140,12 @@ async function fetchAlbumTracks(albumId, page, artistFallback) {
 }
 
 module.exports = {
+    name: 'Jamendo',
     platform: 'jamendo',
     version: '1.0.0',
     author: '研发2号',
     description: 'Jamendo 开放授权（CC）音源：独立音乐人合法开放授权的作品。需在插件设置填写免费 Client ID。',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/jamendo-source.plugin.v1.0.0.js',
     cacheControl: 'no-store', // track.audio 为带签名时效直链，不缓存
     supportedSearchType: ['music', 'album', 'artist', 'sheet'],
     userVariables: [

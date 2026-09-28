@@ -675,9 +675,11 @@ async function importMusicSheetImpl(urlLike) {
 // ==================== 插件对象 ====================
 
 var plugin = {
+  name: '火龙DJ',
   platform: 'huole',
   version: '1.0.0',
   author: '研发3号',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/huolongdj-source.plugin.v1.0.0.js',
   description: '火龙DJ独立源插件 v1.0.0：搜索（新式 JSON 签名接口 /api/Music/Search，小写 MD5 双层签名，Pz=50 + 上游分页倾倒兜底切片）、双榜单（热歌榜/车载新歌榜，免签名 HL 网关 h_r 真翻页）、用户歌曲歌单导入（h_j 按 uid，上限 500 首）、三档取链（128k=p 域 m4a 封装标准档 / 320k=o 域纯格式 / flac=仅源格式 flac 有货，入口即拒不虚标）、CDN 防盗链 sign/t 每次实时生成（t=(now+24h)/1000 hex，sign=md5(fdKey+path+t) 小写），取链后 Range 魔数（ftyp/fLaC/ID3/RIFF）+ 大小（≥64KB）双校验，actualQuality 诚实标注（pure 档反推码率 <224kbps 宁低勿高标 128k）、size 字段回传；UTOKEN/fdKey/四域名经 System/Token + System/Config 动态刷新（TTL 10 分钟）失败回退硬编码；播放统计 CountPlay 未登录 best-effort（hlReport 可关）；全曲库 haslrc=0 无歌词接口不声明。业务主机 app-a-djyyk.y2002.com（blueocean 家族，与 Y2002 电音独立网关独立密钥）。',
   supportedSearchType: ['music'],
   defaultSearchType: 'music',

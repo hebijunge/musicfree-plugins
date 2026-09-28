@@ -723,6 +723,7 @@ async function importMusicSheetImpl(urlLike) {
 // ==================== 插件对象 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/huolongdj-source.plugin.v1.0.2.js',
   name: '火龙DJ',
   platform: 'huole',
   version: '1.0.2',

@@ -184,6 +184,7 @@ async function loadAlbumTracks(albumItem) {
 }
 
 module.exports = {
+    name: '相声评书',
     platform: '相声评书',
     version: '1.0.0',
     author: '音流研发',

@@ -618,10 +618,12 @@ async function getMusicDetailPageUrlImpl(musicItem) {
 // ==================== 插件对象 ====================
 
 var plugin = {
+  name: '懒人听书',
   platform: 'lrts',
   version: '1.0.0',
   author: '研发3号',
   description: '懒人听书（LRTS·腾讯音乐系听书平台）独立源插件 v1.0.0：搜索（keyWord 驼峰参数）返回书籍+专辑，统一映射为专辑条目；专辑/歌单详情展开章节列表（50 章/页分页拉取，单次上限 500 章防超时并如实标注）；播放取链走官方 getPlayPath（书籍 entityType=3 / 专辑 entityType=2），空返回时书籍走 getListenPath 兜底；链接经音流口径校验（Range 0-15 探测 Content-Length 与章节声明 size 双口径比对 + ftyp/ID3 魔数 fail-closed + 码率窗口守卫）；免登录免费内容仅 ~46-98kbps 一档，supportedQualities 如实仅 standard 不虚构更高音质；付费章节标题标注「｜付费」且取链如实报「收费章节未购买」，不做任何绕过（官方限制实测无法绕过）；排行榜接口上游未开放不提供，分类浏览走 getCategory+搜索替代（getBookList categoryId 实测不生效）；有声书无歌词，getLyric 如实返回空',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/lrts-source.plugin.v1.0.0.js',
   primaryKey: ['id'],
   supportedSearchType: ['album'], // 搜索结果为书籍/专辑（无可播单曲形态），music/artist/sheet 如实返回空
   defaultSearchType: 'album',

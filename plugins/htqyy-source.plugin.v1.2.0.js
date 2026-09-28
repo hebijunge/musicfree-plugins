@@ -55,11 +55,13 @@ function parseTracks(html) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: '好听轻音乐',
     platform: '好听轻音乐',
     version: '1.2.0',
     author: 'hebijunge',
     description: '好听轻音乐网 纯音乐/钢琴/新世纪，支持搜索、12分类、榜单、歌单、封面、播放',
-    srcUrl: 'http://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/htqyy-source.plugin.v1.0.0.js',
+    srcUrl: 'http://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/htqyy-source.plugin.v1.2.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

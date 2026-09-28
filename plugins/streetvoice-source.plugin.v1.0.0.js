@@ -432,6 +432,7 @@ async function getTopListDetailImpl(topListItem, page) {
 // ==================== 插件对象 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/streetvoice-source.plugin.v1.0.0.js',
   name: '街声',
   platform: 'streetvoice',
   version: '1.0.0',

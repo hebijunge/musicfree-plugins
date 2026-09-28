@@ -238,6 +238,7 @@ function mapMusicList(rows) {
 // ===== 插件 =====
 
 module.exports = {
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/kuaiyin-source.plugin.v1.0.0.js',
     name: '快音',
     platform: '快音',
     version: '1.0.0',

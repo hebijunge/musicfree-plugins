@@ -43,11 +43,13 @@ function parseList(html) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: '清风DJ',
     platform: '清风DJ',
     version: '1.2.0',
     author: 'hebijunge',
     description: '清风DJ舞曲网 - 分类/榜单/封面/高品320K直链',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/ddddj-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/ddddj-source.plugin.v1.2.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

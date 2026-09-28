@@ -577,6 +577,7 @@ async function importMusicSheetImpl() {
 // ==================== 插件定义 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djcsj-source.plugin.v1.0.0.js',
   name: 'DJ串烧集',
   platform: 'djcsj',
   version: '1.0.0',

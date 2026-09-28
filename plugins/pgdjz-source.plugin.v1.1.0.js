@@ -1,4 +1,4 @@
-// DJKK (pc.djkk.cn) MusicFree 插件 —— 与皮狗DJ同属 CSCms 系统、共用 pgdjz.fun CDN
+// 皮狗DJ (pgdjz.com) MusicFree 插件
 // 搜索: GET /dance/search.html?key={kw}&page={p}  → ul.infolist（a.name 的 title 为干净歌名）
 // 取链: POST /ajax/danceplayer → {code:1, playurl}（试听 64K m4a；320K 高品需站内登录，免登录拿不到，不伪造）
 // 首页5榜: 推荐/最新/热门/收藏/下载（首页第一个 .layui-tab 的5个 .layui-tab-item）
@@ -8,8 +8,8 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const BASE = 'https://pc.djkk.cn';
-const PLATFORM = 'DJKK';
+const BASE = 'https://www.pgdjz.com';
+const PLATFORM = '皮狗DJ';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36';
 const TIMEOUT = 10000;
 const SEARCH_SIZE = 34;
@@ -83,8 +83,8 @@ module.exports = {
     platform: PLATFORM,
     version: '1.1.0',
     author: 'hebijunge',
-    description: 'DJKK站（与皮狗DJ同源）：搜索、首页5榜（推荐/最新/热门/收藏/下载）、22个分类、封面与纯文本歌词；试听为64K m4a，320K高品需站内登录（免登录无法获取，不伪造）',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djkk-source.plugin.v1.0.0.js',
+    description: '皮狗DJ站：搜索、首页5榜（推荐/最新/热门/收藏/下载）、22个分类、封面与纯文本歌词；试听为64K m4a，320K高品需站内登录（免登录无法获取，不伪造）',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/pgdjz-source.plugin.v1.1.0.js',
     supportedSearchType: ['music'],
     cacheControl: 'no-store',
 
@@ -118,7 +118,7 @@ module.exports = {
             }
         );
         const d = res.data;
-        if (!d || d.code !== 1 || !d.playurl) throw new Error('DJKK取链失败');
+        if (!d || d.code !== 1 || !d.playurl) throw new Error('皮狗DJ取链失败');
         return { url: d.playurl, headers: { Referer: BASE + '/' } };
     },
 
@@ -141,10 +141,10 @@ module.exports = {
         });
         const $ = cheerio.load(res.data);
         const box = $('.correlationbox .txtbox').first();
-        if (!box.length) throw new Error('DJKK暂无歌词');
+        if (!box.length) throw new Error('皮狗DJ暂无歌词');
                 const raw = extractTxt($, box);
         if (!raw || /精选推荐|所属分类|下载次数|收藏次数|播放次数|点击次数/.test(raw)) {
-            throw new Error('DJKK暂无歌词');
+            throw new Error('皮狗DJ暂无歌词');
         }
         return { rawLrc: raw };
     },
@@ -191,6 +191,6 @@ module.exports = {
             return { isEnd: data.length < size, musicList: data };
         }
 
-        throw new Error('DJKK未知榜单');
+        throw new Error('皮狗DJ未知榜单');
     },
 };

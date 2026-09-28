@@ -77,11 +77,13 @@ function hasPage(html, p) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: '我是DJ',
     platform: PLATFORM,
     version: '1.1.0',
     author: 'hebijunge',
     description: '我是DJ(54DJ) 串烧/包厢/Bounce/Vina舞曲，支持搜索、17分类、8榜单、封面、试听',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/54dj-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/54dj-source.plugin.v1.1.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

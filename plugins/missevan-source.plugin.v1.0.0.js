@@ -516,7 +516,7 @@ var plugin = {
   version: PLUGIN_VERSION,
   author: '研发2号',
   description: '猫耳FM（missevan.com）广播剧/有声/翻唱源。免费音频免登录播放（DASH fMP4 直链 + HLS 兜底，128k 实测档 + 高码率实测档）；搜索与广播剧剧集需在插件设置配置 Cookie。',
-  srcUrl: '',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/missevan-source.plugin.v1.0.0.js',
   cacheControl: 'no-store', // 播放地址含 token/expire_time 时效签名，必须现取
   supportedSearchType: ['music'],
   supportedQualities: ['128k', '192k'],

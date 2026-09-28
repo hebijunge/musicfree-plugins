@@ -598,6 +598,7 @@ function getMusicCommentsImpl(_musicItem, _page) { return Promise.reject(new Err
 // ==================== 插件定义 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/fanqie-source.plugin.v1.1.0.js',
   name: '番茄畅听',
   platform: 'fanqie',
   version: '1.1.0', // [v1.1.0] P0-4/5/6/7 + P1-12/13/14 全量修复

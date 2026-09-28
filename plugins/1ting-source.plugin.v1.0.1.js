@@ -253,6 +253,7 @@ async function getTopListDetailImpl() {
 // ==================== 插件对象 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/1ting-source.plugin.v1.0.1.js',
   name: '一听音乐',
   platform: '1ting',
   version: '1.0.1',

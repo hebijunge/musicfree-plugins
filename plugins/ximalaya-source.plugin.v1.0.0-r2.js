@@ -795,6 +795,7 @@ function getMvSourceImpl() { return null; }
 // ==================== 插件定义 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/ximalaya-source.plugin.v1.0.0-r2.js',
   name: '喜马拉雅',
   platform: 'ximalaya',
   version: PLUGIN_VERSION,

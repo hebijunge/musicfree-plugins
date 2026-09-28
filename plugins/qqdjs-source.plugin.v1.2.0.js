@@ -42,11 +42,13 @@ function parseList(html) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: 'QQDJ',
     platform: 'QQDJ',
     version: '1.2.0',
     author: 'hebijunge',
     description: '清风DJ音乐网 - 分类/封面/高音质(320K)',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qqdjs-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qqdjs-source.plugin.v1.2.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

@@ -734,6 +734,7 @@ function fetchConfig() {
 
 // ==================== 插件定义 ====================
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djduoduo-source.plugin.v1.0.0.js',
   name: 'DJ多多',
   platform: PLATFORM,
   version: VERSION,

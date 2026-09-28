@@ -380,6 +380,7 @@ function extractVoiceId(urlLike) {
 // ==================== 插件主体 ====================
 
 var plugin = {
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/lizhi-source.plugin.v1.0.0.js',
   name: '荔枝FM',
   platform: 'lizhi',
   version: '1.0.0',

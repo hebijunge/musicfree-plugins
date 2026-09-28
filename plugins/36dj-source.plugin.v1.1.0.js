@@ -36,11 +36,13 @@ function parseList(html) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: '36DJ',
     platform: '36DJ',
     version: '1.1.0',
     author: 'hebijunge',
     description: '36DJ舞曲网 - 分类/榜单/搜索/高品直链',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/36dj-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/36dj-source.plugin.v1.1.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

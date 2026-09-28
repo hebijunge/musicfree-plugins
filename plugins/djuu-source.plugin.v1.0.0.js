@@ -237,6 +237,7 @@ var plugin = {
   version: VERSION,
   author: '研发3号',
   description: 'djuu DJ 音乐（DJ呦呦音乐网）音源插件 v1.0.0（首发版）：DJ 舞曲/串烧/慢摇/车载曲库。搜索（/search musicname 分页）+ 分类榜单（/djlist 16 个站内导航分类）+ 歌曲详情；取链为歌曲页提取 var music.file 变量 → 拼装 https://mp4.djuu.com/{file}.m4a 直链（固定 .m4a 后缀，实测 .mp3 后缀 404），取链后 Range 探测魔数校验；源为单档 m4a，请求任意音质返回该单档，不虚标档位。不支持：歌词、专辑、MV、歌单导入。',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djuu-source.plugin.v1.0.0.js',
   supportedSearchType: ['music'],
   defaultSearchType: 'music',
   primaryKey: ['id'],

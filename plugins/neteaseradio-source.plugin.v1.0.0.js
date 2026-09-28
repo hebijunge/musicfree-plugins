@@ -189,6 +189,7 @@ function getAlbumInfoImpl(albumItem, page) {
 }
 
 module.exports = {
+    name: '网易云电台',
     platform: 'neteaseradio',
     version: '1.0.0',
     author: '研发2号',

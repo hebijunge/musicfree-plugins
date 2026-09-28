@@ -99,11 +99,13 @@ function parseSheetCards(html) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: '电音阁',
     platform: PLATFORM,
     version: '1.1.0',
     author: 'hebijunge',
     description: '电音阁DJ 国潮/商业/套曲/3D环绕，支持搜索、7分类、5榜单、歌单、封面、320k试听',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/dianyinge-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/dianyinge-source.plugin.v1.1.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

@@ -69,11 +69,12 @@ const CATS = [
 ];
 
 module.exports = {
+    name: '汽车DJ',
     platform: PLATFORM,
     version: '1.1.0',
     author: 'hebijunge',
     description: '汽车DJ（大河DJ）：搜索、7个分类（含全站）、aac直链取链、LRC/SRT/TXT歌词（站点无真实封面，用默认图）',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qichedj-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qichedj-source.plugin.v1.1.0.js',
     supportedSearchType: ['music'],
     cacheControl: 'no-store',
 

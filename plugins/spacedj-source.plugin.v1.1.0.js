@@ -118,11 +118,13 @@ function parseDiverts(html) {
 }
 
 module.exports = {
+    cacheControl: 'no-store',
+    name: 'SpaceDJ',
     platform: 'SpaceDJ',
     version: '1.1.0',
     author: 'hebijunge',
     description: 'SpaceDJ电子音乐平台 Korea Bounce/Tech House/套曲，支持搜索、风格分类、封面、MP3直链',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/spacedj-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/spacedj-source.plugin.v1.1.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {
