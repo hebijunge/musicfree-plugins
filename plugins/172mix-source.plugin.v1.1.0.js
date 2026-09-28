@@ -53,7 +53,11 @@ module.exports = {
     },
 
     async getTopLists() {
-        return GENRES.map(g => ({ id: g.slug, title: g.name }));
+        // 协议结构：[{ title?, data: [榜单项] }]，data 为榜单容器
+        return [{
+            title: '曲风分类',
+            data: GENRES.map(g => ({ id: g.slug, title: g.name })),
+        }];
     },
 
     async getTopListDetail(topListItem, page) {
