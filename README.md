@@ -98,7 +98,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | 快音 | 1.0.0 | [kuaiyin-source.plugin.v1.0.0.js](plugins/kuaiyin-source.plugin.v1.0.0.js) |
 | 猫耳FM | 1.0.0 | [missevan-source.plugin.v1.0.0.js](plugins/missevan-source.plugin.v1.0.0.js) |
 | DJ串烧集 | 1.0.0 | [djcsj-source.plugin.v1.0.0.js](plugins/djcsj-source.plugin.v1.0.0.js) |
-| DJ秀 | 1.0.0 | [djshow.plugin.v1.0.0.js](plugins/djshow.plugin.v1.0.0.js) |
+| DJ秀 | 1.0.1 | [djshow.plugin.v1.0.1.js](plugins/djshow.plugin.v1.0.1.js) |
 | Apple Music | 1.0.0 | [apple-music-v1.0.0.js](plugins/apple-music-v1.0.0.js) |
 | 华为音乐 | 1.0.0 | [hwmusic-source.plugin.v1.0.0.js](plugins/hwmusic-source.plugin.v1.0.0.js) |
 | 蜻蜓FM | 1.0.0 | [qingting-source.plugin.v1.0.0.js](plugins/qingting-source.plugin.v1.0.0.js) |
