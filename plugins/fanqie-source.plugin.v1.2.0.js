@@ -4,6 +4,13 @@
 /**
  * 番茄音乐（NovelFM）独立源插件 v1.0.0 —— MusicFree
  * ============================================================
+ * v1.2.0（2026-10-01）：音质标签实测化。v1.1.0 的条目 qualities 声明是数组（宿主期望
+ *   {档:{size}} 映射）且 320k/flac 在 SSR 兜底时全落同一份 ~65kbps 单流、被静态标成
+ *   128k（12 条抽样全部 65~66kbps 被误标）。本版移除条目级 qualities 数组；取链后按
+ *   实测 size/duration 换算码率并 snap 到「不超过实测值的最近档」（medium≈66k→64k、
+ *   higher≈129k→128k、highest≈254k→192k、lossless→flac）；API 与 SSR 兜底返回均补
+ *   size。档位声明相应改为 ['64k','128k','192k','flac']（320k 达不到了，如实去掉）。
+ *
  * 番茄音乐（App 内代号「小番」，即 NovelFM / 懒人听书音乐板块）独立源。
  * 免登录、无签名、明文 M4A 直链；设备参数拼接在 URL Query。
  *
@@ -92,14 +99,15 @@ function liteParams() {
 
 // 档位映射（宁低勿高）：宿主档 → 内部档尝试序；内部档 → 宿主静态标注
 // 实测码率：highest≈254kbps / higher≈129kbps / medium≈66kbps（起风了 311s，文档 §5.4）
+// 64k/192k 也作为可请求档：'64k' 优先 medium（~66k），'192k' 优先 highest（~254k）
 var HOST_TO_INTERNAL = {
+  '64k': ['medium', 'higher', 'highest'],
   '128k': ['higher', 'medium'],
+  '192k': ['highest', 'higher', 'medium'],
   '320k': ['highest', 'higher', 'medium'],
   'flac': ['lossless', 'highest', 'higher']
 };
-var INTERNAL_STATIC_HOST = { lossless: 'flac', highest: '320k', higher: '128k', medium: '128k' };
-// 静态标注的码率下限守卫（kbps）：命中档实测码率低于下限时降一档标注
-var BITRATE_FLOOR = { '320k': 192 }; // 320k 标注需实测 ≥192kbps，否则降标 128k
+var INTERNAL_STATIC_HOST = { lossless: 'flac', highest: '192k', higher: '128k', medium: '64k' };
 
 // ==================== 工具区 ====================
 
@@ -122,16 +130,20 @@ function normalizeQuality(quality) {
   return HOST_TO_INTERNAL[q] ? q : '320k';
 }
 
-// 实测码率（kbps）标注 actualQuality：宁低勿高
-// lossless 恒标 flac；其余按 size/duration 实算，无实测数据时退静态映射
+// 实测码率（kbps）标注 actualQuality：宁低勿高。
+// 档位一律取「不超过实测值的最近档」：medium≈66k→64k、higher≈129k→128k、
+// highest≈254k→192k（不得标 320k）。旧口径只给 320k 设了下限，导致 SSR 兜底
+// 拿到的 ~65kbps 单流被静态标成 128k（12 条抽样实测全部 65~66kbps，均被误标）。
+// lossless 恒标 flac；无实测数据（size 或 duration 缺失）时才退静态映射。
+var QUALITY_SNAP = [['320k', 300], ['192k', 180], ['128k', 110], ['64k', 0]];
 function honestQuality(internal, size, durationSec) {
   if (internal === 'lossless') return 'flac';
-  var label = INTERNAL_STATIC_HOST[internal] || '128k';
-  if (size > 0 && durationSec > 0) {
-    var kbps = Math.round(size * 8 / durationSec / 1000);
-    if (label === '320k' && kbps < BITRATE_FLOOR['320k']) label = '128k'; // 254k→320k；129k→128k
+  if (!(size > 0) || !(durationSec > 0)) return INTERNAL_STATIC_HOST[internal] || '128k';
+  var kbps = size * 8 / durationSec / 1000;
+  for (var i = 0; i < QUALITY_SNAP.length; i++) {
+    if (kbps >= QUALITY_SNAP[i][1]) return QUALITY_SNAP[i][0];
   }
-  return label;
+  return '64k';
 }
 
 // Range 魔数探测：M4A = 偏移 4-7 'ftyp'（文档实测 head=0000001c66747970）；
@@ -222,9 +234,6 @@ async function apiSearch(query, page) {
         // 版权内容 audio_duration=0：不填 duration（宿主显示 --:--），播放时接口报 5000 走友好错误
         duration: dur > 0 ? Math.round(dur) : undefined,
         version: b.singing_version_name || undefined, // 演唱版本（原唱/翻唱）扩展字段透传
-        // [v1.1.0 P0-5] 番茄无原生音质表字段；按 supportedQualities 全档声明（搜索阶段
-        // 取链后回填 actualQuality 即可，宿主只用于音质选项默认）
-        qualities: ['128k', '320k', 'flac'],
         fee: 0, // [v1.1.0 P0-6] 番茄无会员体系，全条目免会员 0
         alias: undefined // [v1.1.0 P0-7] 番茄无别名字段（如有平台别名表后续 v1.x 补）
       });
@@ -409,7 +418,8 @@ async function getMediaSourceImpl(musicItem, quality) {
       url: t.url,
       quality: hostQuality, // [v1.1.0 P1-12] 补 quality（请求档）
       headers: { 'User-Agent': UA },
-      actualQuality: honestQuality(internals[i], t.size, duration)
+      actualQuality: honestQuality(internals[i], t.size, duration),
+      size: t.size > 0 ? t.size : undefined
     };
   }
   throw lastErr || new Error('所有音质档均不可用');
@@ -429,7 +439,7 @@ async function ssrMediaFallback(bookId, duration) {
   var size = contentLengthOf(probed);
   // 无 size 信息时不做码率声明依据，按 higher 档保守标注 128k
   var aq = honestQuality('higher', size, duration);
-  return { url: url, quality: '128k', headers: { 'User-Agent': UA }, actualQuality: aq }; // [v1.1.0 P1-12] 补 quality（SSR 兜底默认 higher 静态标 128k）
+  return { url: url, quality: '128k', headers: { 'User-Agent': UA }, actualQuality: aq, size: size > 0 ? size : undefined }; // [v1.1.0 P1-12] 补 quality（SSR 兜底默认 higher 静态标 128k）
 }
 
 // ---- 歌词（m 站 SSR）----
@@ -496,7 +506,8 @@ function topMusicItemOf(song) {
     album: song.album_title || undefined,
     artwork: song.audio_thumb_uri || undefined,
     version: song.singing_version_name || undefined,
-    qualities: ['128k', '320k', 'flac'], // [v1.1.0 P0-5] 同 apiSearch 一致
+    /* [v1.2.0] 不声明条目级 qualities 数组：原按全档声明但形状是数组（宿主期望 {档:{size}} 映射），
+       且实测 SSR 兜底单流 ~65kbps 与声明档不符；真实音质由 getMediaSource 实测回填 actualQuality+size */
     fee: 0, // [v1.1.0 P0-6] 同 apiSearch
     alias: undefined // [v1.1.0 P0-7] 同 apiSearch
   };
@@ -598,19 +609,19 @@ function getMusicCommentsImpl(_musicItem, _page) { return Promise.reject(new Err
 // ==================== 插件定义 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/fanqie-source.plugin.v1.1.0.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/fanqie-source.plugin.v1.2.0.js',
   name: '番茄畅听',
   platform: 'fanqie',
-  version: '1.1.0', // [v1.1.0] P0-4/5/6/7 + P1-12/13/14 全量修复
+  version: '1.2.0', // [v1.2.0] 音质标签实测化 + 条目 qualities 形状修正
   author: '研发2号',
-  description: '番茄音乐（NovelFM）独立源插件（v1.1.0）：在 v1.0.0 基础上按 MusicFree v1.0.0 宿主契约全量参数对齐——补 IMusicItem.platform/qualities/fee/alias（apiSearch/topMusicItemOf/importMusicItem 共 3 构造位点）、getMediaSource 双通道与 SSR 兜底均补 quality 字段、getTopListDetail 补 topListItem 回传、补 5 个不支持方法的 stub（getAlbumInfo/getMusicSheetInfo/getArtistWorks/importMusicSheet/getMusicComments）。其余功能（搜索/取链/详情/导入/歌词/榜单）与 v1.0.0 一致。',
+  description: '番茄音乐（NovelFM）独立源插件（v1.2.0）：v1.1.0 的条目 qualities 声明用的是数组（宿主期望 {档:{size}} 映射），且 320k/flac 请求在 SSR 兜底时全落到同一份 ~65kbps 单流还被静态标成 128k（12 条抽样全部 65~66kbps 被误标）。本版：① 移除条目级 qualities 数组（搜索阶段无真实档位/大小可标）；② 取链后按实测 size/duration 换算码率并 snap 到不超过实测值的最近档（medium≈66k→64k、higher≈129k→128k、highest≈254k→192k、lossless→flac），杜绝虚标；③ API 与 SSR 兜底返回均补 size 供宿主显示文件大小。搜索/取链/详情/导入/歌词/榜单与 v1.1.0 一致。',
   supportedSearchType: ['music'], // 平台仅歌曲搜索（专辑/歌手/歌单无公开接口，宁缺毋滥）
   defaultSearchType: 'music',
   primaryKey: ['id'], // 对齐酷我/网易云/咪咕：book_id 即唯一标识
-  // 档位声明（不虚标）：higher 实测≈129kbps→128k；highest 实测≈254kbps→320k；
-  // lossless 仅部分内容有档；medium（≈66k）仅作内部兜底不对外声明。
-  // 版权内容无任何档可取，播放时明确报「平台限制播放」。
-  supportedQualities: ['128k', '320k', 'flac'],
+  // 档位声明（不虚标，按实测码率）：medium≈66kbps→64k；higher≈129kbps→128k；
+  // highest≈254kbps→192k（达不到 320k，故不声明 320k）；lossless（仅部分内容）→flac。
+  // actualQuality 每次按实际命中档的 size/duration 回算，绝不高于实测码率。
+  supportedQualities: ['64k', '128k', '192k', 'flac'],
   // [v1.1.0 P1-14] 番茄为音频源不提供视频流；空集避免宿主把 supportedQualities 误作视频档
   supportedVideoQualities: [],
   cacheControl: 'no-store', // 直链含签名且 24h 过期（文档 §10-7），必须现取
