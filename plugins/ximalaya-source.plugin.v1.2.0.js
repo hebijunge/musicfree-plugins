@@ -4,6 +4,9 @@
 /**
  * 喜马拉雅（Ximalaya）独立源插件 v1.0.0 — MusicFree
  * ============================================================
+ * v1.2.0（2026-10-01）：条目级 qualities 去掉错误的数组形态（宿主期望 {档:{size}} 映射），
+ *   取链各返回补 size（免费链用 Range 探测 totalBytes，付费链用 mpay totalLength），
+ *   宿主可显示文件大小；实际Quality 依旧按实测码率如实标注（免费 ~64K / 付费 48K）。
  * 喜马拉雅独立源。免登录、无需 Cookie；免费 + 付费音频均免登录可播
  * （付费走 mpay.ximalaya.com RC4 解密，已在沙箱端到端实测）。
  * 内容形态：有声书 / 相声 / 播客 / 专辑节目，单轨音频 ~64K AAC（免费）/
@@ -94,7 +97,7 @@ var axios = require('axios');
 
 // ==================== 常量区 ====================
 
-var PLUGIN_VERSION = '1.0.1';
+var PLUGIN_VERSION = '1.2.0';
 
 var WEB_HOST = 'https://www.ximalaya.com';
 var MPAY_HOST = 'https://mpay.ximalaya.com';
@@ -343,7 +346,6 @@ async function searchImpl(query, page, type) {
         duration: Number(it.duration) > 0 ? Math.round(Number(it.duration)) : undefined,
         __isPaid: it.is_paid === true || it.is_paid === 1,
         __albumId: albumIdOf(it), // QC P2-2：免费直链回退链用
-        qualities: ['64k'],
         fee: (it.is_paid === true || it.is_paid === 1) ? 1 : 0,
         alias: undefined
       });
@@ -371,7 +373,6 @@ async function searchImpl(query, page, type) {
         artwork: normalizeCover(it.cover_path),
         description: String(it.intro || '').trim() ? String(it.intro).trim() : undefined,
         worksNum: Number(it.tracks) > 0 ? Number(it.tracks) : undefined,
-        qualities: ['64k'],
         fee: (it.is_paid === true || it.is_paid === 1) ? 1 : 0,
         alias: undefined
       });
@@ -410,7 +411,6 @@ function trackRowToMusicItem(row, albumMeta) {
     duration: Number(row.duration) > 0 ? Math.round(Number(row.duration)) : undefined,
     __isPaid: row.isPaid === true || row.isPaid === 1,
     __albumId: albumIdOf(row), // QC P2-2：免费直链回退链用
-    qualities: ['64k'],
     fee: (row.isPaid === true || row.isPaid === 1) ? 1 : 0,
     alias: undefined
   };
@@ -547,8 +547,8 @@ async function resolveFreeViaAlbum(albumId, trackId) {
       if (!u || !MEDIA_URL_ALLOW_RE.test(u)) continue;
       checkResolveBudget('专辑兜底探测 #' + (c + 1));
       var pr = await probeMedia(u, 0); // 免费链无 size 源，仅魔数
-      if (pr.magic === 'm4a') return { url: u, actualQuality: '64k' };
-      if (pr.magic === 'mp3') return { url: u, actualQuality: '32k' };
+      if (pr.magic === 'm4a') return { url: u, actualQuality: '64k', size: pr.totalBytes || undefined };
+      if (pr.magic === 'mp3') return { url: u, actualQuality: '32k', size: pr.totalBytes || undefined };
     }
     return null; // 行已命中但无可用直链，不再翻页
   }
@@ -578,11 +578,11 @@ async function getMediaSourceImpl(musicItem, quality) {
     // 免费链无 size 源 → 仅魔数校验（如实说明）
     var probeFree = await probeMedia(free.src, 0);
     if (probeFree.magic === 'm4a') {
-      return { url: free.src, quality: hostQuality, actualQuality: '64k', headers: { 'User-Agent': WEB_UA } };
+      return { url: free.src, quality: hostQuality, actualQuality: '64k', headers: { 'User-Agent': WEB_UA }, size: probeFree.totalBytes || undefined };
     }
     if (probeFree.magic === 'mp3') {
       // src 为 MP3 形态（实测 ~32K）：宁低勿高，如实标注
-      return { url: free.src, quality: hostQuality, actualQuality: '32k', headers: { 'User-Agent': WEB_UA } };
+      return { url: free.src, quality: hostQuality, actualQuality: '32k', headers: { 'User-Agent': WEB_UA }, size: probeFree.totalBytes || undefined };
     }
   }
 
@@ -612,10 +612,10 @@ async function getMediaSourceImpl(musicItem, quality) {
     var probePaid = await probeMedia(paid.url, paid.totalLength);
     if (probePaid.magic === 'm4a') {
       // 实测文件名含 -aacv2-48K → 真实 48K AAC，未虚标
-      return { url: paid.url, quality: hostQuality, actualQuality: '48k', headers: { 'User-Agent': WEB_UA } };
+      return { url: paid.url, quality: hostQuality, actualQuality: '48k', headers: { 'User-Agent': WEB_UA }, size: paid.totalLength || probePaid.totalBytes || undefined };
     }
     if (probePaid.magic === 'mp3') {
-      return { url: paid.url, quality: hostQuality, actualQuality: '48k', headers: { 'User-Agent': WEB_UA } };
+      return { url: paid.url, quality: hostQuality, actualQuality: '48k', headers: { 'User-Agent': WEB_UA }, size: paid.totalLength || probePaid.totalBytes || undefined };
     }
     var why = probePaid.sizeMismatch ? '（Content-Range 与 totalLength 不一致）' : '（魔数校验未通过）';
     throw new Error('付费音频真链校验失败' + why);
@@ -688,7 +688,6 @@ async function getTopListDetailImpl(topListItem, page) {
       artwork: normalizeCover(a.coverPath),
       __asAlbum: true, // 榜单条目=专辑；点击播放自动解析第一集（getMediaSource 处理）
       __isPaid: a.isPaid === true || a.isPaid === 1,
-      qualities: ['64k'],
       fee: (a.isPaid === true || a.isPaid === 1) ? 1 : 0,
       alias: undefined
     });
@@ -735,7 +734,6 @@ async function importMusicItemImpl(urlLike) {
         duration: Number(entry.duration) > 0 ? Math.round(Number(entry.duration)) : undefined,
         __isPaid: entry.isPaid === true,
         __albumId: albumIdOf(entry), // QC P2-2：免费直链回退链用
-        qualities: ['64k'],
         fee: entry.isPaid === true ? 1 : 0,
         alias: undefined
       };
@@ -745,7 +743,6 @@ async function importMusicItemImpl(urlLike) {
     id: tid,
     platform: 'ximalaya',
     title: '喜马拉雅声音 #' + tid,
-    qualities: ['64k'],
     fee: 0,
     alias: undefined
   };
@@ -795,7 +792,7 @@ function getMvSourceImpl() { return null; }
 // ==================== 插件定义 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/ximalaya-source.plugin.v1.0.1.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/ximalaya-source.plugin.v1.2.0.js',
   name: '喜马拉雅',
   platform: 'ximalaya',
   version: PLUGIN_VERSION,

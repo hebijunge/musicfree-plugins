@@ -102,7 +102,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | Apple Music | 1.0.0 | [apple-music-v1.0.0.js](plugins/apple-music-v1.0.0.js) |
 | 华为音乐 | 1.0.1 | [hwmusic-source.plugin.v1.0.1.js](plugins/hwmusic-source.plugin.v1.0.1.js) |
 | 蜻蜓FM | 1.0.1 | [qingting-source.plugin.v1.0.1.js](plugins/qingting-source.plugin.v1.0.1.js) |
-| 喜马拉雅 | 1.0.1 | [ximalaya-source.plugin.v1.0.1.js](plugins/ximalaya-source.plugin.v1.0.1.js) |
+| 喜马拉雅 | 1.2.0 | [ximalaya-source.plugin.v1.2.0.js](plugins/ximalaya-source.plugin.v1.2.0.js) |
 | 荔枝FM | 1.0.0 | [lizhi-source.plugin.v1.0.0.js](plugins/lizhi-source.plugin.v1.0.0.js) |
 
 ## 目录结构
