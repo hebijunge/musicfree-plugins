@@ -1,6 +1,7 @@
-// DJ766 (dj766.com) - MusicFree Plugin v1.1.0
+// DJ766 (dj766.com) - MusicFree Plugin v1.2.0
 // 同清风DJ CMS：data-* 内联 id/name/artist/cover/audio
-// 高品320K: play→down.urlkj.com, 去掉/m4a2022/层
+// v1.2.0: 实测音频 CDN pan.urlkj.com 未登录访问返回明文「未授权，拒绝访问」(403)，
+//   data-audio 直链需站点登录/授权态才可播 → description/hints 如实标注，未登录取链会失败。
 
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -38,11 +39,12 @@ module.exports = {
     cacheControl: 'no-store',
     name: 'DJ766',
     platform: 'DJ766',
-    version: '1.1.0',
+    version: '1.2.0',
     author: 'hebijunge',
-    description: 'DJ766舞曲网 - 分类/榜单/封面/高品320K直链',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/dj766-source.plugin.v1.1.0.js',
+    description: 'DJ766舞曲网 - 分类/榜单/搜索/封面（列表可浏览；音频直链需站点账号登录/授权，未登录取链会失败）',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/dj766-source.plugin.v1.2.0.js',
     supportedSearchType: ['music'],
+    hints: ['音频需登录/授权：列表与封面可免登录浏览，播放/下载直链未授权访问返回 403', '如你的账号可登录，请在代码里填入 Cookie 后自行验证'],
 
     async search(query, page, type) {
         if (type !== 'music') return { isEnd: true, data: [] };
