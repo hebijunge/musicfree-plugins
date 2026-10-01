@@ -127,6 +127,30 @@ function looksLikeAd(title) {
         .test(String(title || ''));
 }
 
+/**
+ * 站点自报码率（`shiti_yinzhi` / `yinzhi`，形如 "64 Kbps" / "320 Kbps"）→ 宿主音质键。
+ * 宿主音质词表是内置的（64k/96k/128k/192k/320k/flac…），未知键在 UI 里会渲染成空白，
+ * 所以只接受能精确命中的整数码率，推不出来就不声明这一档，而不是硬套一个假档位。
+ */
+function bitrateKey(text) {
+    const m = String(text || '').match(/(\d+)\s*(?:kbps|k)/i);
+    if (!m) return '';
+    const kbps = parseInt(m[1], 10);
+    const key = kbps + 'k';
+    return KNOWN_BITRATE_KEYS.indexOf(key) >= 0 ? key : '';
+}
+const KNOWN_BITRATE_KEYS = ['64k', '96k', '128k', '192k', '320k'];
+
+/** 站点的 "147 MB" 实测按 MiB 计（147MiB ≈ 154,651,775 字节），故乘 1024^2。 */
+function parseSiteSize(text) {
+    const m = String(text || '').match(/([\d.]+)\s*(GB|MB|KB)/i);
+    if (!m) return undefined;
+    const n = parseFloat(m[1]);
+    const unit = m[2].toUpperCase();
+    const mult = unit === 'GB' ? 1024 * 1024 * 1024 : unit === 'MB' ? 1024 * 1024 : 1024;
+    return Math.round(n * mult);
+}
+
 /** 站点占位歌手名归一，避免列表里出现品牌名当歌手。 */
 function normalizeArtist(name) {
     const n = (name || '').trim();
@@ -198,7 +222,11 @@ function cacheMeta(objects) {
             highPath: o.path ? String(o.path) : '',
             firstCate: Number(o.first_cate) || 0,
             title: o.title ? String(o.title) : '',
-            size: Number(o.size) || 0,
+            // 站点自报的两档码率与大小；shiti_size 实测常为空，空就不显示，不猜
+            stdBitrate: bitrateKey(o.shiti_yinzhi),
+            highBitrate: bitrateKey(o.yinzhi),
+            stdSize: parseSiteSize(o.shiti_size),
+            highSize: parseSiteSize(o.size),
         });
     }
 }
@@ -265,17 +293,21 @@ async function probe(url) {
             validateStatus: s => s === 200 || s === 206,
         });
         const b = Buffer.from(res.data || []);
-        if (b.length < 12) return false;
+        if (b.length < 12) return 0;
+        // Content-Range: bytes 0-11/<total>；没有就退回 Content-Length
+        const cr = String(res.headers['content-range'] || '');
+        const m = cr.match(/\/(\d+)\s*$/);
+        const total = m ? parseInt(m[1], 10) : parseInt(res.headers['content-length'] || '0', 10);
         const ascii = (from, len) => b.slice(from, from + len).toString('latin1');
-        return (
+        const isAudio =
             ascii(0, 3) === 'ID3' ||
             ascii(4, 4) === 'ftyp' ||
             ascii(0, 4) === 'fLaC' ||
             ascii(0, 4) === 'OggS' ||
-            (b[0] === 0xff && (b[1] & 0xe0) === 0xe0)
-        );
+            (b[0] === 0xff && (b[1] & 0xe0) === 0xe0);
+        return isAudio ? total : 0;
     } catch (e) {
-        return false;
+        return 0;
     }
 }
 
@@ -288,9 +320,37 @@ async function resolveHighUrl(meta, slug) {
     }
     for (const raw of candidates) {
         const url = normalizeCdnUrl(raw);
-        if (await probe(url)) return url;
+        const total = await probe(url);
+        if (total) return { url: url, size: total };
     }
-    return '';
+    return null;
+}
+
+/**
+ * 给列表项挂 qualities：宿主 UI 会按 supportedQualities 的顺序取 qualities[key]，
+ * 并在有 size 时显示 (大小)。只挂索引里确实有元数据的曲目，挂不出来的就不写，
+ * 避免显示站点根本没提供的档位或编造的大小。
+ */
+async function attachQualities(items) {
+    // 索引来自 change.html（30 秒缓存）。拉不到不影响列表本身，只是这一屏不显示档位/大小。
+    try {
+        await refreshIndex(false);
+    } catch (e) {
+        return items;
+    }
+    for (const it of items) {
+        const meta = metaIndex.get(String(it.id));
+        if (!meta) continue;
+        const q = {};
+        if (meta.stdBitrate) {
+            q[meta.stdBitrate] = meta.stdSize ? { size: meta.stdSize } : {};
+        }
+        if (meta.highBitrate && meta.highPath) {
+            q[meta.highBitrate] = meta.highSize ? { size: meta.highSize } : {};
+        }
+        if (Object.keys(q).length) it.qualities = q;
+    }
+    return items;
 }
 
 // ==================== 列表解析 ====================
@@ -367,11 +427,20 @@ module.exports = {
     author: 'hebijunge',
     description:
         '82DJ舞曲网：分类/榜单/搜索/封面/时长/320K 高品直链。' +
+        '站点只有两档真实编码（64Kbps 与 320Kbps，均为全长），故只声明这两档。' +
         'v1.2.0 重写取链——站点已废弃 create_cookie/get_cookie，改由列表接口元数据确定性拼直链并带防盗链 Referer。',
     srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/82dj-source.plugin.v1.2.0.js',
     cacheControl: 'no-store',
+    /**
+     * 站点自报 `shiti_yinzhi`="64 Kbps" / `yinzhi`="320 Kbps"，两档都是全长
+     * （实测 31,283,255B / 3865s ≈ 64.8kbps，154,651,775B / 3865s ≈ 320.1kbps）。
+     * 档位键名由这两个字段推导（见 bitrateKey），推不出可识别码率的曲目就不声明该档，
+     * 而不是硬套一个宿主里根本不存在、UI 会渲染成空白的假键。
+     * 宿主内置音质词表原本最低只到 96k，64k 是本次一并补上的（否则 64Kbps 源无档可声明）。
+     */
+    supportedQualities: ['64k', '320k'],
     supportedSearchType: ['music'],
-    hints: ['舞曲/串烧长音频，时长普遍 30~90 分钟', '高品 320K 需探活，失败自动回落 64K 试听'],
+    hints: ['舞曲/串烧长音频，时长普遍 30~90 分钟', '仅 64K / 320K 两档，均为全长', '高品探活失败自动回落 64K'],
 
     userVariables: [],
 
@@ -382,7 +451,7 @@ module.exports = {
             headers: htmlHeaders(SITE + '/'),
             timeout: 20000,
         });
-        const data = parseList(res.data);
+        const data = await attachQualities(parseList(res.data));
         return { isEnd: data.length < 10, data: data };
     },
 
@@ -411,7 +480,7 @@ module.exports = {
         }
         await warmSession();
         const res = await axios.get(url, { headers: htmlHeaders(SITE + '/'), timeout: 20000 });
-        const musicList = parseList(res.data);
+        const musicList = await attachQualities(parseList(res.data));
         return { isEnd: musicList.length < 10, musicList: musicList, topListItem: topListItem };
     },
 
@@ -427,19 +496,34 @@ module.exports = {
 
         const slug = CATE_SLUG[meta.firstCate];
         const stdUrl = buildStdUrl(meta);
-        if (!(await probe(stdUrl))) {
+        const stdKey = meta.stdBitrate || '64k';
+        // 站点 shiti_size 常为空，这里用探测到的真实字节数补上，宿主才能显示 64K 档大小
+        const stdTotal = await probe(stdUrl);
+        if (!stdTotal) {
             throw new Error('82DJ 直链未通过音频校验（可能被防盗链或站点返回了广告页）');
         }
 
-        if (quality === 'high' || quality === 'super') {
+        // 站点只有两档：请求高档（high/super/320k 等）才去探 320K，探不到就回落到自报码率的标准档。
+        // 返回的 quality 用站点自报的码率键，而不是宿主语义的 low/standard/high。
+        const wantsHigh =
+            quality === 'high' || quality === 'super' || /320/.test(String(quality || ''));
+        if (wantsHigh && meta.highPath) {
             const high = await resolveHighUrl(meta, slug);
             if (high) {
-                return { url: high, headers: MEDIA_HEADERS, quality: 'high' };
+                return {
+                    url: high.url,
+                    headers: MEDIA_HEADERS,
+                    quality: meta.highBitrate || '320k',
+                    size: meta.highSize || high.size,
+                };
             }
-            // 高品探活全失败：回落 64K 试听，明确标注实际档位
-            return { url: stdUrl, headers: MEDIA_HEADERS, quality: 'low', actualQuality: 'low' };
         }
-        return { url: stdUrl, headers: MEDIA_HEADERS, quality: quality || 'standard' };
+        return {
+            url: stdUrl,
+            headers: MEDIA_HEADERS,
+            quality: stdKey,
+            size: meta.stdSize || stdTotal,
+        };
     },
 
     async getMusicInfo(musicItem) {
