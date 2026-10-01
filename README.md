@@ -26,7 +26,7 @@ MusicFree（音流 fork）插件订阅仓库。
 
 ### 国内代理 · 实测收录（2026-09-25 实测 109 个候选，收录 15 条）
 
-以下 15 条为独立订阅地址，内容与上方通道完全一致（26 个插件），插件文件经对应代理直取 GitHub 源。收录标准：清单可用 + JSON 校验 + 插件 js sha256 与源一致 + 两轮复测通过，按平均速度取 Top 15（实测为海外节点，速度仅作排序参考）。
+以下 15 条为独立订阅地址，内容与上方通道完全一致（51 个插件），插件文件经对应代理直取 GitHub 源。收录标准：清单可用 + JSON 校验 + 插件 js sha256 与源一致 + 两轮复测通过，按平均速度取 Top 15（实测为海外节点，速度仅作排序参考）。
 
 - 代理01 · git.yylx.win（实测 434 KB/s · 09-25）：
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-01.json`
@@ -82,10 +82,10 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | QQ音乐 | 1.9.15 | [qq-source.plugin.v1.9.15.js](plugins/qq-source.plugin.v1.9.15.js) |
 | 酷我音乐 | 1.9.16 | [kuwo-source.plugin.v1.9.16.js](plugins/kuwo-source.plugin.v1.9.16.js) |
 | 酷狗音乐 | 1.9.15 | [kugou-source.plugin.v1.9.15.js](plugins/kugou-source.plugin.v1.9.15.js) |
-| 咪咕音乐 | 1.9.15 | [migu-source.plugin.v1.9.15.js](plugins/migu-source.plugin.v1.9.15.js) |
+| 咪咕音乐 | 1.9.16 | [migu-source.plugin.v1.9.16.js](plugins/migu-source.plugin.v1.9.16.js) |
 | 网易云音乐 | 1.9.15 | [netease-source.plugin.v1.9.15.js](plugins/netease-source.plugin.v1.9.15.js) |
-| 汽水音乐 | 1.9.15 | [qishui-source.plugin.v1.9.15.js](plugins/qishui-source.plugin.v1.9.15.js) |
-| B站 | 1.1.0 | [bilibili-source.plugin.v1.1.0.js](plugins/bilibili-source.plugin.v1.1.0.js) |
+| 汽水音乐 | 1.9.16 | [qishui-source.plugin.v1.9.16.js](plugins/qishui-source.plugin.v1.9.16.js) |
+| B站 | 1.1.1 | [bilibili-source.plugin.v1.1.1.js](plugins/bilibili-source.plugin.v1.1.1.js) |
 | 番茄畅听 | 1.2.0 | [fanqie-source.plugin.v1.2.0.js](plugins/fanqie-source.plugin.v1.2.0.js) |
 | DJ多多 | 1.0.0 | [djduoduo-source.plugin.v1.0.0.js](plugins/djduoduo-source.plugin.v1.0.0.js) |
 | 5sing | 1.0.0 | [5sing-source.plugin.v1.0.0.js](plugins/5sing-source.plugin.v1.0.0.js) |
@@ -93,6 +93,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | Y2002电音 | 1.0.0 | [y2002-source.plugin.v1.0.0.js](plugins/y2002-source.plugin.v1.0.0.js) |
 | 一听音乐 | 1.0.1 | [1ting-source.plugin.v1.0.1.js](plugins/1ting-source.plugin.v1.0.1.js) |
 | 懒人听书 | 1.0.1 | [lrts-source.plugin.v1.0.1.js](plugins/lrts-source.plugin.v1.0.1.js) |
+| 博看听书 | 1.0.0 | [bokantingshu-source.plugin.v1.0.0.js](plugins/bokantingshu-source.plugin.v1.0.0.js) |
 | 街声 | 1.0.0 | [streetvoice-source.plugin.v1.0.0.js](plugins/streetvoice-source.plugin.v1.0.0.js) |
 | 火龙DJ | 1.0.2 | [huolongdj-source.plugin.v1.0.2.js](plugins/huolongdj-source.plugin.v1.0.2.js) |
 | 快音 | 1.0.0 | [kuaiyin-source.plugin.v1.0.0.js](plugins/kuaiyin-source.plugin.v1.0.0.js) |
@@ -104,6 +105,31 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | 蜻蜓FM | 1.0.1 | [qingting-source.plugin.v1.0.1.js](plugins/qingting-source.plugin.v1.0.1.js) |
 | 喜马拉雅 | 1.2.0 | [ximalaya-source.plugin.v1.2.0.js](plugins/ximalaya-source.plugin.v1.2.0.js) |
 | 荔枝FM | 1.0.0 | [lizhi-source.plugin.v1.0.0.js](plugins/lizhi-source.plugin.v1.0.0.js) |
+| 网易云电台 | 1.1.0 | [neteaseradio-source.plugin.v1.1.0.js](plugins/neteaseradio-source.plugin.v1.1.0.js) |
+| CCTV听音 | 1.0.0 | [cctv-source.plugin.v1.0.0.js](plugins/cctv-source.plugin.v1.0.0.js) |
+| Jamendo | 1.0.1 | [jamendo-source.plugin.v1.0.1.js](plugins/jamendo-source.plugin.v1.0.1.js) |
+| 聚合 | 1.9.16 | [agg-source.plugin.v1.9.16.js](plugins/agg-source.plugin.v1.9.16.js) |
+| JOOX音乐 | 1.1.0 | [joox-source.plugin.v1.1.0.js](plugins/joox-source.plugin.v1.1.0.js) |
+| djuu DJ | 1.1.0 | [djuu-source.plugin.v1.1.0.js](plugins/djuu-source.plugin.v1.1.0.js) |
+| 相声评书 | 1.0.0 | [xiangsheng-pingshu-source.plugin.v1.0.0.js](plugins/xiangsheng-pingshu-source.plugin.v1.0.0.js) |
+| 皮狗DJ | 1.1.0 | [pgdjz-source.plugin.v1.1.0.js](plugins/pgdjz-source.plugin.v1.1.0.js) |
+| DJKK | 1.1.0 | [djkk-source.plugin.v1.1.0.js](plugins/djkk-source.plugin.v1.1.0.js) |
+| 汽车DJ | 1.1.0 | [qichedj-source.plugin.v1.1.0.js](plugins/qichedj-source.plugin.v1.1.0.js) |
+| 水晶舞曲 | 1.2.0 | [dj14-source.plugin.v1.2.0.js](plugins/dj14-source.plugin.v1.2.0.js) |
+| 清风DJ | 1.2.0 | [ddddj-source.plugin.v1.2.0.js](plugins/ddddj-source.plugin.v1.2.0.js) |
+| DJ766 | 1.1.0 | [dj766-source.plugin.v1.1.0.js](plugins/dj766-source.plugin.v1.1.0.js) |
+| 82DJ | 1.2.0 | [82dj-source.plugin.v1.2.0.js](plugins/82dj-source.plugin.v1.2.0.js) |
+| QQDJ | 1.2.0 | [qqdjs-source.plugin.v1.2.0.js](plugins/qqdjs-source.plugin.v1.2.0.js) |
+| 36DJ | 1.2.0 | [36dj-source.plugin.v1.2.0.js](plugins/36dj-source.plugin.v1.2.0.js) |
+| 宝贝DJ | 1.2.0 | [bibdj-source.plugin.v1.2.0.js](plugins/bibdj-source.plugin.v1.2.0.js) |
+| 172Mix | 1.2.0 | [172mix-source.plugin.v1.2.0.js](plugins/172mix-source.plugin.v1.2.0.js) |
+| DJ耶耶耶 | 1.1.0 | [djyyy-source.plugin.v1.1.0.js](plugins/djyyy-source.plugin.v1.1.0.js) |
+| 黑色音频 | 1.1.0 | [hy57-source.plugin.v1.1.0.js](plugins/hy57-source.plugin.v1.1.0.js) |
+| 好听轻音乐 | 1.2.1 | [htqyy-source.plugin.v1.2.1.js](plugins/htqyy-source.plugin.v1.2.1.js) |
+| 我是DJ | 1.1.0 | [54dj-source.plugin.v1.1.0.js](plugins/54dj-source.plugin.v1.1.0.js) |
+| 电音阁 | 1.1.0 | [dianyinge-source.plugin.v1.1.0.js](plugins/dianyinge-source.plugin.v1.1.0.js) |
+| SpaceDJ | 1.1.0 | [spacedj-source.plugin.v1.1.0.js](plugins/spacedj-source.plugin.v1.1.0.js) |
+| DJ6 | 1.0.0 | [dj6-source.plugin.v1.0.0.js](plugins/dj6-source.plugin.v1.0.0.js) |
 
 ## 目录结构
 
