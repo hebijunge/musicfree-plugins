@@ -158,8 +158,8 @@
     },
     {
       "name": "djuu DJ",
-      "url": "https://cdn.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/djuu-source.plugin.v1.1.0.js",
-      "version": "1.1.0"
+      "url": "https://cdn.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/djuu-source.plugin.v1.1.1.js",
+      "version": "1.1.1"
     },
     {
       "name": "相声评书",
@@ -188,8 +188,8 @@
     },
     {
       "name": "清风DJ",
-      "url": "https://cdn.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/ddddj-source.plugin.v1.2.0.js",
-      "version": "1.2.0"
+      "url": "https://cdn.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/ddddj-source.plugin.v1.2.1.js",
+      "version": "1.2.1"
     },
     {
       "name": "DJ766",
@@ -203,8 +203,8 @@
     },
     {
       "name": "QQDJ",
-      "url": "https://cdn.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/qqdjs-source.plugin.v1.2.0.js",
-      "version": "1.2.0"
+      "url": "https://cdn.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/qqdjs-source.plugin.v1.2.1.js",
+      "version": "1.2.1"
     },
     {
       "name": "36DJ",

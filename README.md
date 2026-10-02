@@ -110,16 +110,16 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | Jamendo | 1.0.1 | [jamendo-source.plugin.v1.0.1.js](plugins/jamendo-source.plugin.v1.0.1.js) |
 | 聚合 | 1.9.16 | [agg-source.plugin.v1.9.16.js](plugins/agg-source.plugin.v1.9.16.js) |
 | JOOX音乐 | 1.1.0 | [joox-source.plugin.v1.1.0.js](plugins/joox-source.plugin.v1.1.0.js) |
-| djuu DJ | 1.1.0 | [djuu-source.plugin.v1.1.0.js](plugins/djuu-source.plugin.v1.1.0.js) |
+| djuu DJ | 1.1.1 | [djuu-source.plugin.v1.1.1.js](plugins/djuu-source.plugin.v1.1.1.js) |
 | 相声评书 | 1.0.0 | [xiangsheng-pingshu-source.plugin.v1.0.0.js](plugins/xiangsheng-pingshu-source.plugin.v1.0.0.js) |
 | 皮狗DJ | 1.1.0 | [pgdjz-source.plugin.v1.1.0.js](plugins/pgdjz-source.plugin.v1.1.0.js) |
 | DJKK | 1.1.0 | [djkk-source.plugin.v1.1.0.js](plugins/djkk-source.plugin.v1.1.0.js) |
 | 汽车DJ | 1.1.0 | [qichedj-source.plugin.v1.1.0.js](plugins/qichedj-source.plugin.v1.1.0.js) |
 | 水晶舞曲 | 1.2.0 | [dj14-source.plugin.v1.2.0.js](plugins/dj14-source.plugin.v1.2.0.js) |
-| 清风DJ | 1.2.0 | [ddddj-source.plugin.v1.2.0.js](plugins/ddddj-source.plugin.v1.2.0.js) |
+| 清风DJ | 1.2.1 | [ddddj-source.plugin.v1.2.1.js](plugins/ddddj-source.plugin.v1.2.1.js) |
 | DJ766 | 1.2.0 | [dj766-source.plugin.v1.2.0.js](plugins/dj766-source.plugin.v1.2.0.js) |
 | 82DJ | 1.2.0 | [82dj-source.plugin.v1.2.0.js](plugins/82dj-source.plugin.v1.2.0.js) |
-| QQDJ | 1.2.0 | [qqdjs-source.plugin.v1.2.0.js](plugins/qqdjs-source.plugin.v1.2.0.js) |
+| QQDJ | 1.2.1 | [qqdjs-source.plugin.v1.2.1.js](plugins/qqdjs-source.plugin.v1.2.1.js) |
 | 36DJ | 1.2.0 | [36dj-source.plugin.v1.2.0.js](plugins/36dj-source.plugin.v1.2.0.js) |
 | 宝贝DJ | 1.2.0 | [bibdj-source.plugin.v1.2.0.js](plugins/bibdj-source.plugin.v1.2.0.js) |
 | 172Mix | 1.2.0 | [172mix-source.plugin.v1.2.0.js](plugins/172mix-source.plugin.v1.2.0.js) |
