@@ -2,8 +2,14 @@
  * [v1.0.0 显示名中文化] 顶层新增 name 字段：导入/安装列表显示中文名「蜻蜓FM」；platform 字段保持英文不变，不影响功能逻辑与既有识别逻辑。
  */
 /**
- * 蜻蜓FM（Qingting）独立源插件 v1.0.0 — MusicFree
+ * 蜻蜓FM（Qingting）独立源插件 v1.0.1 — MusicFree
  * ============================================================
+ * v1.0.1 changelog（2026-10-01 修搜索；2026-10-02 补版本号）：
+ *   · search 返回 {isEnd,data}，此前返回裸数组，宿主按协议取 .data 恒为空 → 搜索永远 0 条。
+ *   · 内部 version 字段此前漏改（文件名与清单均为 1.0.1，插件自报 1.0.0）。宿主比较更新用的是
+ *     plugin.instance.version（见 MusicFree src/core/pluginManager/index.ts 的 compare(...)），
+ *     清单里的 version 只作展示，故不会造成重复下载，但版本三元组不一致、App 内显示错误版本。
+ *
  * 蜻蜓FM（App 内代号「蜻蜓」，即 Qingting FM / Qt FM）独立源。
  * 免登录、无需 Cookie；HMAC-MD5 签名密钥已破解（App `99@b8#571(bb38_b` /
  * Web `fpMn12&38f_2e`）；付费内容免登录可播；3 档音质（128k MP3 / 64k M4A / 24k M4A）。
@@ -721,9 +727,9 @@ var plugin = {
   srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qingting-source.plugin.v1.0.1.js',
   name: '蜻蜓FM',
   platform: 'qingting',
-  version: '1.0.0',
+  version: '1.0.1',
   author: '研发1号',
-  description: '蜻蜓FM（Qingting FM）独立源插件（v1.0.0）：免登录可搜索/播放/下载，付费内容免登录可播；HMAC-MD5 签名（App 密钥 `99@b8#571(bb38_b` / Web `fpMn12&38f_2e`）；3 档音质（128k MP3 / 64k M4A / 24k M4A）；auth_key 12h 有效期。能力：搜索（music/album）、专辑详情、节目导入、取链（魔数 + 大小比对 + Web 302 兜底）、音乐详情。Stub 不支持：歌词（有声内容）/ 热榜 / 歌单 / 歌手 / 评论 / 直播电台 HLS。',
+  description: '蜻蜓FM（Qingting FM）独立源插件（v1.0.1）：免登录可搜索/播放/下载，付费内容免登录可播；HMAC-MD5 签名（App 密钥 `99@b8#571(bb38_b` / Web `fpMn12&38f_2e`）；3 档音质（128k MP3 / 64k M4A / 24k M4A）；auth_key 12h 有效期。能力：搜索（music/album）、专辑详情、节目导入、取链（魔数 + 大小比对 + Web 302 兜底）、音乐详情。Stub 不支持：歌词（有声内容）/ 热榜 / 歌单 / 歌手 / 评论 / 直播电台 HLS。',
   supportedSearchType: ['music', 'album'],  // 文档 §3.1 支持 program_ondemand + channel_ondemand
   defaultSearchType: 'music',
   primaryKey: ['id'],
