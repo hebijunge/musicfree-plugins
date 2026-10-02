@@ -117,7 +117,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | 汽车DJ | 1.1.0 | [qichedj-source.plugin.v1.1.0.js](plugins/qichedj-source.plugin.v1.1.0.js) |
 | 水晶舞曲 | 1.2.0 | [dj14-source.plugin.v1.2.0.js](plugins/dj14-source.plugin.v1.2.0.js) |
 | 清风DJ | 1.2.1 | [ddddj-source.plugin.v1.2.1.js](plugins/ddddj-source.plugin.v1.2.1.js) |
-| DJ766 | 1.2.0 | [dj766-source.plugin.v1.2.0.js](plugins/dj766-source.plugin.v1.2.0.js) |
+| DJ766 | 1.3.0 | [dj766-source.plugin.v1.3.0.js](plugins/dj766-source.plugin.v1.3.0.js) |
 | 82DJ | 1.2.0 | [82dj-source.plugin.v1.2.0.js](plugins/82dj-source.plugin.v1.2.0.js) |
 | QQDJ | 1.2.1 | [qqdjs-source.plugin.v1.2.1.js](plugins/qqdjs-source.plugin.v1.2.1.js) |
 | 36DJ | 1.2.0 | [36dj-source.plugin.v1.2.0.js](plugins/36dj-source.plugin.v1.2.0.js) |
