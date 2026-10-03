@@ -111,7 +111,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | 聚合 | 1.9.16 | [agg-source.plugin.v1.9.16.js](plugins/agg-source.plugin.v1.9.16.js) |
 | JOOX音乐 | 1.1.1 | [joox-source.plugin.v1.1.1.js](plugins/joox-source.plugin.v1.1.1.js) |
 | djuu DJ | 1.1.1 | [djuu-source.plugin.v1.1.1.js](plugins/djuu-source.plugin.v1.1.1.js) |
-| 相声评书 | 1.0.1 | [xiangsheng-pingshu-source.plugin.v1.0.1.js](plugins/xiangsheng-pingshu-source.plugin.v1.0.1.js) |
+| 相声评书 | 1.0.2 | [xiangsheng-pingshu-source.plugin.v1.0.2.js](plugins/xiangsheng-pingshu-source.plugin.v1.0.2.js) |
 | 皮狗DJ | 1.1.1 | [pgdjz-source.plugin.v1.1.1.js](plugins/pgdjz-source.plugin.v1.1.1.js) |
 | DJKK | 1.1.1 | [djkk-source.plugin.v1.1.1.js](plugins/djkk-source.plugin.v1.1.1.js) |
 | 汽车DJ | 1.1.0 | [qichedj-source.plugin.v1.1.0.js](plugins/qichedj-source.plugin.v1.1.0.js) |
