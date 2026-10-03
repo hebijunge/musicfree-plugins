@@ -182,7 +182,9 @@ function buildUnitItem(albumId, u, meta) {
     album: meta.name,
     artwork: meta.cover,
     duration: toInt(u && u.duration), // 秒
-    qualities: declaredBytes > 0 ? { standard: { size: declaredBytes } } : {},
+    qualities: declaredBytes > 0 ? (function () {
+      var k = {}; k[hostQualityKey(declaredBytes, toInt(u && u.duration))] = { size: declaredBytes }; return k;
+    })() : {},
     platform: 'bookan'
   };
 }
@@ -426,9 +428,28 @@ async function getRecommendSheetsByTagImpl(tagItem, page) {
 
 // ==================== 播放取链（units file 直链 + 音流口径校验） ====================
 
-// 音质归一：源单档 m4a（实测 ~64kbps AAC），请求更高档位如实 standard
+// 音质归一：源单档 m4a，请求更高档位如实降档
 function normalizeQuality() {
-  return 'standard';
+  return 'standard'; // 内部哨兵名，对宿主一律用内置音质键（见 hostQualityKey）
+}
+
+// [v1.0.1 宿主键协议对齐] 内部哨兵 standard → 宿主内置音质键。
+// 旧写法把 legacy 名交给宿主：宿主 legacyQualityMap 视 standard 为 192k，
+// 而 plugin.ts 又直接透传 result.quality——一档 30kbps 上外的流在菜单/角标/下载命名里成了 192k。
+// 2026-10-03 真链路实测（小说旧闻钞 38 节）：525,200B÷139s=30kbps、1,247,165B÷327s=31kbps、
+// 5,757,328B÷1495s=31kbps（v1.0.0 注释写的「~64kbps」不准，一并改正）。
+// 宿主内置最低档是 64k，故按「不超过实测的最近内置档」标注，实测再高也只到 64k/96k/128k；
+// size 或 duration 未知时不猜，落最低内置档 64k。
+var HOST_QUALITY_TIERS = [64, 96, 128];
+function hostQualityKey(size, durationSec) {
+  var bytes = toNum(size), sec = toInt(durationSec);
+  if (bytes <= 0 || sec <= 0) return '64k';
+  var kbps = bytes * 8 / sec / 1000;
+  var fit = 64;
+  for (var i = 0; i < HOST_QUALITY_TIERS.length; i++) {
+    if (kbps >= HOST_QUALITY_TIERS[i]) fit = HOST_QUALITY_TIERS[i];
+  }
+  return fit + 'k';
 }
 
 // 魔数识别（音流口径）：实测博看 m4a 为 ftyp box；白名单兼容 ID3/帧同步/fLaC/OggS
@@ -506,7 +527,7 @@ function verifySource(url, opts) {
 
 async function getMediaSourceImpl(musicItem, quality) {
   if (!musicItem) throw new Error('[bookan] missing musicItem');
-  normalizeQuality(quality); // 单档（见 supportedQualities 注释），统一 standard
+  normalizeQuality(quality); // 单档（见 supportedQualities 注释）
   var parsed = parseSourceId(musicItem && musicItem.id);
   if (!parsed || parsed.kind !== 'unit') {
     throw new Error('[bookan] 无法识别播放条目 id: ' + str(musicItem && musicItem.id).slice(0, 80));
@@ -521,10 +542,11 @@ async function getMediaSourceImpl(musicItem, quality) {
   var declaredBytes = declaredKB > 0 ? Math.round(declaredKB * 1024) : 0;
   var v = await withTimeout(verifySource(url, { declaredSize: declaredBytes, duration: toInt(unit.duration) }),
     Math.max(deadline - Date.now(), 1000), '[bookan] 取链校验超时');
+  var hostKey = hostQualityKey(v.total || declaredBytes, toInt(unit.duration));
   return {
     url: url,
-    quality: 'standard',
-    actualQuality: 'standard',
+    quality: hostKey,      // [v1.0.1] 宿主内置键，不再透传 legacy 'standard'
+    actualQuality: hostKey,
     size: v.total,
     _verify: { magic: v.magic } // 魔数与实取大小如实记录
   };
@@ -548,16 +570,18 @@ async function getMusicInfoImpl(musicItem) {
 // ==================== 插件对象 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/bokantingshu-source.plugin.v1.0.0.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/bokantingshu-source.plugin.v1.0.1.js',
   name: '博看听书',
   platform: 'bookan',
-  version: '1.0.0',
+  version: '1.0.1', // [v1.0.1] 档位标签改走宿主内置键（supportedQualities ['standard']→['64k']、条目 qualities 与取链 quality/actualQuality 同改）；
+  // 宿主 legacyQualityMap 把 standard 当 192k，而实测本源单档只有 30~31kbps AAC（原注释「~64kbps」一并改正）；
+  // 新增 hostQualityKey 按「不超过实测的最近内置档」标注。详见头部说明。
   author: '研发1号',
   description: '博看听书（博看网有声资源，api.bookan.com.cn 纯 JSON API）独立源插件 v1.0.0：搜索（es.bookan.com.cn ES 接口）与 11 分类书目浏览，书籍/专辑统一映射为专辑条目（复用懒人听书书→专辑映射先例）；专辑详情展开章节列表（200 条/页翻页拉取，单次上限 500 章防超时并如实标注）；播放取链直取 units 的 file 字段 m4a 静态直链（无签名、CORS 开放、统一升级 https，播放域白名单 audio.bookan.com.cn）；接口取链+大小校验（Range 0-15 探测 total 与声明 size 比对，实测 size 单位 KB 需 ×1024；ftyp/ID3 魔数 fail-closed + 16~320kbps 码率窗口）；源单档 m4a（~64kbps AAC），supportedQualities 如实仅 standard 不虚构更高音质；空搜索/非法专辑 id（code=10000 集合不存在）/字段缺失均如实返回或上抛，不伪造数据；听书无歌词，getLyric 如实返回空',
   primaryKey: ['id'],
   supportedSearchType: ['album'], // 搜索结果为书目（无可播单曲形态），music/artist/sheet 如实返回空
   defaultSearchType: 'album',
-  supportedQualities: ['standard'], // 源单档 m4a（实测 ~64kbps AAC），不虚构更高音质
+  supportedQualities: ['64k'], // [v1.0.1] 内置键口径：源单档 m4a 实测 30~31kbps AAC，宿主最低内置档即 64k（旧 'standard' 会被宿主 legacy 映射当 192k）
   cacheControl: 'cache', // file 直链为静态 CDN 资源（实测带 Content-Md5/Last-Modified，无时效签名）
   userVariables: [],
   hints: {
