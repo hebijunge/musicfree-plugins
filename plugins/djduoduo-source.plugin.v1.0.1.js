@@ -5,7 +5,15 @@
  * ============================================================================
  * DJ多多 音源插件 for MusicFree（音流宿主 standalone 版）
  * ----------------------------------------------------------------------------
- * @version   1.0.0
+ * @version   1.0.1
+ * @changelog v1.0.1（2026-10-03）档位标签改用宿主内置键：supportedQualities 与 Q_TO_KEY 的
+ *            'low' → '64k'（实测 Q0 = 77kbps AAC，2,239,766B÷232s，按宁低勿高贴最低内置档）；
+ *            QUALITY_TO_Q 补 64k/96k/192k 显式映射，未知档仍默认 128k。
+ *            宿主 plugin.ts 直接透传 result.quality 且不做 legacy→内置转换，旧 'low' 标签
+ *            会让角标与下载文件命名落在非内置档位上。
+ *            歌词缺口保持现状（非本版本改动）：getlist.php?act=lyric 返回 Base64 密文，
+ *            两把通用 AES 密钥实测均 padding 错误，密钥在 App 原生层（文档 §4.10/§12 待解），
+ *            故不提供 getLyric，也不用跨站借词冒充本站歌词。
  * @author    研发1号
  * @date      2026-09-24
  * ----------------------------------------------------------------------------
@@ -49,7 +57,7 @@ var axios = require('axios');
 
 // ==================== 常量 ====================
 var PLATFORM = 'djduoduo';
-var VERSION = '1.0.0';
+var VERSION = '1.0.1';
 
 var API_BASE = 'https://new.dianyinduoduo.com/v4/';
 var UA = 'okhttp/4.9.2';
@@ -65,8 +73,11 @@ var IMG_CDN = 'http://txcdn.dianyinduoduo.com';
 var AUDIO_DIRS = ['dj', 'dj_nq', 'dj_hq', 'dj_sq'];
 
 // 音质映射：宿主档位名 → 上游 Quality 下标
-var QUALITY_TO_Q = { low: 0, '128k': 1, standard: 1, '320k': 2, high: 2, flac: 3, super: 3 };
-var Q_TO_KEY = ['low', '128k', '320k', 'flac'];
+// [v1.0.1 宿主键协议对齐] 旧表用 legacy 键 low/standard/high/super 作标签，宿主 fork 传的是
+// 内置键（64k…master）且 plugin.ts 不做 legacy→内置转换，'low' 会把非内置档位透到角标与文件命名。
+// Q0 实测为 77kbps AAC（2,239,766B÷232s），按「宁低勿高」贴到内置最低档 64k。
+var QUALITY_TO_Q = { '64k': 0, low: 0, '96k': 1, '128k': 1, standard: 1, '192k': 2, '320k': 2, high: 2, flac: 3, super: 3 };
+var Q_TO_KEY = ['64k', '128k', '320k', 'flac'];
 
 // 8 个榜单（文档 4.4：无榜单列表接口，Id 硬编码）
 var RANK_DEFS = [
@@ -529,7 +540,7 @@ function getMediaSourceImpl(musicItem, quality) {
       var url = audioUrlOf(id, 0, p);
       var expect = musicItem && musicItem._size ? musicItem._size : 0;
       return probeAudioHead(url, expect, 0).then(function (v) {
-        return { url: url, quality: 'low', actualQuality: 'low', size: v.size, bitrate: (musicItem && musicItem._bitrate) || 0 };
+        return { url: url, quality: '64k', actualQuality: '64k', size: v.size, bitrate: (musicItem && musicItem._bitrate) || 0 };
       });
     };
     var tryDetail = function () {
@@ -539,7 +550,7 @@ function getMediaSourceImpl(musicItem, quality) {
         var p = decryptPath(s.Path);
         var url = audioUrlOf(id, 0, p);
         return probeAudioHead(url, s.Size || 0, 0).then(function (v) {
-          return { url: url, quality: 'low', actualQuality: 'low', size: v.size, bitrate: s.Bitrate || 0 };
+          return { url: url, quality: '64k', actualQuality: '64k', size: v.size, bitrate: s.Bitrate || 0 };
         });
       });
     };
@@ -734,7 +745,7 @@ function fetchConfig() {
 
 // ==================== 插件定义 ====================
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djduoduo-source.plugin.v1.0.0.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djduoduo-source.plugin.v1.0.1.js',
   name: 'DJ多多',
   platform: PLATFORM,
   version: VERSION,
@@ -743,7 +754,7 @@ var plugin = {
   supportedSearchType: ['music'],
   defaultSearchType: 'music',
   primaryKey: ['id'],
-  supportedQualities: ['low', '128k', '320k', 'flac'],
+  supportedQualities: ['64k', '128k', '320k', 'flac'], // [v1.0.1] low→64k（内置键）
   cacheControl: 'no-store', // 音频直链现取现用（派生规则虽稳定，formats 档位/大小仍动态）
   userVariables: [
     { key: 'ddUid', name: 'formats 高音质账号 Uid（可选）', hint: '默认使用文档内置可用登录态 Uid=12626571；若内置登录态失效（Q1~Q3 报 401/403），改填自己的 Uid' },
