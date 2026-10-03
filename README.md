@@ -142,8 +142,5 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 ## 维护约定
 
 - 新插件完成后：将 js 按命名规范放入 `plugins/`，在 `plugins.json` 追加一条（name/url/version 与插件内部声明一致）即可，订阅端自动生效
-- 插件升级：保留旧版本文件（可选）或删除，`plugins.json` 中 url/version 更新到新文件
+- 插件升级：远端 `plugins/` 每个源只保留最新版本文件，旧版本不保留（需要回看历史走 git 记录），`plugins.json` 中 url/version 更新到新文件
 - 版本号以各插件 js 内部 `version` 字段为权威依据
-| 网易云电台 | 1.0.0 | [neteaseradio-source.plugin.v1.0.0.js](plugins/neteaseradio-source.plugin.v1.0.0.js) |
-| CCTV听音 | 1.0.0 | [cctv-source.plugin.v1.0.0.js](plugins/cctv-source.plugin.v1.0.0.js) |
-| Jamendo | 1.0.1 | [jamendo-source.plugin.v1.0.1.js](plugins/jamendo-source.plugin.v1.0.1.js) |
