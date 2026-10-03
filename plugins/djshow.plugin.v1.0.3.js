@@ -124,6 +124,12 @@ var QUALITY_TIER = {
 // 档位 → type=song 详情的字段名与体积字段名（f 档不在详情里，走 downloadlist）
 var TIER_FIELD = { l: 'path', m: 'mpath', h: 'hpath' };
 var TIER_SIZE = { l: 'size', m: 'msize', h: 'hsize' };
+// [v1.0.3] 内部档 → 宿主内置音质键（2026-10-03 fork 路径逐档实测，dur=4175s 曲目）：
+//   l=_path  33,825,018B  ≈65kbps  → 64k
+//   m=_mpath 100,204,295B ≈192kbps → 192k
+//   h=_hpath 167,007,129B ≈320kbps → 320k
+//   f=downloadlist 939,524,096B ≈1800kbps FLAC → flac
+var TIER_HOST_LABEL = { l: '64k', m: '192k', h: '320k', f: 'flac' };
 
 // 下载档位接口（apk 内 UrlKey.SEARCH_SONG_DOWNLOADLIST）：result.downloadlist 为 base64+XOR 密文
 var API_CLB = 'https://apiclb.djshow.cn/api';
@@ -553,7 +559,7 @@ async function getMediaSource(musicItem, quality) {
     var tier = QUALITY_TIER[quality];
     if (!tier) {
         // 未知音质键（如 hires/dolby/master）：抛错，交宿主按音质顺序继续降级
-        throw new Error('DJ秀 无 [' + quality + '] 档，本站提供 64k/96k/128k/192k/320k/无损FLAC');
+        throw new Error('DJ秀 无 [' + quality + '] 档，本站实际提供 64k/192k/320k/无损FLAC 四个文件档');
     }
     var url;
     var sizeHint;
@@ -591,6 +597,12 @@ async function getMediaSource(musicItem, quality) {
     if (HAS_HOST_ACBZ_PROXY) {
         // headers 跟随标准路线的 UA（okhttp/3.12.0），避免 fork 代理下载同一 CDN 时因缺 UA 被 403
         var forkResult = { url: url, acbz: 'tkm-xor', headers: Object.assign({}, HTTP_HEADERS) };
+        // [v1.0.3] 回传实际档位：此前两条路线都不写 quality/actualQuality，
+        // 宿主 plugin.ts 拿不到就沿用请求档做角标与下载命名 —— 96k 请求交付 l 档
+        // （实测 65kbps）却显示 96k，属虚高一档半；128k 请求交付 m 档（192kbps）
+        // 则被压标成 128k。现按选中档如实回标。
+        forkResult.quality = TIER_HOST_LABEL[tier];
+        forkResult.actualQuality = TIER_HOST_LABEL[tier];
         if (typeof sizeHint === 'number' && sizeHint > 0) {
             forkResult.size = sizeHint;
         }
@@ -658,7 +670,11 @@ async function getMediaSource(musicItem, quality) {
     }
     var b64 = typeof btoa === 'function' ? btoa(binary) : Buffer.from(plain).toString('base64');
 
-    var result = { url: 'data:' + recheck.mime + ';base64,' + b64 };
+    var result = {
+        url: 'data:' + recheck.mime + ';base64,' + b64,
+        quality: TIER_HOST_LABEL[tier],       // [v1.0.3] 同 fork 路线口径
+        actualQuality: TIER_HOST_LABEL[tier],
+    };
     if (typeof sizeHint === 'number' && sizeHint > 0) {
         result.size = sizeHint;
     }
@@ -888,10 +904,10 @@ async function getMusicComments(musicItem, page) {
 }
 
 module.exports = {
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djshow.plugin.v1.0.2.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djshow.plugin.v1.0.3.js',
     name: 'DJ秀',
     platform: 'DJ秀',
-    version: '1.0.2',
+    version: '1.0.3', // [v1.0.3] 两条取链路线均回传 quality/actualQuality（按选中档 l/m/h/f → 64k/192k/320k/flac，2026-10-03 逐档实测）；supportedQualities 由六档收为四档（96k/128k 无对应文件，归一映射保留）
     author: '研发2号',
     description:
         'DJ秀(DJshow)音源插件。数据面全量接入（分类/搜索/歌单/榜单/明文歌词/评论）；' +
@@ -899,7 +915,11 @@ module.exports = {
         'fork 宿主走解密代理 file:// 播放，标准宿主走插件内全量解密 data: URI 实验路径；' +
         '无损档取自下载档位接口(base64+XOR)的 f 档 flac。',
     supportedSearchType: ['music'],
-    supportedQualities: ['64k', '96k', '128k', '192k', '320k', 'flac'],
+    // [v1.0.3] 只列真实存在的四个文件档（l/m/h/f）。
+    // 旧的六档声明里 96k 与 128k 没有对应文件：96k 走 l 档（65kbps）、128k 走 m 档（192kbps），
+    // 菜单多点一次只是让人误以为存在中间码率。两键的归一映射（QUALITY_TIER）保留，宿主按优先级
+    // 列表传入时仍能拿到就近档并如实回标。
+    supportedQualities: ['64k', '192k', '320k', 'flac'],
     cacheControl: 'no-store',
     hints: {},
 
