@@ -209,7 +209,8 @@ async function ensureBuffer(kw, need) {
 
 function normalizeQuality(q) {
   var s = String(q || '');
-  if (s === 'standard' || s === 'low') return 'sd'; // 荔枝官方「标准」= SD 低码率
+  // [v1.0.1] 补 '64k'：菜单改用宿主内置键后，宿主传的是 64k 而不再是 legacy standard
+  if (s === 'standard' || s === 'low' || s === '64k') return 'sd'; // 荔枝官方「标准」= SD 低码率
   return 'hd'; // 128k / high / super / 未知档 → 荔枝最高实际档 HD（宁低勿高，actualQuality 如实上报）
 }
 
@@ -334,7 +335,10 @@ async function resolveSource(musicItem, quality) {
   return {
     url: target,
     headers: { 'User-Agent': probe.ua || UA_OKHTTP }, // CDN 拒 iPhone UA，宿主播放请求带同 UA（取链实测成功者）
-    actualQuality: kind === 'sd' ? 'standard' : '128k'
+    // [v1.0.1] SD 档不再回 legacy 键 'standard'：宿主 legacyQualityMap 把 standard 当 192k，
+    // 而本档实测只有 15kbps（2026-10-03：768,391B÷414s，SD M4A；对比 HD 6,760,380B÷414s≈131kbps），
+    // 标 standard 等于虚高 12 倍。宿主内置键最低档即 64k，无更低标签可用，故落 64k 并在注释里写明实测值。
+    actualQuality: kind === 'sd' ? '64k' : '128k'
   };
 }
 
@@ -380,15 +384,16 @@ function extractVoiceId(urlLike) {
 // ==================== 插件主体 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/lizhi-source.plugin.v1.0.0.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/lizhi-source.plugin.v1.0.1.js',
   name: '荔枝FM',
   platform: 'lizhi',
-  version: '1.0.0',
+  version: '1.0.1', // [v1.0.1] SD 档回标从 legacy 'standard'（宿主按 192k 处理）改为内置最低档 64k，实测 SD ~15kbps / HD ~131kbps；supportedQualities 同改 ['64k','128k']
   author: '研发2号',
-  description: '荔枝FM音源插件 v1.0.0（播客/电台/有声书）：搜索（keywords+deviceId+receiptData 会话分页，实测上游忽略 page 参数）、HD MP3(~128kbps)/SD M4A(~14kbps) 双音质取链（trackUrl 后缀派生）、付费音频封面日期派生直链、主播作品列表、分享链接/纯ID导入单曲；取链经 Range 探测魔数+码率区间校验（音流口径）。CDN 实测拒 iPhone UA，插件与播放均带 Android UA。无歌词/排行榜/歌单/专辑/评论接口，如实不实现。',
+  description: '荔枝FM音源插件 v1.0.0（播客/电台/有声书）：搜索（keywords+deviceId+receiptData 会话分页，实测上游忽略 page 参数）、HD MP3(~128kbps)/SD M4A(~14kbps) 双音质取链（trackUrl 后缀派生，对外标 64k/128k；SD 实测 ~15kbps）、付费音频封面日期派生直链、主播作品列表、分享链接/纯ID导入单曲；取链经 Range 探测魔数+码率区间校验（音流口径）。CDN 实测拒 iPhone UA，插件与播放均带 Android UA。无歌词/排行榜/歌单/专辑/评论接口，如实不实现。',
   primaryKey: ['id'],
   supportedSearchType: ['music'],
-  supportedQualities: ['standard', '128k'], // standard=SD M4A ~14kbps；128k=HD MP3 ~128kbps（荔枝实际能力，如实呈现）
+  // [v1.0.1] legacy 键 'standard' → 内置键 '64k'：宿主会把 standard 按 192k 处理，而该档实测 15kbps
+  supportedQualities: ['64k', '128k'], // 64k=SD M4A（实测 ~15kbps，宿主内置键最低档）；128k=HD MP3（实测 ~131kbps）
   cacheControl: 'no-store', // 直链长期有效但依赖条目扩展字段与风控状态，现取更稳
   hints: {
     search: ['搜索荔枝FM播客/电台/有声书音频'],
