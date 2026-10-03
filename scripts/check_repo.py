@@ -2,7 +2,7 @@
 """musicfree-plugins 仓库全面检查脚本 v1"""
 import json, os, re, sys, hashlib, subprocess
 
-ROOT = r"C:\Users\ajun\Desktop\tvbox\music"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # scripts/ 上一级 = 仓库根
 PLUGINS = os.path.join(ROOT, "plugins")
 issues = []
 

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """定位 agg 插件顶层 plugin 对象定义"""
-import re
-p = r"C:\Users\ajun\Desktop\tvbox\music\plugins\agg-source.plugin.v1.9.15.js"
+import re, os
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+p = os.path.join(ROOT, "plugins", "agg-source.plugin.v1.9.15.js")
 c = open(p, encoding="utf-8", errors="replace").read()
 print("file len:", len(c))
 # 找 plugin 对象定义

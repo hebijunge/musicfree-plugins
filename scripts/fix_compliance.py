@@ -2,7 +2,7 @@
 """补齐 skill 规范缺失字段：cacheControl / name(遗留旧文件) / srcUrl(清单插件)"""
 import json, os, re
 
-ROOT = r"C:\Users\ajun\Desktop\tvbox\music"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # scripts/ 上一级 = 仓库根
 PLUGINS = os.path.join(ROOT, "plugins")
 
 with open(os.path.join(ROOT, "plugins.json"), encoding="utf-8-sig") as f:

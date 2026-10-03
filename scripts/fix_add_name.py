@@ -2,7 +2,7 @@
 """修复脚本2：1) 18 个插件补 name 字段 2) 17 个重命名插件 srcUrl 同步 3) jamendo name 修正"""
 import os, re
 
-PLUGINS = r"C:\Users\ajun\Desktop\tvbox\music\plugins"
+PLUGINS = os.path.join(ROOT, "plugins")
 
 # 重命名映射（新文件名 -> 新版本号）
 NEW_VER = {

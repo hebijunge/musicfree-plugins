@@ -2,7 +2,7 @@
 """最终验证：清单 JSON 有效性、一致性、引用完整性、版本一致性"""
 import json, os, re
 
-ROOT = r"C:\Users\ajun\Desktop\tvbox\music"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # scripts/ 上一级 = 仓库根
 PLUGINS = os.path.join(ROOT, "plugins")
 
 manifests = sorted(f for f in os.listdir(ROOT) if f.endswith(".json") and os.path.isfile(os.path.join(ROOT, f)))

@@ -2,7 +2,7 @@
 """修复 srcUrl：把 17 个重命名插件内部 srcUrl 中的旧文件名 v1.0.0 改为新版本号"""
 import os, re
 
-PLUGINS = r"C:\Users\ajun\Desktop\tvbox\music\plugins"
+PLUGINS = os.path.join(ROOT, "plugins")
 NEW_VER = {
     "172mix-source.plugin.v1.1.0.js": "1.1.0", "36dj-source.plugin.v1.1.0.js": "1.1.0",
     "54dj-source.plugin.v1.1.0.js": "1.1.0", "82dj-source.plugin.v1.1.0.js": "1.1.0",
