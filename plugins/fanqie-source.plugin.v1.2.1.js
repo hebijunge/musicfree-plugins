@@ -4,6 +4,22 @@
 /**
  * 番茄音乐（NovelFM）独立源插件 v1.0.0 —— MusicFree
  * ============================================================
+ * v1.2.1（2026-10-03 档位声明与回标一致性收口，基线 v1.2.0）：
+ *  - 【P1 虚标收口】v1.2.0 把 honestQuality 实测档写进了 actualQuality，但宿主 plugin.ts
+ *    读的是 result.quality（且不做 legacy→内置键转换），而两条路径都仍写「请求档/静态档」：
+ *    API 路径 quality=hostQuality、SSR 路径 quality='128k'。于是 24 个音质键（含 64k~320k、
+ *    low/standard/high/super、exhigh/lossless/hq/sq/zq）全部落到同一条 ~65kbps SSR 单流，
+ *    角标却各自显示自己要的档位。现两处均改为 quality === actualQuality === 实测档。
+ *  - 【P1 只列可达档】playerapi/video_model 的四档通道当前全域 403「invalid aid」：
+ *    lite(8661)/std(3040) 两域 + api5-sinfonlinea 共 3 组组合各 12 次重试全 403；经
+ *    log.isnssdk.com 重新注册 device_id/iid 后仍 403，而同一参数集的搜索/详情接口正常
+ *    ——说明该端点已另行加签或轮换 aid，不是 v1.2.0 记录的那种随机灰度抖动。
+ *    可达取链只剩 m 站 SSR 单流（12 条抽样恒 65~66kbps）→ supportedQualities 收为 ['64k']。
+ *    取链侧 128k/192k/flac 候选序与实测标注逻辑全部保留，通道恢复后改回一行声明即可。
+ *  - SSR 兜底失去实测依据时（size 或 duration 缺失）静态档由 higher(=128k) 改为 medium(=64k)，
+ *    与该通道的实测分布一致（宁低勿高）。
+ *  - 实测 A/B（曲目「我知道你在等我」dur=316s，实取 2,587,084B≈65kbps）：
+ *    320k/flac/master 等任意键 旧 回标=各自请求档 → 新 一律回标 64k；菜单由 4 档减为 1 档。
  * v1.2.0（2026-10-01）：音质标签实测化。v1.1.0 的条目 qualities 声明是数组（宿主期望
  *   {档:{size}} 映射）且 320k/flac 在 SSR 兜底时全落同一份 ~65kbps 单流、被静态标成
  *   128k（12 条抽样全部 65~66kbps 被误标）。本版移除条目级 qualities 数组；取链后按
@@ -414,11 +430,14 @@ async function getMediaSourceImpl(musicItem, quality) {
     if (!MEDIA_URL_ALLOW_RE.test(t.url)) { lastErr = new Error('直链未通过官方 CDN 白名单校验'); continue; }
     var magic = await probeMediaMagic(t.url);
     if (!magic) { lastErr = new Error('音质档 ' + internals[i] + ' 魔数校验未通过'); continue; }
+    // [v1.2.1 P1] quality 与 actualQuality 同取实测档：宿主 plugin.ts 读的是 result.quality
+    // 且不做 legacy 转换，旧写法回显 hostQuality 让任意请求键都显示自己要的档位。
+    var aq = honestQuality(internals[i], t.size, duration);
     return {
       url: t.url,
-      quality: hostQuality, // [v1.1.0 P1-12] 补 quality（请求档）
+      quality: aq,
       headers: { 'User-Agent': UA },
-      actualQuality: honestQuality(internals[i], t.size, duration),
+      actualQuality: aq,
       size: t.size > 0 ? t.size : undefined
     };
   }
@@ -437,9 +456,11 @@ async function ssrMediaFallback(bookId, duration) {
     responseType: 'arraybuffer'
   });
   var size = contentLengthOf(probed);
-  // 无 size 信息时不做码率声明依据，按 higher 档保守标注 128k
-  var aq = honestQuality('higher', size, duration);
-  return { url: url, quality: '128k', headers: { 'User-Agent': UA }, actualQuality: aq, size: size > 0 ? size : undefined }; // [v1.1.0 P1-12] 补 quality（SSR 兜底默认 higher 静态标 128k）
+  // [v1.2.1] 无实测依据时按 'medium' 静态映射（=64k）而非 higher(=128k)：
+  // m 站 SSR 单流 12 条抽样实测恒为 65~66kbps，静态标 128k 是虚高；
+  // 有 size+duration 时仍由实测决定。quality 与 actualQuality 同值。
+  var aq = honestQuality('medium', size, duration);
+  return { url: url, quality: aq, headers: { 'User-Agent': UA }, actualQuality: aq, size: size > 0 ? size : undefined };
 }
 
 // ---- 歌词（m 站 SSR）----
@@ -609,10 +630,10 @@ function getMusicCommentsImpl(_musicItem, _page) { return Promise.reject(new Err
 // ==================== 插件定义 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/fanqie-source.plugin.v1.2.0.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/fanqie-source.plugin.v1.2.1.js',
   name: '番茄畅听',
   platform: 'fanqie',
-  version: '1.2.0', // [v1.2.0] 音质标签实测化 + 条目 qualities 形状修正
+  version: '1.2.1', // [v1.2.1] 档位声明与回标一致性收口：result.quality 不再回显请求档/静态档，与 actualQuality 同取实测档（宿主读的是 quality 且不做 legacy 转换）；四档通道全域 403「invalid aid」（含重注册设备号后），可达仅剩 m 站 SSR 单流恒 65~66kbps → supportedQualities 收为 ['64k']；SSR 无实测依据时静态档 higher(128k)→medium(64k)。详见头部 changelog；v1.2.0] 音质标签实测化 + 条目 qualities 形状修正
   author: '研发2号',
   description: '番茄音乐（NovelFM）独立源插件（v1.2.0）：v1.1.0 的条目 qualities 声明用的是数组（宿主期望 {档:{size}} 映射），且 320k/flac 请求在 SSR 兜底时全落到同一份 ~65kbps 单流还被静态标成 128k（12 条抽样全部 65~66kbps 被误标）。本版：① 移除条目级 qualities 数组（搜索阶段无真实档位/大小可标）；② 取链后按实测 size/duration 换算码率并 snap 到不超过实测值的最近档（medium≈66k→64k、higher≈129k→128k、highest≈254k→192k、lossless→flac），杜绝虚标；③ API 与 SSR 兜底返回均补 size 供宿主显示文件大小。搜索/取链/详情/导入/歌词/榜单与 v1.1.0 一致。',
   supportedSearchType: ['music'], // 平台仅歌曲搜索（专辑/歌手/歌单无公开接口，宁缺毋滥）
@@ -621,7 +642,13 @@ var plugin = {
   // 档位声明（不虚标，按实测码率）：medium≈66kbps→64k；higher≈129kbps→128k；
   // highest≈254kbps→192k（达不到 320k，故不声明 320k）；lossless（仅部分内容）→flac。
   // actualQuality 每次按实际命中档的 size/duration 回算，绝不高于实测码率。
-  supportedQualities: ['64k', '128k', '192k', 'flac'],
+  // [v1.2.1 只列可达档] playerapi/video_model 四档通道当前全域 403「invalid aid」
+  // （2026-10-03 实测：lite/std 两域 + api5-sinfonlinea 共 3 组组合、24 次重试全 403；
+  // 经 log.isnssdk.com 重新注册 device_id/iid 后仍 403，而同一参数集的搜索/详情接口正常
+  // ——该端点已另行加签或轮换了 aid，不是抖动）。可达取链只剩 m 站 SSR 单流，实测恒 65~66kbps
+  // → 只声明 64k。取链侧的 128k/192k/flac 候选序与 honestQuality 实测标注全部保留：
+  // 通道恢复后把本行改回 ['64k','128k','192k','flac'] 即可，无需动其他代码。
+  supportedQualities: ['64k'],
   // [v1.1.0 P1-14] 番茄为音频源不提供视频流；空集避免宿主把 supportedQualities 误作视频档
   supportedVideoQualities: [],
   cacheControl: 'no-store', // 直链含签名且 24h 过期（文档 §10-7），必须现取

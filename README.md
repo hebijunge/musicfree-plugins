@@ -86,7 +86,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | 网易云音乐 | 1.9.15 | [netease-source.plugin.v1.9.15.js](plugins/netease-source.plugin.v1.9.15.js) |
 | 汽水音乐 | 1.9.16 | [qishui-source.plugin.v1.9.16.js](plugins/qishui-source.plugin.v1.9.16.js) |
 | B站 | 1.1.2 | [bilibili-source.plugin.v1.1.2.js](plugins/bilibili-source.plugin.v1.1.2.js) |
-| 番茄畅听 | 1.2.0 | [fanqie-source.plugin.v1.2.0.js](plugins/fanqie-source.plugin.v1.2.0.js) |
+| 番茄畅听 | 1.2.1 | [fanqie-source.plugin.v1.2.1.js](plugins/fanqie-source.plugin.v1.2.1.js) |
 | DJ多多 | 1.0.0 | [djduoduo-source.plugin.v1.0.0.js](plugins/djduoduo-source.plugin.v1.0.0.js) |
 | 5sing | 1.0.0 | [5sing-source.plugin.v1.0.0.js](plugins/5sing-source.plugin.v1.0.0.js) |
 | 千千音乐 | 1.0.2 | [qianqian-source.plugin.v1.0.2.js](plugins/qianqian-source.plugin.v1.0.2.js) |
