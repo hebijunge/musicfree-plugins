@@ -2,7 +2,18 @@
  * [v1.0.1 显示名中文化] 顶层新增 name 字段：导入/安装列表显示中文名「懒人听书」；platform 字段保持英文不变，不影响功能逻辑与既有识别逻辑。
  */
 /**
- * 懒人听书独立源插件 v1.0.1（MusicFree 插件规范 · 音流宿主对齐）
+ * 懒人听书独立源插件 v1.0.2（MusicFree 插件规范 · 音流宿主对齐）
+ *
+ * ==================== v1.0.2 changelog（档位标签内置键化，2026-10-03） ====================
+ * 依据：宿主 MusicFree/src/utils/qualities.ts 的 legacyQualityMap 把 legacy 名 standard
+ * 当作 192k，而 plugin.ts 又直接透传 result.quality 且不做 legacy→内置转换。
+ * 缺陷：supportedQualities 声明 ['standard']、取链回标 'standard'、条目 qualities 也用
+ * standard 键 —— 一档实测 46~98kbps 的免费流在宿主菜单/角标/下载命名里被当成 192k。
+ * 实测（2026-10-03 真链路 搜索→专辑→章节→取链）：首章 2,960,664B ÷ 491s = 48kbps。
+ * 修复：新增 hostQualityKey(size, duration)，按「不超过实测值的最近内置档」输出
+ * 64k/96k/128k；条目 qualities、取链 quality/actualQuality、supportedQualities 全部
+ * 改走内置键（supportedQualities=['64k']）；内部哨兵名仍叫 standard 不动取链逻辑。
+ * 兼容：读声明大小时跨键遍历，旧缓存条目里的 standard 键仍可取到 size。
  *
  * ==================== v1.0.1 changelog（交叉质检修复版） ====================
  * 依据：质检1号 2026-09-24《懒人听书插件 v1.0.0 交叉质检报告》（核心播放链路 31/31 独立复测
@@ -200,7 +211,9 @@ function buildChapterItem(bookId, ch, meta, idx) {
     album: meta.name,
     artwork: meta.cover,
     duration: toInt(ch && ch.length),
-    qualities: declared > 0 ? { standard: { size: declared } } : {},
+    qualities: declared > 0 ? (function () {
+      var k = {}; k[hostQualityKey(declared, toInt(ch && ch.length))] = { size: declared }; return k;
+    })() : {},
     platform: 'lrts'
   };
   return item;
@@ -216,7 +229,9 @@ function buildAlbumAudioItem(albumId, a, meta) {
     album: meta.name,
     artwork: meta.cover,
     duration: toInt(a && a.length),
-    qualities: declared > 0 ? { standard: { size: declared } } : {},
+    qualities: declared > 0 ? (function () {
+      var k = {}; k[hostQualityKey(declared, toInt(a && a.length))] = { size: declared }; return k;
+    })() : {},
     platform: 'lrts'
   };
 }
@@ -504,9 +519,26 @@ async function getRecommendSheetsByTagImpl(tagItem, page) {
 
 // ==================== 播放取链（getPlayPath + getListenPath 兜底 + 音流口径校验） ====================
 
-// 音质归一：平台免登录仅 standard 一档（文档实测 46-98kbps），请求更高档位如实降档
+// 音质归一：平台免登录仅一档（文档实测 46-98kbps），请求更高档位如实降档
 function normalizeQuality(q) {
-  return 'standard';
+  return 'standard'; // 内部哨兵名，对宿主一律用内置音质键（见 hostQualityKey）
+}
+
+// [v1.0.2 宿主键协议对齐] 内部哨兵 standard → 宿主内置音质键。
+// 旧写法把 legacy 名 'standard' 直接交给宿主：宿主 legacyQualityMap 把 standard 当作 192k，
+// 于是一档 46~98kbps 的免费流在菜单/角标/下载命名里被当成 192k。
+// 免登录只有一路流，按「不超过实测值的最近内置档」标注：
+// <96kbps→64k、<128kbps→96k、其余→128k；size 或 duration 未知时不猜，落 64k。
+var HOST_QUALITY_TIERS = [64, 96, 128];
+function hostQualityKey(size, durationSec) {
+  var bytes = toInt(size), sec = toInt(durationSec);
+  if (bytes <= 0 || sec <= 0) return '64k';
+  var kbps = bytes * 8 / sec / 1000;
+  var fit = 64;
+  for (var i = 0; i < HOST_QUALITY_TIERS.length; i++) {
+    if (kbps >= HOST_QUALITY_TIERS[i]) fit = HOST_QUALITY_TIERS[i];
+  }
+  return fit + 'k';
 }
 
 // 魔数识别（音流口径）：ftyp=M4A（书籍实测）/ ID3、帧同步=MP3（专辑实测）/ fLaC、OggS 兼容收录
@@ -631,14 +663,21 @@ async function getMediaSourceImpl(musicItem, quality) {
       Math.max(deadline - Date.now(), 1000), '[lrts] getListenPath 兜底超时');
   }
   if (!isAllowedMediaUrl(url)) throw new Error('[lrts] 取链 URL 未通过协议校验（仅放行 https）');
-  var declaredSize = musicItem && musicItem.qualities && musicItem.qualities.standard
-    ? toInt(musicItem.qualities.standard.size) : 0;
-  var v = await withTimeout(verifySource(url, { declaredSize: declaredSize, duration: toInt(musicItem && musicItem.duration) }),
+  var declaredSize = 0;
+  var qs = musicItem && musicItem.qualities;
+  if (qs) { // [v1.0.2] qualities 改用内置键，跨键取声明大小（兼容旧缓存条目里的 standard 键）
+    for (var qk in qs) {
+      if (qs[qk] && toInt(qs[qk].size) > 0) { declaredSize = toInt(qs[qk].size); break; }
+    }
+  }
+  var durSec = toInt(musicItem && musicItem.duration);
+  var v = await withTimeout(verifySource(url, { declaredSize: declaredSize, duration: durSec }),
     Math.max(deadline - Date.now(), 1000), '[lrts] 取链校验超时');
+  var hostKey = hostQualityKey(v.total || declaredSize, durSec);
   return {
     url: url,
-    quality: 'standard',
-    actualQuality: 'standard',
+    quality: hostKey,      // [v1.0.2] 宿主内置键（实测 46~98kbps → 64k/96k），不再透传 legacy 'standard'
+    actualQuality: hostKey,
     size: v.total,
     headers: { 'User-Agent': LRTS_UA, Referer: LRTS_REFERER },
     _verify: { magic: v.magic, tier: v.tier } // 完整档/免登录低音质档如实记录
@@ -677,16 +716,16 @@ async function getMusicDetailPageUrlImpl(musicItem) {
 // ==================== 插件对象 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/lrts-source.plugin.v1.0.1.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/lrts-source.plugin.v1.0.2.js',
   name: '懒人听书',
   platform: 'lrts',
-  version: '1.0.1',
+  version: '1.0.2',
   author: '研发3号',
   description: '懒人听书（LRTS·腾讯音乐系听书平台）独立源插件 v1.0.0：搜索（keyWord 驼峰参数）返回书籍+专辑，统一映射为专辑条目；专辑/歌单详情展开章节列表（50 章/页分页拉取，单次上限 500 章防超时并如实标注）；播放取链走官方 getPlayPath（书籍 entityType=3 / 专辑 entityType=2），空返回时书籍走 getListenPath 兜底；链接经音流口径校验（Range 0-15 探测 Content-Length 与章节声明 size 双口径比对 + ftyp/ID3 魔数 fail-closed + 码率窗口守卫）；免登录免费内容仅 ~46-98kbps 一档，supportedQualities 如实仅 standard 不虚构更高音质；付费章节标题标注「｜付费」且取链如实报「收费章节未购买」，不做任何绕过（官方限制实测无法绕过）；排行榜接口上游未开放不提供，分类浏览走 getCategory+搜索替代（getBookList categoryId 实测不生效）；有声书无歌词，getLyric 如实返回空',
   primaryKey: ['id'],
   supportedSearchType: ['album'], // 搜索结果为书籍/专辑（无可播单曲形态），music/artist/sheet 如实返回空
   defaultSearchType: 'album',
-  supportedQualities: ['standard'], // 免费免登录仅 46-98kbps 一档（文档实测），不虚构更高音质
+  supportedQualities: ['64k'], // [v1.0.2] 内置键口径：免登录仅 46-98kbps 一档，取不高于实测的最近内置档 64k；旧写法 'standard' 会被宿主 legacy 映射当 192k
   cacheControl: 'cache', // vkey 直链 24h 有效（文档 4.3）
   userVariables: [],
   hints: {
