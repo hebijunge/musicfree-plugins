@@ -1466,10 +1466,10 @@ function getMusicDetailPageUrlImpl(musicItem) {
 // ==================== 插件导出（宿主契约对齐 kuwo/kugou standalone 插件） ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/apple-music-v1.0.0.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/apple-music-v1.0.1.js',
   name: 'Apple Music',
   platform: PLATFORM,
-  version: '1.0.0',
+  version: '1.0.1', // [v1.0.1] supportedQualities 摘掉取不到的 128k→192k 幻影档（192k 请求实测交付 321kbps 文件）
   author: '研发1号',
   description: 'Apple Music 独立源插件 v1.0.0：Apple Music 曲库目录源（搜索/专辑/歌单/29 分类歌单广场/分享链导入）+ 酷我兜底播放取链。' +
     '公开 API 仅返回 30~90 秒预览（完整曲目需订阅+FairPlay DRM，插件不可行），故播放主路径按歌曲名+歌手经酷我通道兜底取链' +
@@ -1480,7 +1480,10 @@ var plugin = {
     'storefront 默认 us 可切 cn，分类歌单固定 cn。',
   primaryKey: ['id'],
   supportedSearchType: ['music', 'album', 'sheet'],
-  supportedQualities: ['128k', '192k', '320k', 'flac'],
+  // [v1.0.1] 摘掉 192k：本源无可交付的 192k 文件——自有通道只有 previews 一段 ≈96~128kbps M4A，
+  // 完整档靠酷我兜底（128kmp3/320kmp3/2000kflac）。2026-10-03 逐键实测：192k/320k 请求
+  // 均拿到同一条 321kbps 文件（回标如实 320k），菜单多列一档只是让人误选中段码率。
+  supportedQualities: ['128k', '320k', 'flac'],
   cacheControl: 'no-store', // 播放链接为酷我签名短时效链接 + Apple 预览防盗链，必须现取
   userVariables: [
     { key: 'appleStorefront', name: 'Storefront（默认 us）', hint: 'Apple Music 区服：us / cn / hk / jp / tw 等；分类歌单固定 cn 不受此项影响' },

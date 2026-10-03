@@ -1224,16 +1224,20 @@ function getMusicDetailPageUrlImpl(musicItem) {
 
 // ==================== 榜单/歌单（文档未覆盖，如实不支持） ====================
 // 文档 2. 明确标注：专辑/歌单模块"需进一步抓包"，无公开接口。不虚构实现。
-function getTopListsImpl() { return Promise.resolve([]); }
+function getTopListsImpl() {
+  // [v1.0.2] 原为静默返回空数组：宿主榜单页只见到一片空白，不知道是没有接口。
+  // 与蜻蜓/猫耳同口径——如实抛原因，宿主把提示给到用户。
+  return Promise.reject(new Error('华为音乐：榜单接口文档未覆盖（需抓包），暂不支持；可用入口为搜索'));
+}
 function getTopListDetailImpl() { return Promise.reject(new Error('华为音乐：榜单接口文档未覆盖（需抓包），暂不支持')); }
 function getSheetInfoImpl() { return Promise.reject(new Error('华为音乐：歌单接口文档未覆盖（需抓包），暂不支持')); }
 
 // ==================== MusicFree 插件清单 ====================
 const plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/hwmusic-source.plugin.v1.0.1.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/hwmusic-source.plugin.v1.0.2.js',
   name: '华为音乐',
   platform: '华为音乐', // 音乐源标识，应与其他插件不同
-  version: '1.0.1',
+  version: '1.0.2', // [v1.0.2] getTopLists 由静默返回空数组改为如实抛「榜单接口未覆盖」，与蜻蜓/猫耳同口径（空页不告知原因）
   author: '研发1号',
   description: '华为音乐音源（搜索免登录；华为官方取链尽力尝试，酷我兜底播放，来源如实标记）',
   primaryKey: ['id'],
