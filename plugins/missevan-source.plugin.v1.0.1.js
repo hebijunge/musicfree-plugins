@@ -52,7 +52,7 @@ var axios = require('axios');
 
 // ==================== 常量区 ====================
 
-var PLUGIN_VERSION = '1.0.0';
+var PLUGIN_VERSION = '1.0.1'; // [v1.0.1] 免登录分类浏览由 5 个扩到 8 个（按可播率筛选，见 TOP_CATS 注释）;
 var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36';
 var HOST = 'https://www.missevan.com';
 
@@ -60,13 +60,23 @@ var HOST = 'https://www.missevan.com';
 // 文档 2026-09-02 实测期为 *.bilivideo.com（B站CDN），两者兼容放行，其余一律拒绝。
 var MEDIA_URL_ALLOW_RE = /^https:\/\/([a-z0-9-]+\.)*(maoercdn\.com|bilivideo\.com)\//i;
 
-// 排行榜（分类精选）：cat_id 与标题为 2026-09-24 逐页实测（<title> 标签）
+// 排行榜（分类精选）：免登录分类页，平台无公开榜单接口。
+// [v1.0.1] 由 5 个扩到 8 个。依据 2026-10-03 逐页实测（扫 cat 1..60 取 <title> 与声音 id，
+// 再每类抽取 5~12 条真跑 getMediaSource 统计可播率）：
+//   收：8 音乐 / 48 二次创作 / 1 音频 / 50 OP‑ED‑OST / 11 故事 / 4 情感 / 44 乙女（均 5/5 可播）；
+//   6 听书为存量入口，本轮实测 4/12 可播（其余为付费/不存在），保留但如实标注；
+//   不收：16 轻小说 0/12（全部付费）、17 网络小说 1/12——列表看得到点不了，宁缺毋滥；
+//   5 广播剧返回 SPA 壳（2463B、零 id）；9/12/30 仅 2~3 个 id；2/3 连续 12s 超时；
+//   7/10/13~15/18~25/35/40/52 均 404。
 var TOP_CATS = [
   { catId: '8', title: '音乐专区' },
   { catId: '6', title: '听书专区' },
   { catId: '48', title: '二次创作专区' },
   { catId: '4', title: '情感专区' },
-  { catId: '1', title: '音频专区' }
+  { catId: '1', title: '音频专区' },
+  { catId: '50', title: 'OP/ED/OST专区' },
+  { catId: '11', title: '故事专区' },
+  { catId: '44', title: '乙女专区' }
 ];
 
 var API_TIMEOUT = 6000;        // getsound / getusersound / getdrama 超时
@@ -516,7 +526,7 @@ var plugin = {
   version: PLUGIN_VERSION,
   author: '研发2号',
   description: '猫耳FM（missevan.com）广播剧/有声/翻唱源。免费音频免登录播放（DASH fMP4 直链 + HLS 兜底，128k 实测档 + 高码率实测档）；搜索与广播剧剧集需在插件设置配置 Cookie。',
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/missevan-source.plugin.v1.0.0.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/missevan-source.plugin.v1.0.1.js',
   cacheControl: 'no-store', // 播放地址含 token/expire_time 时效签名，必须现取
   supportedSearchType: ['music'],
   supportedQualities: ['128k', '192k'],
