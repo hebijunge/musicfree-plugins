@@ -253,8 +253,8 @@
     },
     {
       "name": "DJ6",
-      "url": "https://gcore.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/dj6-source.plugin.v1.0.0.js",
-      "version": "1.0.0"
+      "url": "https://gcore.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/dj6-source.plugin.v1.0.1.js",
+      "version": "1.0.1"
     }
   ]
 }

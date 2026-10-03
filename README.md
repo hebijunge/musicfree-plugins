@@ -129,7 +129,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | 我是DJ | 1.1.1 | [54dj-source.plugin.v1.1.1.js](plugins/54dj-source.plugin.v1.1.1.js) |
 | 电音阁 | 1.1.1 | [dianyinge-source.plugin.v1.1.1.js](plugins/dianyinge-source.plugin.v1.1.1.js) |
 | SpaceDJ | 1.1.1 | [spacedj-source.plugin.v1.1.1.js](plugins/spacedj-source.plugin.v1.1.1.js) |
-| DJ6 | 1.0.0 | [dj6-source.plugin.v1.0.0.js](plugins/dj6-source.plugin.v1.0.0.js) |
+| DJ6 | 1.0.1 | [dj6-source.plugin.v1.0.1.js](plugins/dj6-source.plugin.v1.0.1.js) |
 
 ## 目录结构
 
