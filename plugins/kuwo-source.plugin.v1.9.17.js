@@ -5,6 +5,13 @@ var axios = require('axios');
 /**
  * 酷我音乐独立源插件（MusicFree）
  * ================================
+ * v1.9.17（2026-10-03，档位不倒挂）：
+ *   ① super 链原先母带优先（20900kmflac 首选），宿主选 `flac` 实际交付 144,431,977B
+ *     ≈5528kbps 母带，而选 `hires` 只回 24,343,582B ≈932kbps——音质越高体积越小。
+ *     现按站点自己给的档位表（本曲 qualities: flac bitrate=2000 / 320 / 128）排序：
+ *     2000kflac 明文竞速池 → 海棠 lossless → 24bit(20201) → 母带(20900) → 海棠 kw.php，
+ *     命中哪档回标哪档；② supportedQualities 摘掉 192k——上游无该档，192k 请求实际
+ *     交付 320k（回标也是 320k），属幽灵档位。
  * v1.9.15（2026-09-25 接口吸收版，基线 v1.9.14）：v1.9.15 接口吸收版（承接「23 个音乐插件可吸收取链接口」调研，实测存活口径 2026-09-25）：本源新增三条兜底通道，全部挂在既有海棠 resolve-url 兜底之后（不改变主链优先级）：① 海棠 kw.php 直连（musicapi.haitangw.net/music/kw.php，302/JSON 双形态，standard→128k/high→320k/super→lossless，探针实测 lossless 302→car-er.kuwo.cn 官方 fLaC 55.4MB）；② nxinxz 补充档位（music.nxinxz.com/kw.php，仅 standard/low/high，探针实测 320k ID3 mp3 10.79MB）；③ antiserver 320k 备选（anti.s convert_url，仅 high 档链尾，返回档位不稳定由守卫按 320k 声明码率下限 fail-closed）。三通道 actualQuality 如实声明，外层 resolveWithFallback 守卫（无损魔数/码率下限）不过即拒收接力；详见头部 changelog；
  *   详情：版本字段行同款摘要，此处不重复展开。
  * v1.9.12（2026-09-20 包升版，基线 v1.9.11）：QQ 源接入 a.aa.cab/qq.music 搜索型取链新通道（详见 qq-v1912.js 头部 changelog）；本源无代码改动，版本号随包统一升 v1.9.12。
@@ -1562,10 +1569,10 @@ function kuwoDesResolve(raw, quality) {
     // [v0.7.4] bitrate 口径修正：convert_url2 响应 bitrate 为 kbps（实测 128/320/2000），
     // 原阈值 320000/192000 按 bps 理解，导致 mp3 档恒标 128k
     var aq;
-    // [v1.6.0 P1-1] Hi-Res 标注：DES convert_url2 format=flac 实测即返回 bitrate=2000（真 2000kflac
-    // 无损，55MB 级），≥2000 标 'hires' 与普通 flac 区分；format=2000kflac 不被稳定接受（228908
-    // 降级 mp3 128）故不改请求格式，仅按响应标注
-    if (fmt === 'flac') aq = br >= 2000 ? 'hires' : 'flac';
+    // [v1.9.17 回标纠正] 此处 br 是站点的**名义档位号**（DES 返回 bitrate=2000 即"2000kflac 普通无损"），
+    // 不是实测码率，旧写法 br>=2000 就标 'hires' 把 CD 级 flac 抬成了 Hi-Res。
+    // 真 24bit/母带只走 QMC 20201kmflac / 20900kmflac 路径，那里已显式回标 hires/master。
+    if (fmt === 'flac') aq = 'flac';
     else aq = br >= 320 ? '320k' : (br >= 192 ? '192k' : '128k'); // mp3 档按响应 bitrate 如实标注
     return { url: url, actualQuality: aq };
   });
@@ -1632,10 +1639,10 @@ function kwOfficialResolve(host, raw, quality, variant, signal) { // [v1.7.1 fix
       throw new Error('kuwo trial snippet');
     }
     // [v0.7.4] actualQuality 按响应 bitrate 如实标注（nmobi 响应 bitrate 为 kbps 口径），不按请求档宣称
-    // [v1.6.0 P1-1] Hi-Res 标注：br=2000kflac 实测 fLaC 55,397,039B（晴天 228908）；br=flac 反而
-    // 降级 mp3 128——请求档保持 KUWO_BR 不变，返回 flac 且 bitrate>=2000 时标 'hires'
+    // [v1.9.17 回标纠正] flac 一律标 'flac'：d.bitrate=2000 是站点的档位号（普通无损），不是
+    // 实测码率，旧写法把它当 hires 抬高了一档；24bit/母带由 QMC 路径显式回标。
     var aq = (d.format === 'flac')
-      ? ((d.bitrate >= 2000) ? 'hires' : 'flac')
+      ? 'flac'
       : (d.bitrate >= 320 ? '320k' : (d.bitrate >= 192 ? '192k' : '128k'));
     return { url: String(d.url), actualQuality: aq };
   });
@@ -1741,8 +1748,9 @@ function kwHdResolve(raw, br, aq, minBr) {
       out = { url: String(d.url), ekey: qq, actualQuality: aq };
     } else {
       // 明文档 actualQuality 按响应 bitrate 如实标注（宁低勿高，与 kwOfficialResolve 同口径）
+      // [v1.9.17] flac 一律标 'flac'（respBr 是站点名义档位号，>=2000 不等于 Hi-Res）
       var aqOut = aq || ((fmt === 'flac')
-        ? ((respBr >= 2000) ? 'hires' : 'flac')
+        ? 'flac'
         : (respBr >= 320 ? '320k' : (respBr >= 192 ? '192k' : '128k')));
       out = { url: String(d.url), actualQuality: aqOut };
     }
@@ -2575,11 +2583,14 @@ function resolveKuwo(raw, quality, musicItem) {
   // actualQuality 按命中档如实标注（master/atmos/hires 经 internalToHostQuality 透传宿主）。
   if (quality === 'super') {
     // [v1.6.1] qmcRace 升级为模块级 kwQmcRace 三路竞速（官方双域名 + HD 形态）
-    return kwQmcRace(raw, '20900kmflac', 'master')
-      .catch(function () { return kwQmcRace(raw, '20501kmflac', 'atmos'); })
-      .catch(function () { return kwQmcRace(raw, '20201kmflac', 'hires'); })
-      .catch(function () { return raceSuccess(racers); })
+    // [v1.9.17 档位不倒挂] 原顺序是母带(20900)优先，导致宿主选 `flac` 时交付 144MB/5528kbps
+    // 母带，而选 `hires` 时只给 20201 的 24MB/932kbps——音质越高体积越小、且 flac 键拿到母带。
+    // 现在按站点自己的档位表来：先要它声明的 2000kflac 明文档（实测 flac bitrate=2000），
+    // 再海棠 lossless，都没有货才逐级上到 24bit / 母带；命中哪档就回标哪档（宁低勿高）。
+    return raceSuccess(racers)
       .catch(function () { return resolveHaitang('kw', raw.rid, quality); })
+      .catch(function () { return kwQmcRace(raw, '20201kmflac', 'hires'); })
+      .catch(function () { return kwQmcRace(raw, '20900kmflac', 'master'); })
       // [v1.9.15 P0-1 吸收] 海棠 kw.php 直连兜底（super→lossless，守卫 fLaC 魔数 fail-closed）
       .catch(function () { return kwHaitangPhpResolve(raw, quality, musicItem); });
   }
@@ -3074,10 +3085,10 @@ async function lyricSearchImpl(q, page) {
 // ==================== 插件定义 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/kuwo-source.plugin.v1.9.16.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/kuwo-source.plugin.v1.9.17.js',
   name: '酷我音乐',
   platform: 'kuwo',
-  version: '1.9.16', // [v1.9.16 星海复活 + HYWmusic 酷我道接入（2026-09-29 实测）：① yy.zddyr.top/lx/api/ 自 v1.9.4 判死（503 需授权）恢复，回到竞速池原 550ms 位次，超时由 SOURCE_TIMEOUT 降为 RELAY_TIMEOUT（实测失败路径耗时 8.3~9.1s，兜底位不得吃穿 getMediaSource 8s 预算），actualQuality 改为采信响应 data.quality（服务端对降级会如实回报 320k），仅 standard/high/super 三档（hires/master 实测与 flac 返回同一 52.83MB 文件=静默降级，不接入）；② 新增 HYWmusic 酷我道 http://103.79.184.97/api/music/url（该 host 此前仅酷狗/QQ/网易源引用、酷我侧零引用且被标失效），置于竞速链尾 1000ms，实测与星海互补——星海回 code=500 的三首本源出 38.27/18.92/24.96MB 真 fLaC；该端点会以 48kbps AAC 冒充无损并回 code=200（rid=303316116 flac/320k 返回同一 1.29MB aac），故声明档一律交 verifyMediaSizeStrict 复核、不过即拒收接力，master 档 code=403 不接，卡密实测不校验仍按公益版默认值携带；③ 新增开关 kwXinghai/kwHyw/hywCardKey，默认开。v1.9.15 接口吸收版（承接「23 个音乐插件可吸收取链接口」调研，实测存活口径 2026-09-25）：本源新增三条兜底通道，全部挂在既有海棠 resolve-url 兜底之后（不改变主链优先级）：① 海棠 kw.php 直连（musicapi.haitangw.net/music/kw.php，302/JSON 双形态，standard→128k/high→320k/super→lossless，探针实测 lossless 302→car-er.kuwo.cn 官方 fLaC 55.4MB）；② nxinxz 补充档位（music.nxinxz.com/kw.php，仅 standard/low/high，探针实测 320k ID3 mp3 10.79MB）；③ antiserver 320k 备选（anti.s convert_url，仅 high 档链尾，返回档位不稳定由守卫按 320k 声明码率下限 fail-closed）。三通道 actualQuality 如实声明，外层 resolveWithFallback 守卫（无损魔数/码率下限）不过即拒收接力；详见头部 changelog；；v1.9.14 包升版（网易源集成长青 SVIP 网易替补通道 yinyue.haitangw.net，本源无代码改动，随包升版）；v1.9.13 包升版（QQ 源 a.aa.cab 通道方案A 拒绝虚标修复，本源无代码改动）；v1.9.12 包升版（QQ 源接入 a.aa.cab 新通道，本源无代码改动）；v1.9.10 KRC 接力域名修复版：fetchKuwoKrcRelay 搜索域名 mobilecdn.kugou.com → mobiles.kugou.com——mobilecdn 在部分网络 DNS 污染（证书 altnames 为 *.cdn.myqcloud.com）致逐字歌词接力断链，mobiles 同构（参数/响应一致），2026-09-12 实测搜索→krcs→download→decodeKrc 全链路打通；其余代码零改动；v1.9.9 音质标识一致性核查版（无代码改动，随包升版）：六页键集核查通过（v1.9.5 enrichQualities 为本轮参考实现）；遗留记录：专辑页(musicpay MINFO 明文档)与歌手页(N_MINFO 含加密档)同歌键集差异属上游数据口径不一致，宁缺毋假未动，详见排查总表-v1.9.9；v1.9.8版本号统一版（各源版本号对齐，无代码增量）；v1.9.6 MV 画质表修复版：availableVideoQualities 从「单实档」改为 baka 同款 5 档全 ladder（240p~1080p）——2026-09-11 复验实测酷我 anymatch 对仅 480p MV 请求 1080p 可出真实流，单档声明令宿主画质菜单无法切档；取链仍逐级降级+实档回读，诚实性不变；v1.9.5 全页面音质标识核查 + VIP 标识移除版：榜单页两路径（bang 树/聚合榜）补 qualities：聚合条目 aggQuals 透传 + ksong.s 实测无 N_MINFO 后接 enrichKuwoQualities（musicpay 批量 MINFO）兜底（榜单页此前全缺）；新增 enrichKuwoQualities（musicpay ids 批量）给专辑/歌手作品页补音质；全接口停写 fee（VIP 角标）与 getMusicInfo/取链 fee 回填，kwFeeOfRaw 移除；v1.9.4 第三方取链修复 + size 字段版：星海（yy.zddyr.top 503 鉴权死亡 + 替代 zrcdy.dpdns.org 也不可用）从竞速池移除（6→5 路）保留函数体注释掉，2026-09-11 标记失效；getMediaSource 返回值补 size 字段（取链响应直带 > HEAD Range 0-0 探测 > 留空），详见头部 changelog；v1.9.1 随包升版：歌单对象补 author 别名字段（宿主协议读 artist，任务字段清单要求 author，两者都传），导入修复详见酷狗 v1.9.1 changelog 与本轮自测清单；v1.9.0 BakaMusic 高价值音源接入版：P0 次合代/ikun 酷我通道入竞速池（4→6 路 0/250/400/550/700/850ms，严格校验+fLaC 魔数防假成功）+ P1 全豆要 nmobi 兜底回落 + userVariables 开关 kwCihedai/kwIkun 默认开；详见头部 changelog；v1.8.4 歌单导入元数据版：importMusicSheet 返回完整 IMusicSheetItem（title/description 对齐宿主契约，meta 随 pl.svc 顶层字段零额外请求回传）；v1.8.3 质检遗留优化版：Q-02/Q-03 复核确认已符合统一口径，随包升版；v1.8.2 歌单解析修复版：P2-2 歌单入口 qualities（N_MINFO 透传+parseKuwoQualityInfo）+ P2-4 错误码统一；]  v1.8.0 = MV 参数对齐基线：mvSourceResultOf 补 width/height/codec/availableVideoQualities.width + 三层兜底链 videoQuality 写回（基线 v1.7.1 = 星海 token 纯 JS base64 + nmobi/mobi 错峰 0/250/400/550ms 竞速 + AbortController + IMediaSourceResult 字段）；v1.7.0 = 第三方/备选竞速通道接入：2 官方（nmobi/mobi convert_url3 形态优先 → 实证 convert_url_with_sign 回落）+ 2 第三方（屿溪 /v1/music/resolve-url POST + 星海 /lx/api/ X-Token 鉴权）= 4 通道优先级错峰并发竞速（0/80/180/300ms），每通道通过严格音质大小校验（响应层 + Range 0-15 魔数/码率双重校验），standard/high/super 三档纳入竞速池，hires/master/atmos 维持 QMC+海棠母带/全景声链不动；详见头部 changelog 段；v1.6.1 = HotDownloader 借鉴：P0 档位真实性校验（QMC 严格相等 + super/high bitrate 下限 + 守卫魔数/码率双重校验 + CDN 探测补 UA）+ hires 宿主档（20201kmflac→20900→母带尾链）+ kwHdResolve 第四路提速竞速（HotDownloader 形态 ~67ms）；详见头部 changelog；v1.5.0 = 补齐宿主字段六项（P1 逐字歌词 getWordByWordLyric / 评论 getMusicComments / fee VIP 标记 / 分享链接 getMusicDetailPageUrl + P2 primaryKey / alias）；v1.4.4 = 清理聚合拆分残留（榜单 id agg-* 改 kw-* 单源命名 + 移除热歌榜抖音 CDN 封面硬编码）；v1.4.3 = 各音质文件大小返回宿主（N_MINFO 解析 + musicpay 详情回填，对齐 baka qualities）；v1.4.2 = super/atmos 档官方高音质全档阶梯（20900→20501→20201 逐档回落）；v1.4.1 = super 档 QMC 20201kmflac 优先后回落明文池；v1.4.0 = 母带/增强档接入酷我 QMC 加密档官方直源（插件侧 DES 解链+尾 704 提取得 QQ ekey 下发，宿主 ekey 通道零改动，母带链升级 QMC 双域名竞速首选）；v1.3.0 = MV 全面对齐 baka 酷我（mvId/mvSongId/mvArtwork 字段补齐 + 榜单条目 platform/mv 提升 + 5 画质档含 360p + anymatch 双通道竞速 + 旧版 playUrl 按 songId 兜底）；v1.2.9 = getMvSource 去 _src 硬前置 + getMusicInfo 回填 platform（旧数据 MV 菜单自愈；srcUrl 更新源按用户决策不接入）；由聚合搜索插件 v0.8.0 拆分；v1.2.8 = MV 标识补齐（六入口 mvpayinfo.vid 采集 + buildMusicItem/buildSheetItem 顶层 mv/platform 自报，打通宿主「播放 MV」入口）；v1.2.0 = 取链优化三连；v1.2.1 = tags 协议包装修复 + 海棠全音质兜底；v1.2.2 = hires 档升级海棠 kw master 真 24bit 母带 FLAC；v1.2.3 = 至臻全景声 atmos 独立成档（海棠 kw atmos，fLaC 校验 + master 链回落），DTS:X 上游不识别不接入；v1.2.4 = 榜单封面补 coverImg 字段 + 歌单分类按 tag.digest 真分流（getTagPlayList / get_pc_qz_data）+ getRcmPlayList 0 基分页；v1.2.5 = 歌手搜索接入（supportedSearchType 补 artist + r.s ft=artist）+ getArtistWorks 歌手作品页（歌曲/专辑）；v1.2.6 = 歌词搜索接入（lyric 分支 + rawLrcTxt 预览）+ defaultSearchType 显式声明 + 歌单分类 pinned 横向快捷标签（心情×3 + 语言×3 动态挑）；v1.2.7 = 歌手详情补齐（搜索歌手并发补 fans 粉丝数 + 新增 getArtistDetail 方法，www artistInfo 端点）
+  version: '1.9.17', // [v1.9.16 星海复活 + HYWmusic 酷我道接入（2026-09-29 实测）：① yy.zddyr.top/lx/api/ 自 v1.9.4 判死（503 需授权）恢复，回到竞速池原 550ms 位次，超时由 SOURCE_TIMEOUT 降为 RELAY_TIMEOUT（实测失败路径耗时 8.3~9.1s，兜底位不得吃穿 getMediaSource 8s 预算），actualQuality 改为采信响应 data.quality（服务端对降级会如实回报 320k），仅 standard/high/super 三档（hires/master 实测与 flac 返回同一 52.83MB 文件=静默降级，不接入）；② 新增 HYWmusic 酷我道 http://103.79.184.97/api/music/url（该 host 此前仅酷狗/QQ/网易源引用、酷我侧零引用且被标失效），置于竞速链尾 1000ms，实测与星海互补——星海回 code=500 的三首本源出 38.27/18.92/24.96MB 真 fLaC；该端点会以 48kbps AAC 冒充无损并回 code=200（rid=303316116 flac/320k 返回同一 1.29MB aac），故声明档一律交 verifyMediaSizeStrict 复核、不过即拒收接力，master 档 code=403 不接，卡密实测不校验仍按公益版默认值携带；③ 新增开关 kwXinghai/kwHyw/hywCardKey，默认开。v1.9.15 接口吸收版（承接「23 个音乐插件可吸收取链接口」调研，实测存活口径 2026-09-25）：本源新增三条兜底通道，全部挂在既有海棠 resolve-url 兜底之后（不改变主链优先级）：① 海棠 kw.php 直连（musicapi.haitangw.net/music/kw.php，302/JSON 双形态，standard→128k/high→320k/super→lossless，探针实测 lossless 302→car-er.kuwo.cn 官方 fLaC 55.4MB）；② nxinxz 补充档位（music.nxinxz.com/kw.php，仅 standard/low/high，探针实测 320k ID3 mp3 10.79MB）；③ antiserver 320k 备选（anti.s convert_url，仅 high 档链尾，返回档位不稳定由守卫按 320k 声明码率下限 fail-closed）。三通道 actualQuality 如实声明，外层 resolveWithFallback 守卫（无损魔数/码率下限）不过即拒收接力；详见头部 changelog；；v1.9.14 包升版（网易源集成长青 SVIP 网易替补通道 yinyue.haitangw.net，本源无代码改动，随包升版）；v1.9.13 包升版（QQ 源 a.aa.cab 通道方案A 拒绝虚标修复，本源无代码改动）；v1.9.12 包升版（QQ 源接入 a.aa.cab 新通道，本源无代码改动）；v1.9.10 KRC 接力域名修复版：fetchKuwoKrcRelay 搜索域名 mobilecdn.kugou.com → mobiles.kugou.com——mobilecdn 在部分网络 DNS 污染（证书 altnames 为 *.cdn.myqcloud.com）致逐字歌词接力断链，mobiles 同构（参数/响应一致），2026-09-12 实测搜索→krcs→download→decodeKrc 全链路打通；其余代码零改动；v1.9.9 音质标识一致性核查版（无代码改动，随包升版）：六页键集核查通过（v1.9.5 enrichQualities 为本轮参考实现）；遗留记录：专辑页(musicpay MINFO 明文档)与歌手页(N_MINFO 含加密档)同歌键集差异属上游数据口径不一致，宁缺毋假未动，详见排查总表-v1.9.9；v1.9.8版本号统一版（各源版本号对齐，无代码增量）；v1.9.6 MV 画质表修复版：availableVideoQualities 从「单实档」改为 baka 同款 5 档全 ladder（240p~1080p）——2026-09-11 复验实测酷我 anymatch 对仅 480p MV 请求 1080p 可出真实流，单档声明令宿主画质菜单无法切档；取链仍逐级降级+实档回读，诚实性不变；v1.9.5 全页面音质标识核查 + VIP 标识移除版：榜单页两路径（bang 树/聚合榜）补 qualities：聚合条目 aggQuals 透传 + ksong.s 实测无 N_MINFO 后接 enrichKuwoQualities（musicpay 批量 MINFO）兜底（榜单页此前全缺）；新增 enrichKuwoQualities（musicpay ids 批量）给专辑/歌手作品页补音质；全接口停写 fee（VIP 角标）与 getMusicInfo/取链 fee 回填，kwFeeOfRaw 移除；v1.9.4 第三方取链修复 + size 字段版：星海（yy.zddyr.top 503 鉴权死亡 + 替代 zrcdy.dpdns.org 也不可用）从竞速池移除（6→5 路）保留函数体注释掉，2026-09-11 标记失效；getMediaSource 返回值补 size 字段（取链响应直带 > HEAD Range 0-0 探测 > 留空），详见头部 changelog；v1.9.1 随包升版：歌单对象补 author 别名字段（宿主协议读 artist，任务字段清单要求 author，两者都传），导入修复详见酷狗 v1.9.1 changelog 与本轮自测清单；v1.9.0 BakaMusic 高价值音源接入版：P0 次合代/ikun 酷我通道入竞速池（4→6 路 0/250/400/550/700/850ms，严格校验+fLaC 魔数防假成功）+ P1 全豆要 nmobi 兜底回落 + userVariables 开关 kwCihedai/kwIkun 默认开；详见头部 changelog；v1.8.4 歌单导入元数据版：importMusicSheet 返回完整 IMusicSheetItem（title/description 对齐宿主契约，meta 随 pl.svc 顶层字段零额外请求回传）；v1.8.3 质检遗留优化版：Q-02/Q-03 复核确认已符合统一口径，随包升版；v1.8.2 歌单解析修复版：P2-2 歌单入口 qualities（N_MINFO 透传+parseKuwoQualityInfo）+ P2-4 错误码统一；]  v1.8.0 = MV 参数对齐基线：mvSourceResultOf 补 width/height/codec/availableVideoQualities.width + 三层兜底链 videoQuality 写回（基线 v1.7.1 = 星海 token 纯 JS base64 + nmobi/mobi 错峰 0/250/400/550ms 竞速 + AbortController + IMediaSourceResult 字段）；v1.7.0 = 第三方/备选竞速通道接入：2 官方（nmobi/mobi convert_url3 形态优先 → 实证 convert_url_with_sign 回落）+ 2 第三方（屿溪 /v1/music/resolve-url POST + 星海 /lx/api/ X-Token 鉴权）= 4 通道优先级错峰并发竞速（0/80/180/300ms），每通道通过严格音质大小校验（响应层 + Range 0-15 魔数/码率双重校验），standard/high/super 三档纳入竞速池，hires/master/atmos 维持 QMC+海棠母带/全景声链不动；详见头部 changelog 段；v1.6.1 = HotDownloader 借鉴：P0 档位真实性校验（QMC 严格相等 + super/high bitrate 下限 + 守卫魔数/码率双重校验 + CDN 探测补 UA）+ hires 宿主档（20201kmflac→20900→母带尾链）+ kwHdResolve 第四路提速竞速（HotDownloader 形态 ~67ms）；详见头部 changelog；v1.5.0 = 补齐宿主字段六项（P1 逐字歌词 getWordByWordLyric / 评论 getMusicComments / fee VIP 标记 / 分享链接 getMusicDetailPageUrl + P2 primaryKey / alias）；v1.4.4 = 清理聚合拆分残留（榜单 id agg-* 改 kw-* 单源命名 + 移除热歌榜抖音 CDN 封面硬编码）；v1.4.3 = 各音质文件大小返回宿主（N_MINFO 解析 + musicpay 详情回填，对齐 baka qualities）；v1.4.2 = super/atmos 档官方高音质全档阶梯（20900→20501→20201 逐档回落）；v1.4.1 = super 档 QMC 20201kmflac 优先后回落明文池；v1.4.0 = 母带/增强档接入酷我 QMC 加密档官方直源（插件侧 DES 解链+尾 704 提取得 QQ ekey 下发，宿主 ekey 通道零改动，母带链升级 QMC 双域名竞速首选）；v1.3.0 = MV 全面对齐 baka 酷我（mvId/mvSongId/mvArtwork 字段补齐 + 榜单条目 platform/mv 提升 + 5 画质档含 360p + anymatch 双通道竞速 + 旧版 playUrl 按 songId 兜底）；v1.2.9 = getMvSource 去 _src 硬前置 + getMusicInfo 回填 platform（旧数据 MV 菜单自愈；srcUrl 更新源按用户决策不接入）；由聚合搜索插件 v0.8.0 拆分；v1.2.8 = MV 标识补齐（六入口 mvpayinfo.vid 采集 + buildMusicItem/buildSheetItem 顶层 mv/platform 自报，打通宿主「播放 MV」入口）；v1.2.0 = 取链优化三连；v1.2.1 = tags 协议包装修复 + 海棠全音质兜底；v1.2.2 = hires 档升级海棠 kw master 真 24bit 母带 FLAC；v1.2.3 = 至臻全景声 atmos 独立成档（海棠 kw atmos，fLaC 校验 + master 链回落），DTS:X 上游不识别不接入；v1.2.4 = 榜单封面补 coverImg 字段 + 歌单分类按 tag.digest 真分流（getTagPlayList / get_pc_qz_data）+ getRcmPlayList 0 基分页；v1.2.5 = 歌手搜索接入（supportedSearchType 补 artist + r.s ft=artist）+ getArtistWorks 歌手作品页（歌曲/专辑）；v1.2.6 = 歌词搜索接入（lyric 分支 + rawLrcTxt 预览）+ defaultSearchType 显式声明 + 歌单分类 pinned 横向快捷标签（心情×3 + 语言×3 动态挑）；v1.2.7 = 歌手详情补齐（搜索歌手并发补 fans 粉丝数 + 新增 getArtistDetail 方法，www artistInfo 端点）
   author: '研发2号',
   description: '酷我音乐独立源插件 v1.9.8（v1.9.8 版本号统一版：各源版本号对齐，无代码增量；v1.9.6 MV 画质表修复：availableVideoQualities 改 baka 同款 5 档全 ladder，宿主画质菜单可切档；v1.9.5 全页面音质标识核查 + VIP 标识移除版：榜单页音质补齐（聚合透传 + musicpay 批量兜底，ksong.s 无 N_MINFO）；enrichKuwoQualities 批量补专辑/歌手/榜单页音质；全接口停写 fee（VIP 角标）；v1.9.1 随包升版：歌单对象补 author 别名字段，详见头部 v1.9.1 changelog；v1.9.0 BakaMusic 高价值音源接入版：P0 次合代/ikun 酷我第三方通道加入 standard/high/super 竞速池（4→6 路，错峰 0/250/400/550/700/850ms，全部过 Range 魔数/码率严格校验防假成功，userVariables kwCihedai/kwIkun 默认开）+ P1 全豆要 nmobi 兜底回落；v1.8.4 歌单导入元数据版：importMusicSheet 返回完整 IMusicSheetItem 歌单对象——标题/介绍/封面/作者随 pl.svc getlistinfo 顶层字段零额外请求回传，介绍字段 description 对齐宿主 v1.0.0 契约；v1.8.3 质检遗留优化版：错误前缀与 code 口径复核确认已符合统一标准，随包升版；v1.8.2 歌单解析修复版：歌单歌曲补 qualities（pl.svc 条目自带 N_MINFO 透传+既有 parseKuwoQualityInfo，零额外请求）+ 歌单导入错误统一携带结构化 code；基础 v1.7.1 = 修复与对齐：fix#1 星海 token 改纯 JS UTF-8+base64 编码（复用 utf8Bytes，输出与 btoa 逐字节一致，Hermes 无 btoa 环境通道恢复可用）；fix#2 nmobi/mobi 同 host 双发治理——错峰 0/80/180/300 → 0/250/400/550ms，nmobi 首胜 ~176ms 时 mobi 定时器已封盘清除、不再多发（最坏 +~170ms 由胜出 abort 对冲）；fix#3 竞速胜出即封盘（清定时器、落选结果不再结算）；fix#4 AbortController 可用时逐通道下发 signal 并在胜出后 abort 落选通道在途请求（axios>=0.22 真取消，低版本忽略；build.length>=1 判定向后兼容既有调用点）；fix#5 各通道/严格校验函数签名加 signal 透传；参数对齐 plugin.d.ts：getMediaSource 返回补宿主标准 quality 字段（=actualQuality）；v1.7.0 = 第三方/备选竞速通道：2 官方（nmobi/mobi convert_url3 形态优先 → 实证 convert_url_with_sign 回落）+ 2 第三方（屿溪 /v1/music/resolve-url POST + 星海 /lx/api/ X-Token 鉴权）= 4 通道优先级错峰并发竞速（0/80/180/300ms），严格音质大小校验（响应层 + Range 0-15 魔数/码率双重校验），standard/high/super 三档纳入竞速池，hires/master/atmos 维持 QMC+海棠母带/全景声链不动；v1.6.1 = HotDownloader 借鉴优化：P0 档位真实性校验（QMC 解析器 format/bitrate 严格相等 + super/high bitrate 下限 + 守卫层魔数/码率双重校验 + CDN 探测补 UA 修复 403 空转）+ hires 独立档（20201kmflac 24bit 优先→20900 母带→母带尾链）+ kwHdResolve 提速竞速；v1.6.0：Hi-Res 标注（flac 且 bitrate>=2000 → actualQuality hires，真 2000kflac 无损 55MB 级）、逐字歌词增强（lrcx GET 兜底通道 + lrcx 专用解析器 + KRC 真逐字优先通道序）、搜索单引号 JSON 容错；v1.5.0 宿主字段全量补齐：逐字歌词 getWordByWordLyric（酷我 lrcx 原生通道 XOR/Base64+zlib 解密→QRC，失败降级酷狗 KRC 跨源接力）、歌曲评论 getMusicComments（海棠代理通道 page 分页）、fee VIP 标记（fpay/feeType.song 判定，搜索/详情/取链三处）、分享链接 getMusicDetailPageUrl（play_detail 官方页）、primaryKey 声明、alias 别名透传；v1.4.4 清理聚合拆分残留——榜单 id 改 kw-* 单源命名、移除热歌榜抖音 CDN 封面；v1.4.3 各音质文件大小返回宿主（N_MINFO/musicpay 解析，对齐 baka qualities 口径）；v1.4.2 super 档官方高音质阶梯：20900 母带→20501 全景声→20201 24bit 逐档双域名竞速回落，各档插件解链下发 QQ ekey、actualQuality 如实标注；母带/增强档接入酷我 QMC 加密档官方直源：插件侧 DES 解链提取 QQ ekey、经宿主原生 ekey 通道解密，母带链 QMC 双域名竞速首选；MV 全面对齐 baka 酷我：歌曲条目带顶层 mv/mvId/mvSongId/mvArtwork 字段，5 画质档 240p~1080p，anymatch 双通道竞速 + 旧版 playUrl 按 songId 兜底；v1.2.9 getMvSource 去 _src 硬前置 + getMusicInfo 回填 platform；v1.2.8 补 MV 标识）：搜索（歌曲/专辑/歌手/歌单/歌词，歌词搜索带 rawLrcTxt 预览、选中后走 getLyric 取完整歌词）、歌手作品页（getArtistWorks 歌曲/专辑分页）、歌手详情（getArtistDetail 头像/粉丝数/简介，搜索歌手自动补 fans）、取链（standard/low 档 nmobi/nmsublist/mobi.s 免签车载/DES 手机渠道/DES 车载渠道/antiserver 六路竞速，high/super 档四路官方+DES 竞速，master/atmos 档海棠 kw 真 24bit 母带 FLAC（~187MB）/至臻全景声（~31MB）优先（fLaC 魔数校验）→ DES 2000kflac 竞速 → 海棠 lossless 兜底，全音质档竞速全挂统一海棠 kw 兜底，带试听守卫与档位校验，high 档 ogg 降级拒收）、歌词（openapi getlyric + songinfoandlrc 双通道）、动态榜单树（官方 bang/list 5 分组 36 榜 + ksong.s 真翻页）、推荐歌单与分类标签（含横向快捷标签栏）、歌单与单曲分享链接导入、专辑搜索与详情（分页）、MV（baka 同款 anymatch 双通道 5 画质 + 旧版 playUrl 按 songId 兜底）、歌曲详情与封面反查。支持音质：128k/192k/320k/无损 flac（2000k）/hires 档 24bit Hi-Res（20201kmflac，v1.6.1）/master 档 24bit 母带/atmos 档至臻全景声（母带与全景声仅部分 VIP 歌有货，未命中按回落链实际档如实标注；DTS:X 上游不支持）；实际无损上限为母带级 FLAC。',
   supportedSearchType: ['music', 'album', 'artist', 'sheet', 'lyric'],
@@ -3093,7 +3104,7 @@ var plugin = {
   // atmos=官方 20501kmflac 首选、海棠兜底；actualQuality 均按实际命中档如实标注。
   // DTS:X 上游不识别不接入（[v1.2.3]）。
   // [v1.1.0 fix O-8] 音质上限已在 description 声明：增强档未命中时按回落链实际档如实标注（宁低勿高）。
-  supportedQualities: ['128k', '192k', '320k', 'flac', 'hires', 'master', 'atmos'],
+  supportedQualities: ['128k', '320k', 'flac', 'hires', 'master', 'atmos'],
   cacheControl: 'no-store', // 各源播放链接多为签名短时效链接，必须现取
   userVariables: [
     { key: 'kwCihedai', name: '次合代第三方通道（v1.9.0 新增，默认开）', hint: '设为 off 关闭；BakaMusic 实测真实无损（lossless≈1647kbps fLaC），加入 standard/high/super 竞速池（错峰 700ms），校验不过自动静默让路' },

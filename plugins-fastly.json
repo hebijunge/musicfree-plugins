@@ -8,8 +8,8 @@
     },
     {
       "name": "酷我音乐",
-      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/kuwo-source.plugin.v1.9.16.js",
-      "version": "1.9.16"
+      "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@main/plugins/kuwo-source.plugin.v1.9.17.js",
+      "version": "1.9.17"
     },
     {
       "name": "酷狗音乐",
