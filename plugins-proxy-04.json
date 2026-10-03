@@ -3,8 +3,8 @@
   "plugins": [
     {
       "name": "QQ音乐",
-      "url": "https://ghm.078465.xyz/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qq-source.plugin.v1.9.15.js",
-      "version": "1.9.15"
+      "url": "https://ghm.078465.xyz/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qq-source.plugin.v1.9.16.js",
+      "version": "1.9.16"
     },
     {
       "name": "酷我音乐",
