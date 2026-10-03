@@ -1,6 +1,27 @@
 /**
- * 咪咕音乐独立源插件（MusicFree）v1.9.16
+ * 咪咕音乐独立源插件（MusicFree）v1.9.17
  * ================================
+ * v1.9.17（2026-10-03 档位诚实性收口，基线 v1.9.16）：
+ *  - 【P0 修复】`atmos_plus` 不是音质档，是 3D60 = 60 秒明文试听片段：
+ *    实测「晴天」10,584,078B ÷ 176,400B/s(16bit/44.1k/立体声) = 60.0s，「浮夸」11,520,078B 同量级，
+ *    而同一首歌的 atmos(Z3D) 是 71,380,604B≈2115kbps 的 24bit 全曲。菜单点 atmos_plus
+ *    等于「只播 60 秒」，比不列这一档更差。故：supportedQualities 摘掉 atmos_plus、
+ *    宿主键 atmos_plus 归一到 atmos（Z3D 全曲，宿主已内建 MG3D 解密）、
+ *    内部 atmos2 取链梯与 3D60 档位透出整体移除。
+ *  - 【P1 修复】旧 guardFullAudio 的时长估算对 WAV 一律按 128kbps(16000B/s) 折算，
+ *    60s 的 3D60 被估成 661s 从而绕过试听守卫；现加 wav_3d_60s 硬拒（纵深防御，
+ *    任何适配器/派生层回流出试听链都在这里拦下）。
+ *  - 【P1 修复】`hires`（ZQ32/wav_32bit）覆盖率≈0：文档 §4.3 50 首统计 ZQ32 0%、
+ *    「UI 应永久隐藏」，2026-10-03 实测 4 首（孤勇者/红尘客栈/浮夸/稻香）hires 请求
+ *    无一命中 wav_32bit，全部回落 SQ/HQ。故菜单摘掉 hires，宿主 hires/master/dolby/vinyl
+ *    归一到内部 hires（ZQ24/flac_24bit，实测覆盖率 8% 且命中时是真 24bit）。
+ *  - 保持如实：无损族拿不到时逐级降 SQ→HQ 并回标实际档位（实测 flac24bit→flac/320k），
+ *    不虚标；atmos 无 Z3D 时降 zq32→HQ 并回标 hires/320k（同属既有行为）。
+ *  - 【P2 补齐】搜索/歌单条目时长：search_all.do 响应无任何时长字段（逐字段核实），
+ *    列表右侧一直空白。CBR 档可由文件大小反推（文档 §4.1：PQ=128k→16000B/s、HQ=320k→40000B/s），
+ *    实测晴天 PQ 4,317,311B÷16000=269.8s 与榜单条目 270s 吻合。反推值单列 sizeDuration，
+ *    只作展示兜底、不写入 entry.duration——同曲判定的 ±6s 规则一旦拿到真时长就会改变去重结果
+ *    （实测会让两条同名不同副标题的翻唱被并掉），故搜索结果组成保持逐条一致（20/20，顺序不变）。
  * [v1.9.15 显示名中文化（线上接口吸收版线）] 顶层新增 name 字段：导入/安装列表显示中文名「咪咕音乐」；platform 字段保持英文不变，不影响功能逻辑与既有识别逻辑。
  * v1.9.16（2026-09-26 咪咕源 oiapi 通道接入 + 档位映射修正版，基线线上 v1.9.15 接口吸收版）：
  *  - 正式发布 oiapi 通道（resolveMiguOiapi，channel 'migu-oiapi'）：GET https://oiapi.net/api/MiGu_Music
@@ -474,10 +495,11 @@ var SOURCE_WEIGHT = {
   migu: 0.95
 };
 
-// 咪咕免登录音质能力。v1.2.0：新增 hires（ZQ32/wav_32bit 派生）、atmos（Z3D/wav_3d）、
-// atmos_plus（3D60/wav_3d_60s）三档——对齐 baka 8 档音质声明；全部走派生梯 + Range 探测验真。
+// 咪咕免登录音质能力。v1.2.0：新增 hires（ZQ24 派生）、atmos（Z3D/wav_3d）。
+// [v1.9.17] 移除 atmos2（3D60/wav_3d_60s）——它是 60 秒试听片段而非音质档，
+// 出现在能力梯里等于把「只听 60 秒」放进可选结果。
 var SOURCE_QUALITIES = {
-  migu: ['standard', 'high', 'super', 'hires', 'atmos', 'atmos2']
+  migu: ['standard', 'high', 'super', 'hires', 'atmos']
 };
 
 function canServe(source, quality) {
@@ -492,8 +514,10 @@ function canServe(source, quality) {
 // v1.2.0：从列表条目的音质声明提取宿主 qualities 字段（对齐 baka MIGU_QUALITY_INFO）
 var MIGU_FORMAT_KEY_INFO = {
   LQ: '128k', PQ: '128k', HQ: '320k', SQ: 'flac',
-  ZQ: 'flac24bit', ZQ24: 'flac24bit', ZQ32: 'hires',
-  Z3D: 'atmos', '3D60': 'atmos_plus'
+  ZQ: 'flac24bit', ZQ24: 'flac24bit',
+  Z3D: 'atmos'
+  // [v1.9.17] 不再透出 3D60→atmos_plus（60 秒试听片段不是音质档）、
+  // ZQ32→hires（wav_32bit 覆盖率≈0，接口亦不返回其大小）
 };
 
 function miguQualitiesFromEntry(it) {
@@ -525,28 +549,22 @@ function miguQualitiesFromEntry(it) {
     q[key] = entry;
   }
   // [v1.9.9 音质标识一致性修复] z3dCode 直出补齐（零请求）：搜索/歌单等入口条目 raw 自带
-  // z3dCode 而 audioFormats 未报 Z3D/3D60 时，此前整页缺 atmos/atmos_plus，与榜单/歌手作品
+  // z3dCode 而 audioFormats 未报 Z3D 时，此前整页缺 atmos，与榜单/歌手作品
   // 页（bmww 条目 audioFormats 带 Z3D）同歌键集不一致。z3dCode 实测两种形态都消费：
-  // ① 紧凑描述符（search_all.do）：androidSize=wav_3d 全曲(atmos)、h5Size=3D60 试听
-  //   (atmos_plus)——2026-09-12 实测晴天 androidSize=71,380,604 / h5Size=10,584,078，
-  //   与 getMediaSource('atmos'/'atmos_plus') 实取字节逐字节一致，声明非虚标；
-  // ② URL 三件套（listen-url v2.1）：androidUrl/h5Url，经 normalizeZ3dCode 归一。
+  // ① 紧凑描述符（search_all.do）：androidSize=wav_3d 全曲(atmos)
+  //   ——2026-09-12 实测晴天 androidSize=71,380,604，
+  //   与 getMediaSource('atmos') 实取字节逐字节一致，声明非虚标；
+  // ② URL 三件套（listen-url v2.1）：androidUrl，经 normalizeZ3dCode 归一。
+  // [v1.9.17] h5Size/h5Url 是 3D60（60 秒明文试听片段），不再透出为 atmos_plus 档位。
   // 取链链路未动：atmos 梯在播放时经 listen-url 自取 z3dCode 直链。
   var nz = null;
   try { nz = normalizeZ3dCode(it && it.z3dCode); } catch (eZ) { nz = null; }
   var zz = (it && it.z3dCode) || null;
   var atmosSize = (nz && nz.wav3d && nz.wav3d.size > 0 && nz.wav3d.size) || (zz && Number(zz.androidSize) || 0);
-  var sampleSize = (nz && nz.sample && nz.sample.size > 0 && nz.sample.size) || (zz && Number(zz.h5Size) || 0);
   if (atmosSize > 0) {
     if (!q.atmos) q.atmos = { size: atmosSize };
     else if (!q.atmos.size) q.atmos.size = atmosSize;
   }
-  if (sampleSize > 0) {
-    if (!q.atmos_plus) q.atmos_plus = { size: sampleSize };
-    else if (!q.atmos_plus.size) q.atmos_plus.size = sampleSize;
-  }
-  // Z3D 与 3D60 共用资源：仅声明 Z3D 时 60s 版通常也可取
-  if (q.atmos && !q.atmos_plus) q.atmos_plus = {};
   return Object.keys(q).length ? q : undefined;
 }
 
@@ -579,6 +597,28 @@ function mergeHostQualities(existing, incoming) {
     hasAny = true;
   }
   return hasAny ? merged : null;
+}
+
+// [v1.9.17 P2] 搜索/歌单入口时长补齐：咪咕 search_all.do 响应里没有任何时长字段
+// （2026-10-03 逐字段核实：duration/length/timelong 全不存在），条目时长恒缺，
+// 宿主列表只能显示空白。CBR 档位可由文件大小反推——文档 §4.1 编码表：
+// PQ=MP3 128k/44100(16000B/s)、HQ=MP3 320k/44100(40000B/s)。
+// 实测晴天 PQ 4,317,311B÷16000=269.8s、HQ 10,792,962B÷40000=269.8s，与榜单条目 270s 一致。
+function miguDurationFromSize(it) {
+  var lists = [it && it.rateFormats, it && it.newRateFormats, it && it.audioFormats];
+  for (var i = 0; i < lists.length; i++) {
+    var l = lists[i];
+    if (!Array.isArray(l)) continue;
+    for (var j = 0; j < l.length; j++) {
+      var f = l[j] || {};
+      var sz = Number(f.size || f.asize || f.isize) || 0;
+      if (sz <= 0) continue;
+      var ft = String(f.formatType || f.toneFlag || '');
+      if (ft === 'PQ') return Math.round(sz / 16000);
+      if (ft === 'HQ') return Math.round(sz / 40000);
+    }
+  }
+  return 0;
 }
 
 function searchMigu(query, page) {
@@ -624,6 +664,9 @@ function searchMigu(query, page) {
         title: str(it.name), artist: splitArtists(it.singers),
         album: firstAlbumName(it.albums),
         duration: parseInt(it.duration, 10) || 0,
+        // [v1.9.17] 派生时长单列 sizeDuration：同曲判定口径不变（±6s 规则会改变去重结果），
+        // 仅在输出条目上作为展示时长兜底。
+        sizeDuration: miguDurationFromSize(it),
         artwork: pic,
         raw: raw2
       };
@@ -693,6 +736,11 @@ function buildMusicItem(group) {
     if (!artwork && members[k].artwork) artwork = members[k].artwork;
     if (!duration && members[k].duration) duration = members[k].duration;
   }
+  // [v1.9.17] 咪咕 search_all.do 无时长字段：展示位用 size÷码率反推值兜底（不参与度重判）
+  var sizeDuration = best.sizeDuration || 0;
+  for (var ks = 0; ks < members.length && !sizeDuration; ks++) {
+    if (members[ks].sizeDuration) sizeDuration = members[ks].sizeDuration;
+  }
   // _srcOrder：源优先序（代表源置顶，其余按成员序），歌词/详情取数时原生源优先
   var srcOrder = [];
   for (var om = 0; om < members.length; om++) {
@@ -706,7 +754,7 @@ function buildMusicItem(group) {
     artist: best.artist,
     album: best.album,
     artwork: artwork || undefined,
-    duration: duration || undefined,
+    duration: duration || sizeDuration || undefined,
     // v1.2.0 字段对齐（宿主 IMusicItem 协议）：qualities 供宿主智能音质选择，
     // copyrightId 稳定主键 / MV 字段供 MV 入口与详情页使用
     qualities: best.qualities || undefined,
@@ -1181,6 +1229,7 @@ var SHEET_FETCHERS = {
           artist: (it.singerList || []).map(function (x) { return str(x.name); }).join('/'),
           album: str(it.album && it.album.name ? it.album.name : it.album),
           duration: parseInt(it.duration, 10) || 0,
+          sizeDuration: miguDurationFromSize(it),
           artwork: pic,
           // v1.3.0（P0）：歌单条目挂 qualities——playlist song v2.0 条目实测自带
           // audioFormats[].asize/isize（2026-09-07 实测歌单 195233074）
@@ -1205,7 +1254,7 @@ function buildSheetItem(entry) {
     title: entry.title,
     artist: entry.artist,
     album: entry.album || undefined,
-    duration: entry.duration || undefined,
+    duration: entry.duration || entry.sizeDuration || undefined,
     artwork: entry.artwork || undefined,
     // v1.2.0 字段对齐：qualities/copyrightId/MV 字段透出（宿主协议）
     qualities: entry.qualities || undefined,
@@ -1526,7 +1575,7 @@ async function getMusicInfoImpl(musicItem) {
 
 function haitangLevelOf(quality) {
   if (quality === 'super') return 'lossless';
-  if (quality === 'hires' || quality === 'zq32' || quality === 'atmos' || quality === 'atmos2') return 'hires';
+  if (quality === 'hires' || quality === 'zq32' || quality === 'atmos') return 'hires';
   if (quality === 'high') return 'exhigh';
   return 'standard';
 }
@@ -1537,17 +1586,23 @@ function haitangLevelOf(quality) {
 // 老宿主仍可能请求 192k，映射到 high(320k) 而非报错；flac24bit 归入 hires（ZQ24 派生）。
 // v1.2.0：档位重排——宿主 'flac24bit' → 内部 hires（ZQ24/flac_24bit，2026-09-06 实测）；
 // 宿主 'hires' → 内部 zq32（ZQ32/wav_32bit，baka 实测通道）；'atmos' → 内部 atmos（Z3D/wav_3d）；
-// 'atmos_plus' → 内部 atmos2（3D60/wav_3d_60s）。master/dolby 等泛高解析词归 zq32。
+// 'atmos_plus' → 内部 atmos（v1.9.17 起；此前归 atmos2 = 3D60 60 秒试听）。
+// master/dolby/vinyl/hires 归内部 hires（ZQ24）；zq32 保留为 atmos 梯的中间级，不再由宿主键直接命中。
 var QUALITY_KEY_MAP = {
   '96k': 'standard', '128k': 'standard',
   '192k': 'high', '320k': 'high',
   'flac': 'super', 'flac24bit': 'hires',
-  'hires': 'zq32', 'master': 'zq32', 'atmos': 'atmos', 'atmos_plus': 'atmos2', 'dolby': 'zq32', 'vinyl': 'zq32'
+  // [v1.9.17] 泛高解析词与 atmos_plus 归一到「可交付的最高档」：
+  // hires/master/dolby/vinyl 原归 zq32（wav_32bit，覆盖率≈0，实测 4 首全回落），
+  // 现归内部 hires（ZQ24/flac_24bit，覆盖率 8% 且命中即真 24bit，未命中自动降 SQ→HQ 如实回标）；
+  // atmos_plus 原归 atmos2（3D60 = 60 秒试听片段），现归 atmos（Z3D 全曲，宿主内建 MG3D 解密）。
+  'hires': 'hires', 'master': 'hires', 'atmos': 'atmos', 'atmos_plus': 'atmos',
+  'dolby': 'hires', 'vinyl': 'hires'
 };
 function normalizeQuality(q) {
   var s = String(q || '');
   if (QUALITY_KEY_MAP[s]) return QUALITY_KEY_MAP[s];
-  if (s === 'standard' || s === 'high' || s === 'super' || s === 'hires' || s === 'zq32' || s === 'atmos' || s === 'atmos2') return s;
+  if (s === 'standard' || s === 'high' || s === 'super' || s === 'hires' || s === 'zq32' || s === 'atmos') return s;
   return 'standard';
 }
 
@@ -1561,7 +1616,6 @@ function internalToHostQuality(q) {
   if (q === 'hires') return 'flac24bit';
   if (q === 'zq32') return 'hires';
   if (q === 'atmos') return 'atmos';
-  if (q === 'atmos2') return 'atmos_plus';
   return '128k'; // standard / low / 未知
 }
 
@@ -1676,11 +1730,7 @@ function deriveMiguUrl(pqUrl, quality) {
       .replace(/MP3_128_16_Stero/i, 'wav_3d')
       .replace(/\.mp3(\?|$)/, '.wav$1');
   }
-  if (quality === 'atmos2') {
-    return miguSwapSqDir(pqUrl)
-      .replace(/MP3_128_16_Stero/i, 'wav_3d_60s')
-      .replace(/\.mp3(\?|$)/, '.wav$1');
-  }
+  // [v1.9.17] 删除 atmos2/wav_3d_60s 派生：3D60 是 60 秒明文试听片段，不得作为取链结果交付
   return pqUrl;
 }
 
@@ -2348,28 +2398,8 @@ async function upgradeMiguQuality(pqUrl, quality, z3d, musicItem) {
     var uA3 = deriveMiguUrl(pqUrl, 'high');
     return { url: uA3, actualQuality: miguActualQuality(uA3) };
   }
-  // v1.2.0：atmos_plus 梯（wav_3d_60s → wav_3d → HQ）
-  if (quality === 'atmos2') {
-    // v1.3.2 ①：z3dCode h5Url（wav_3d_60s = 3D60 明文试听）直链优先，明文 WAV 可直接播
-    if (z3d && z3d.sample && z3d.sample.url) {
-      try {
-        await probeMiguExists(z3d.sample.url);
-        return { url: z3d.sample.url, actualQuality: 'atmos_plus', z3dDirect: true };
-      } catch (ez3b) { /* 直链探测失败，走派生梯 */ }
-    }
-    var uAp1 = deriveMiguUrl(pqUrl, 'atmos2');
-    try {
-      await probeMiguExists(uAp1);
-      return { url: uAp1, actualQuality: 'atmos_plus' };
-    } catch (eap) { /* 降级继续 */ }
-    var uAp2 = deriveMiguUrl(pqUrl, 'atmos');
-    try {
-      await probeMiguExists(uAp2);
-      return { url: uAp2, actualQuality: 'atmos' };
-    } catch (eap2) { /* 降级继续 */ }
-    var uAp3 = deriveMiguUrl(pqUrl, 'high');
-    return { url: uAp3, actualQuality: miguActualQuality(uAp3) };
-  }
+  // [v1.9.17] 删除 atmos2（atmos_plus/3D60）取链梯：wav_3d_60s 是 60 秒明文试听片段，
+  // 作为「最高音质档」交付等于让用户只听 60 秒。宿主 atmos_plus 键已归一到 atmos（Z3D 全曲）。
   // hires：ZQ24 → SQ → HQ 逐级降（ZQ24/SQ 存在性独立，规律⑤/③）
   var u3 = deriveMiguUrl(pqUrl, 'hires');
   try {
@@ -2615,6 +2645,12 @@ function resolveWithFallback(musicItem, quality) {
  * 探测请求自身网络失败（Range 不支持/超时，无 response）不惩罚源，放行由播放器处理。
  */
 function guardFullAudio(url, musicItem) {
+  // [v1.9.17 P1] 3D60 硬拒：wav_3d_60s 恒为 60 秒明文试听片段，而下面的码率估算把 WAV
+  // 一律按 128kbps 折算（实测 10,584,078B 被估成 661s > 标称 270s），试听链因此绕过守卫。
+  // 在估算之前按路径特征直接拦死，任何适配器/派生层回流出它都在这里换通道。
+  if (/wav_3d_60s/i.test(String(url || ''))) {
+    return Promise.reject(new Error('guard: 3D60 trial snippet'));
+  }
   return axios.get(url, {
     timeout: SOURCE_TIMEOUT,
     headers: { Range: 'bytes=0-0' },
@@ -3617,16 +3653,18 @@ async function searchLyricImpl(q, page) {
 // ==================== 插件定义 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/migu-source.plugin.v1.9.16.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/migu-source.plugin.v1.9.17.js',
   name: '咪咕音乐',
   platform: 'migu',
-  version: '1.9.16', // [v1.9.16 咪咕源 oiapi 通道接入 + 档位映射修正版（standard/low→PQ 修正集成版 LQ 虚标缺陷，详见头部 changelog）；v1.9.15 接口吸收版（kuwo/netease/qq 三源集成调研吸收通道：酷我 kw.php/nxinxz/antiserver-high、网易 eapi 响应解密修复+wy.php 兜底、QQ xunhuisi；本源无代码改动，随包升版）+ 显示名中文化「咪咕音乐」；v1.9.15 咪咕源 oiapi 第三方取链通道版（yinliu-app 仓 oiapi 集成版，未入订阅线，本版合并，详见头部 changelog）；v1.9.14 包升版（网易源集成长青 SVIP 网易替补通道 yinyue.haitangw.net，本源无代码改动，随包升版）；v1.9.13 包升版（QQ 源 a.aa.cab 通道方案A 拒绝虚标修复，本源无代码改动）；v1.9.12 包升版（QQ 源接入 a.aa.cab 新通道，本源无代码改动）；v1.9.10 随包升版（无代码改动，版本号统一升）；v1.9.9 音质标识一致性修复版：miguQualitiesFromEntry 消费条目自带 z3dCode 零请求补齐 atmos/atmos_plus 及真实大小（搜索/歌单页此前整页缺失，与榜单/歌手页同歌键集不一致；实测晴天声明 71,380,604B/10,584,078B 与 getMediaSource 实取字节逐字节一致，非虚标）；专辑页部分专辑上游 songList 返空属上游数据缺口如实记录；取链链路零改动，六页复测 195/195 全一致，详见排查总表-v1.9.9；v1.9.8版本号统一版（各源版本号对齐，无代码增量）；v1.9.4 第三方取链排查 + size 字段版：咪咕本轮排查仅 1 路第三方（海棠 musicserver.haitangw.cc/v1/music/resolve-url，200/201/503 alive 竞速容错），本轮零失效移除；getMediaSource 返回值补 size 字段（取链响应直带 resourceSize/audioSize > HEAD Range 0-0 探测 > 留空）+ 补 quality 标准字段对齐 IMediaSourceResult 契约，详见头部 changelog；v1.9.3 WebView 短链跟随修复版：followRedirects 非 3xx 分支新增 responseURL 自动跟随检测——真机 WebView 下 XHR 自动跟随 302（maxRedirects:0 仅 Node 生效），短链解析拿到最终 URL 而非原始短链，修复真机 SHEET_URL_UNRECOGNIZED，详见头部 changelog；v1.9.1 随包升版：歌单对象补 author 别名字段（宿主协议读 artist，任务字段清单要求 author，两者都传），导入修复详见酷狗 v1.9.1 changelog 与本轮自测清单；v1.9.0 BakaMusic 高价值音源接入版：零代码增量随包升版——P2 共享咪咕对比评估无吸收项（本插件官方 PQ 派生链覆盖其 PQ 探测形态），详见头部 changelog；v1.8.4] 歌单导入元数据版：复核确认 description（歌单介绍，取 playlist/v2.0 summary 字段）已随完整歌单对象回传，无代码改动随包升版；[v1.8.3] 质检遗留优化版（Q-02/Q-03 复核确认已符合统一口径，随包升版）；2026-09-10 歌单解析修复版（P1-1 meta 接口换新 + P2-1/P2-3 platform 补齐 + P2-4 错误码，详见头部 v1.8.2 changelog）；沿用 v1.8.0 MV 参数对齐基线
+  version: '1.9.17', // [v1.9.17 档位诚实性收口版 2026-10-03：摘掉两个假档位——atmos_plus 实为 3D60 的 60 秒明文试听片段（实测 10,584,078B÷176,400B/s=60.0s，同曲 atmos 全曲 71,380,604B），hires 对应 ZQ32/wav_32bit 覆盖率≈0（文档 50 首统计 0%，2026-10-03 复测 4 首无一命中）；宿主 atmos_plus 归一到 atmos(Z3D 全曲)，hires/master/dolby/vinyl 归一到内部 hires(ZQ24)；内部 atmos2 取链梯与 3D60 档位透出删除；guardFullAudio 增 wav_3d_60s 硬拒（旧码率估算把 WAV 按 128kbps 折算，把 60s 试听估成 661s 而绕过守卫）。详见头部 changelog；v1.9.16 咪咕源 oiapi 通道接入 + 档位映射修正版（standard/low→PQ 修正集成版 LQ 虚标缺陷，详见头部 changelog）；v1.9.15 接口吸收版（kuwo/netease/qq 三源集成调研吸收通道：酷我 kw.php/nxinxz/antiserver-high、网易 eapi 响应解密修复+wy.php 兜底、QQ xunhuisi；本源无代码改动，随包升版）+ 显示名中文化「咪咕音乐」；v1.9.15 咪咕源 oiapi 第三方取链通道版（yinliu-app 仓 oiapi 集成版，未入订阅线，本版合并，详见头部 changelog）；v1.9.14 包升版（网易源集成长青 SVIP 网易替补通道 yinyue.haitangw.net，本源无代码改动，随包升版）；v1.9.13 包升版（QQ 源 a.aa.cab 通道方案A 拒绝虚标修复，本源无代码改动）；v1.9.12 包升版（QQ 源接入 a.aa.cab 新通道，本源无代码改动）；v1.9.10 随包升版（无代码改动，版本号统一升）；v1.9.9 音质标识一致性修复版：miguQualitiesFromEntry 消费条目自带 z3dCode 零请求补齐 atmos/atmos_plus 及真实大小（搜索/歌单页此前整页缺失，与榜单/歌手页同歌键集不一致；实测晴天声明 71,380,604B/10,584,078B 与 getMediaSource 实取字节逐字节一致，非虚标）；专辑页部分专辑上游 songList 返空属上游数据缺口如实记录；取链链路零改动，六页复测 195/195 全一致，详见排查总表-v1.9.9；v1.9.8版本号统一版（各源版本号对齐，无代码增量）；v1.9.4 第三方取链排查 + size 字段版：咪咕本轮排查仅 1 路第三方（海棠 musicserver.haitangw.cc/v1/music/resolve-url，200/201/503 alive 竞速容错），本轮零失效移除；getMediaSource 返回值补 size 字段（取链响应直带 resourceSize/audioSize > HEAD Range 0-0 探测 > 留空）+ 补 quality 标准字段对齐 IMediaSourceResult 契约，详见头部 changelog；v1.9.3 WebView 短链跟随修复版：followRedirects 非 3xx 分支新增 responseURL 自动跟随检测——真机 WebView 下 XHR 自动跟随 302（maxRedirects:0 仅 Node 生效），短链解析拿到最终 URL 而非原始短链，修复真机 SHEET_URL_UNRECOGNIZED，详见头部 changelog；v1.9.1 随包升版：歌单对象补 author 别名字段（宿主协议读 artist，任务字段清单要求 author，两者都传），导入修复详见酷狗 v1.9.1 changelog 与本轮自测清单；v1.9.0 BakaMusic 高价值音源接入版：零代码增量随包升版——P2 共享咪咕对比评估无吸收项（本插件官方 PQ 派生链覆盖其 PQ 探测形态），详见头部 changelog；v1.8.4] 歌单导入元数据版：复核确认 description（歌单介绍，取 playlist/v2.0 summary 字段）已随完整歌单对象回传，无代码改动随包升版；[v1.8.3] 质检遗留优化版（Q-02/Q-03 复核确认已符合统一口径，随包升版）；2026-09-10 歌单解析修复版（P1-1 meta 接口换新 + P2-1/P2-3 platform 补齐 + P2-4 错误码，详见头部 v1.8.2 changelog）；沿用 v1.8.0 MV 参数对齐基线
   author: '研发2号',
   description: '咪咕音乐独立源插件 v1.9.8（v1.9.8 版本号统一版：各源版本号对齐，无代码增量；v1.9.5 全页面音质标识核查 + VIP 标识移除版：全接口停写 fee（VIP 角标）与 getMusicInfo/取链 fee 回填，miguFeeOf/miguIsVip 移除；音质标识各入口此前已全覆盖、本轮核查无缺口；上一版 v1.9.3 WebView 短链跟随修复版：followRedirects 非 3xx 分支新增 responseURL 自动跟随检测——真机 WebView 下 XHR 自动跟随 302（axios maxRedirects:0 仅 Node 生效），短链解析拿到最终 URL 而非原始短链，修复真机导入 SHEET_URL_UNRECOGNIZED，详见头部 changelog；上一版 v1.9.2 为分享链接文本自动提取 URL 版；v1.9.1 随包升版：歌单对象补 author 别名字段，详见头部 v1.9.1 changelog；v1.9.0 BakaMusic 高价值音源接入版：零代码增量随包升版——P2 共享咪咕对比评估判定无吸收项（BakaMusic 共享咪咕为 PQ 探测降级形态，本插件官方 PQ 派生 HQ/SQ/ZQ24/Z3D 全档+跨源兜底覆盖之），详见头部 v1.9.0 changelog；v1.8.4 歌单导入元数据版：复核确认 importMusicSheet 返回完整 IMusicSheetItem 歌单对象，歌单介绍 description（取 playlist/v2.0 summary 字段）随对象回传，字段名对齐宿主 v1.0.0 契约；v1.8.3 质检遗留优化版：错误前缀与 code 口径复核确认已符合统一标准，随包升版；歌单解析修复版：v1.8.2 修歌单元数据接口——query_playlist_by_id_tag 实测返回 HTML 登录壳失效，改走 MIGUM3.0 playlist/v2.0 App 通道（旧接口降为兜底，失败不再静默），歌单标题/封面/作者/描述恢复；歌单对象与音乐条目补 platform/isImported；错误统一携带结构化 code；v1.8.0 MV 参数对齐基线（getMvSourceImpl 顶层守卫字段兜底 + P1 字段齐备）；v1.6.1 修复跨源兜底歌词同步——酷我无损兜底胜出时歌词/逐字歌词自动切酷我源；v1.6.0 主链 MIGUM2.0/v2.0 明文 listen-url，PQ 直链派生全音质并探测验真——SQ 派生失败/产物<5MB 自动触发酷我官方接口无损兜底；h5v2.4 加密接口保留为副取链，另有 v2.1/302/pc-v2.0/海棠 mg 多通道接力）/歌词（v2.0 songItem 富字段 lrcUrl/mrcUrl/trcUrl 直供，翻译歌词+逐字歌词 TEA 解密后 QRC 原文直出宿主 rawLrc）/VIP 角标 fee/别名 alias/主键 primaryKey 齐备/官方榜单 14 个/歌单导入与广场/专辑/歌手作品/MV 四档画质/官方评论（海棠兜底）；无损档可接力海棠 mg 备源（可在设置中关闭）。',
   supportedSearchType: ['music', 'album', 'artist', 'sheet', 'lyric'],
-  // v1.1.0 修复#7：'192k' 虚档移除（上游 h5v2.4 无该通道）；新增 hires（ZQ24 派生）
-  // v1.2.0：新增 hires(ZQ32)/atmos(Z3D)/atmos_plus(3D60) 档位
-  supportedQualities: ['128k', '320k', 'flac', 'flac24bit', 'hires', 'atmos', 'atmos_plus'],
+  // v1.1.0 修复#7：'192k' 虚档移除（上游 h5v2.4 无该通道）
+  // [v1.9.17 只列可得档位] 再摘两档：atmos_plus 实为 3D60 的 60 秒试听片段（不是音质档，
+  // 点开只听 60 秒）；hires 对应 ZQ32/wav_32bit，文档 50 首统计覆盖率 0%、明示「UI 应永久隐藏」，
+  // 2026-10-03 复测 4 首无一命中 wav_32bit。flac24bit(ZQ24) 覆盖率 8% 但命中即真 24bit，保留。
+  supportedQualities: ['128k', '320k', 'flac', 'flac24bit', 'atmos'],
   // v1.2.0 字段对齐：copyrightId 为咪咕稳定主键（宿主 primaryKey 协议声明）
   primaryKey: ['copyrightId'],
   // v1.3.0（P1，对标 baka no-cache）：no-store 改为 no-cache——宿主语义为「仍写缓存、
