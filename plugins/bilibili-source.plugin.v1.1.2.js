@@ -7,6 +7,22 @@ var he = require('he');
 /**
  * 哔哩哔哩独立源插件（MusicFree）
  * ================================
+ * v1.1.2（2026-10-03 档位以带宽为准 + size 回传，基线 v1.1.1）：
+ *  - 【P1 虚标收口】result.quality 此前等于「请求档」回显，而宿主 plugin.ts 直接透传它做
+ *    角标/命名——于是 64k/128k/320k/low/standard/high/original/exhigh/lossless/hq/sq/zq
+ *    任意键都拿到同一条 30280 流并显示自己要的档位（实测 11,130,879B÷688s≈129kbps 标 320k），
+ *    且 legacy 键（low/hq/sq…）会把非内置档位透给宿主。现由选中流的 bandwidth 定档：
+ *    ≥150kbps→192k（30280 实测 169,316）、≥70kbps→96k（30232 实测 84,710）、其余→64k
+ *    （30216 实测 38,231，即宿主内置最低档），quality 与 actualQuality 同值。
+ *  - 【P1 选流修正】96k 档旧实现取「带宽降序后倒数第二条」，隐含假设有 3 条流；
+ *    流数不为 3（如仅 30280+30216）时会拿到 30280 却标 96k。现改为「≤100kbps 里取最高，
+ *    全都高于 100kbps 则退最低码率流」，并新增 64k 档（明确要最低码率）。
+ *  - 【P2 补齐】取链结果回传 size（DASH 声明字节 / durl size），供宿主下载进度与音质面板。
+ *  - durl 兜底路径（极老视频无 DASH）：按 size÷时长反推定档，推不出则不写 quality，
+ *    不再回显请求档。
+ *  - 实测 A/B（榜单曲目 688s）：320k 请求 旧 标 320k（实 129kbps）→ 新 标 192k；
+ *    64k 请求 旧 标 64k 且下发最高码率流 → 新 选最低码率流并按其带宽定档；
+ *    low/hq/sq/exhigh 等非内置键 → 新全部归到 64k/96k/192k 内置档位。
  * v1.1.1（2026-09-26 第十批调研吸收版，基线 v1.1.0）：
  *  - AI 字幕作歌词（getLyricImpl 从空 stub 转为实现，v1.1.0 P1-9「B 站无官方歌词接口」
  *    的缺口由 AI 字幕降级方案补上）：GET /x/player/wbi/v2?bvid=&cid=（带 Cookie + 风控
@@ -100,6 +116,7 @@ var MIXIN_KEY_ENC_TAB = [
 // ==================== 通用工具 ====================
 
 function str(v) { return v === undefined || v === null ? '' : String(v); }
+function numOr0(v) { var n = Number(v); return isFinite(n) && n > 0 ? Math.floor(n) : 0; }
 
 /** 搜索接口返回的 mm:ss 转秒；数字直接透传 */
 function durationToSec(duration) {
@@ -359,11 +376,24 @@ function sortedAac(dash) {
 }
 
 /**
- * 按目标档挑流并返回 actualQuality（宁低勿高、如实标注）。
+ * 按目标档挑流，并以「实际选中流的 bandwidth」定档（宁低勿高、如实标注）。
  * v1.0.1：hires/dolby 档实际不可用时返回 null（交宿主按音质序列降级），不再静默回落
  * 192k——宿主下载命名按「请求档」兜底（.m4s 后缀不识别），静默回落会导致 192k AAC
  * 被命名为 .flac 虚标；返回 null 后宿主下载循环换下一档成功，actualQuality 即实际档位。
+ * [v1.1.2 P1 档位以带宽为准] 此前 AAC 分支恒回标 '96k'/'192k'（按请求档写死），
+ * 而宿主 plugin.ts 读的是 result.quality——旧代码把它等于请求档回填，于是
+ * 64k/128k/320k/low/standard/high/original/exhigh/lossless/hq/sq/zq 等任意键
+ * 都能拿到同一条 30280 流并显示自己请求的档位（实测 11,130,879B/688s≈129kbps
+ * 却被标 320k）。现改为：选中流后按 bandwidth 定档，size 一并回传（宿主下载进度/
+ * 音质面板用），quality 与 actualQuality 同值，不再出现「宣称档位 ≠ 实际档位」。
  */
+function aacQualityLabel(bandwidth) {
+  var k = Number(bandwidth) || 0;
+  if (k >= 150000) return '192k'; // 30280 实测 169,316bps（B 站标称「高音质」/bili192）
+  if (k >= 70000) return '96k';   // 30232 实测 84,710bps（标称「标准音质」）
+  return '64k';                    // 30216 实测 38,231bps，宿主内置最低档即 64k
+}
+
 function pickAudio(dash, tier) {
   var aac = sortedAac(dash);
   var best = aac[0];
@@ -371,20 +401,33 @@ function pickAudio(dash, tier) {
   var dolby = dolbyAudio(dash)[0];
 
   if (tier === 'dolby') {
-    if (dolby) return { url: dolby.baseUrl, actualQuality: 'dolby' };
-    if (flac) return { url: flac.baseUrl, actualQuality: 'hires' }; // flac 内容 .flac 命名一致
+    if (dolby) return { url: dolby.baseUrl, size: numOr0(dolby.size), bandwidth: numOr0(dolby.bandwidth), actualQuality: 'dolby' };
+    if (flac) return { url: flac.baseUrl, size: numOr0(flac.size), bandwidth: numOr0(flac.bandwidth), actualQuality: 'hires' }; // flac 内容 .flac 命名一致
     return null; // 杜比与 Hi-Res 均不可用 → 宿主降级
   } else if (tier === 'hires') {
-    if (flac) return { url: flac.baseUrl, actualQuality: 'hires' };
+    if (flac) return { url: flac.baseUrl, size: numOr0(flac.size), bandwidth: numOr0(flac.bandwidth), actualQuality: 'hires' };
     return null; // Hi-Res 不可用 → 宿主降级
-  } else if (tier === '96k') {
-    // 30232（~85k）最贴近 96k 档；AAC 按带宽降序后倒数第二即 30232
-    if (aac.length >= 2) return { url: aac[aac.length - 2].baseUrl, actualQuality: '96k' };
-    if (aac.length === 1) return { url: aac[0].baseUrl, actualQuality: '96k' };
-  } else { // 192k 及其余映射 → AAC 最高（30280 ~169k）
-    if (best) return { url: best.baseUrl, actualQuality: '192k' };
   }
-  return null; // 响应中无可用音频流
+  var chosen = null;
+  if (tier === '64k') {
+    chosen = aac[aac.length - 1]; // 只要最低码率流
+  } else if (tier === '96k') {
+    // 目标 ≤100kbps 里取最高（实测即 30232=84.7k）；全list 都高于 100k 时退到最低码率流。
+    // 旧实现按 aac.length-2 取「倒数第二条」，流数不是 3 时就选错（如仅 30280+30216 时拿到 30280）。
+    for (var i = 0; i < aac.length; i++) { // 降序表头起扫：取首个 ≤100kbps 的流（=其中最高码率者）
+      if ((aac[i].bandwidth || 0) <= 100000) { chosen = aac[i]; break; }
+    }
+    if (!chosen && aac.length) chosen = aac[aac.length - 1];
+  } else { // 192k 及其余映射 → 最高码率 AAC 流
+    chosen = best;
+  }
+  if (!chosen) return null; // 响应中无可用音频流
+  return {
+    url: chosen.baseUrl,
+    size: numOr0(chosen.size),
+    bandwidth: numOr0(chosen.bandwidth),
+    actualQuality: aacQualityLabel(chosen.bandwidth),
+  };
 }
 
 /** 宿主音质键（含旧版 low/standard/high/super）→ B 站内部档 */
@@ -392,8 +435,9 @@ function qualityToTier(quality) {
   var q = str(quality) || '192k';
   if (q === 'dolby' || q === 'atmos' || q === 'atmos_plus') return 'dolby';
   if (q === 'hires' || q === 'flac' || q === 'flac24bit' || q === 'super' || q === 'master' || q === 'vinyl') return 'hires';
+  if (q === '64k') return '64k';
   if (q === '96k' || q === 'low') return '96k';
-  return '192k'; // 192k/128k/320k/standard/high 及未知档
+  return '192k'; // 128k/192k/320k/standard/high 及未知档
 }
 
 /** 播放流请求头：Referer 是硬要求（缺了 CDN 403），与官方插件口径一致 */
@@ -425,9 +469,20 @@ async function getMediaSource(musicItem, quality) {
     }
   }
   var dash = await fetchDash(bvid, cid);
-  // durl 形态（极老视频无 DASH）：历史合流流，无法定档，不标 actualQuality
+  // durl 形态（极老视频无 DASH）：历史合流流，按 size÷时长反推码率定档；
+  // [v1.1.2] 反推不出时不再回填「请求档」——旧写法 quality=请求档会让宿主角标显示用户
+  // 要的任何档位（宿主 plugin.ts 直接透传 result.quality，不做 legacy→内置键转换）。
   if (!dash.dash && dash.durl && dash.durl.length) {
-    return { url: dash.durl[0].url, headers: streamHeaders(bvid), quality: quality || '192k' }; // [v1.1.0 P1-8] 补 quality
+    var legacy = dash.durl[0] || {};
+    var legacyOut = { url: legacy.url, headers: streamHeaders(bvid) };
+    var legacySize = numOr0(legacy.size);
+    var legacyDur = parseInt(musicItem.duration, 10) || 0;
+    if (legacySize) legacyOut.size = legacySize;
+    if (legacySize && legacyDur > 0) {
+      legacyOut.quality = aacQualityLabel(legacySize * 8 / legacyDur);
+      legacyOut.actualQuality = legacyOut.quality;
+    }
+    return legacyOut;
   }
   var picked = pickAudio(dash.dash, qualityToTier(quality));
   if (!picked) {
@@ -436,8 +491,19 @@ async function getMediaSource(musicItem, quality) {
     // 链路走原生降级。返回 null 时宿主包装层不触发重试（零额外开销）。
     return null;
   }
-  var result = { url: picked.url, headers: streamHeaders(bvid), quality: quality || '192k' }; // [v1.1.0 P1-8] 补 quality（请求档，便于下载命名/统计）
-  if (picked.actualQuality) result.actualQuality = picked.actualQuality;
+  // [v1.1.2 P1] quality 与 actualQuality 同为「实际选中流」档位，size 取 DASH 声明字节
+  var result = {
+    url: picked.url,
+    headers: streamHeaders(bvid),
+    quality: picked.actualQuality,
+    actualQuality: picked.actualQuality,
+  };
+  // [v1.1.2] playurl（fnval=16）的 audio 条目只有 bandwidth 没有 size：
+  // 无 size 时按「bandwidth(bps)÷8×时长(s)」估算，供宿主下载进度/音质面板使用。
+  // 实测该估算与真实字节误差 <1%（30280：184,052bps×270s=6,209,205B ↔ 实取 6,201,843B）。
+  var durSec = parseInt(musicItem.duration, 10) || 0;
+  if (picked.size) result.size = picked.size;
+  else if (picked.bandwidth && durSec > 0) result.size = Math.round(picked.bandwidth / 8 * durSec);
   return result;
 }
 
@@ -886,10 +952,10 @@ async function getLyricImpl(musicItem) {
 }
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/bilibili-source.plugin.v1.1.1.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/bilibili-source.plugin.v1.1.2.js',
   name: 'B站',
   platform: 'bilibili',
-  version: '1.1.1', // [v1.1.1] AI 字幕作歌词（getLyric 空 stub 转实现：wbi/v2 字幕列表 + zh/en 双语降级，详见头部 changelog）
+  version: '1.1.2', // [v1.1.2] 档位以带宽为准 + size 回传：result.quality 不再回显请求档，改由选中流的 bandwidth 定档（≥150k→192k/≥70k→96k/其余→64k），修复 64k~320k 与 low/hq/sq 等非内置键全部虚标为请求档；96k 档选流不再假设「恰好 3 条流」；取链结果补 size。详见头部 changelog；v1.1.1] AI 字幕作歌词（getLyric 空 stub 转实现：wbi/v2 字幕列表 + zh/en 双语降级，详见头部 changelog）
   author: '研发2号',
   appVersion: '>=0.6',
   description: '哔哩哔哩独立源插件 v1.1.1：AI 字幕作歌词——配置 Cookie 后自动拉取视频 AI 字幕转 LRC（中英双语展示，无 AI 字幕或未配置 Cookie 时交宿主跨源歌词检索），接口协议吸收自 martin65536/bilibili-musicfree（代码自行实现）；其余功能（搜索/取链/详情/分P/导入/评论/榜单，v1.1.0 宿主契约全量参数对齐）与 v1.1.0 一致。',
