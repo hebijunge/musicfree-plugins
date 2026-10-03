@@ -238,10 +238,10 @@ function mapMusicList(rows) {
 // ===== 插件 =====
 
 module.exports = {
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/kuaiyin-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/kuaiyin-source.plugin.v1.0.1.js',
     name: '快音',
     platform: '快音',
-    version: '1.0.0',
+    version: '1.0.1', // [v1.0.1] 取链回填 quality/actualQuality='128k' 与 size（此前只回 {url}，宿主拿不到 result.quality 就沿用请求档做角标/命名 → 任意档位请求都显示自己要的档）
     author: '研发2号',
     description: '快音音源（api.kaixinyf.cn）| 单一 m4a 音质 | 纯文本歌词 | UGC 平台：DJ/翻唱/广场舞为主，主流歌手可能无结果 | 歌单详情上游暂不可用',
     supportedSearchType: ['music'],
@@ -292,7 +292,18 @@ module.exports = {
             throw new Error('快音: 播放链接无效');
         }
         // 音频直链无需签名/Header（实测裸请求 200，audio/mp4a-latm）
-        return { url: url };
+        // [v1.0.1] 回填 quality/actualQuality/size：此前只回 {url}，宿主 plugin.ts 拿不到
+        // result.quality 就沿用用户请求档做角标与下载命名 —— 本平台只有单一 m4a
+        // （实测 708,272B÷44s≈129kbps，与 supportedQualities 声明的 128k 一致），
+        // 于是任意档位请求（320k/flac/master…）都会显示成自己要的档位，属虚标。
+        var result = {
+            url: url,
+            quality: '128k',
+            actualQuality: '128k',
+        };
+        var fileSize = Number(musicItem && musicItem._fileSize) || 0;
+        if (fileSize > 0) result.size = fileSize;
+        return result;
     },
 
     /** 歌曲信息补全 */
