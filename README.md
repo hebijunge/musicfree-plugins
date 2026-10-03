@@ -102,7 +102,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | DJ秀 | 1.0.3 | [djshow.plugin.v1.0.3.js](plugins/djshow.plugin.v1.0.3.js) |
 | Apple Music | 1.0.0 | [apple-music-v1.0.0.js](plugins/apple-music-v1.0.0.js) |
 | 华为音乐 | 1.0.1 | [hwmusic-source.plugin.v1.0.1.js](plugins/hwmusic-source.plugin.v1.0.1.js) |
-| 蜻蜓FM | 1.0.1 | [qingting-source.plugin.v1.0.1.js](plugins/qingting-source.plugin.v1.0.1.js) |
+| 蜻蜓FM | 1.0.2 | [qingting-source.plugin.v1.0.2.js](plugins/qingting-source.plugin.v1.0.2.js) |
 | 喜马拉雅 | 1.2.0 | [ximalaya-source.plugin.v1.2.0.js](plugins/ximalaya-source.plugin.v1.2.0.js) |
 | 荔枝FM | 1.0.0 | [lizhi-source.plugin.v1.0.0.js](plugins/lizhi-source.plugin.v1.0.0.js) |
 | 网易云电台 | 1.1.0 | [neteaseradio-source.plugin.v1.1.0.js](plugins/neteaseradio-source.plugin.v1.1.0.js) |

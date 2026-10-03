@@ -66,7 +66,7 @@ var axios = require('axios');
 
 // ==================== 常量区 ====================
 
-var PLUGIN_VERSION = '1.0.1';
+var PLUGIN_VERSION = '1.0.2';
 
 // 文档 §2.3 实测请求头（iOS 端 UA + QT-App-Version）— 仅用于 App API
 var UA = 'QingTing-iOS/10.7.9.0 com.Qting.QTTour Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148';
@@ -335,8 +335,8 @@ async function searchImpl(query, page, type) {
         artwork: it.cover || undefined,
         description: undefined,
         worksNum: undefined,
-        qualities: [],      // 专辑项不直接含音轨，按 getAlbumInfo 补齐
-        fee: 0,
+        qualities: {}, // [v1.0.2] 对齐宿主类型：qualities 映射形态（专辑项无音轨，留空对象）
+        // fee 停写（接口无付费标记，不硬编码 0）
         alias: undefined
       });
     } else {
@@ -353,8 +353,8 @@ async function searchImpl(query, page, type) {
         // channel_id 需随 item 透传给 getMediaSource 拼 path（宿主是否保留额外字段：实测可行；getMediaSource
         // 防御性 parse 二级 JSON `__extras.channel_id` 也兜底，详见 getMediaSourceImpl）
         __channel_id: deep.channel_id,
-        qualities: ['128k', '64k', '24k'],
-        fee: 0,
+        qualities: { '128k': {}, '64k': {}, '24k': {} }, // [v1.0.2] 数组→宿主期望的映射（宿主按 qualities[档]取数，数组形态恒 undefined）
+        // fee 停写：接口不返回付费标记，硬编码 0 等于对所有曲目宣称免费
         alias: undefined
       });
     }
@@ -410,8 +410,8 @@ async function getAlbumInfoImpl(albumItem, page) {
       artwork: channelCover,
       duration: Number(p.duration) > 0 ? Math.round(Number(p.duration)) : undefined,
       __channel_id: chId,
-      qualities: ['128k', '64k', '24k'],
-      fee: 0,
+      qualities: { '128k': {}, '64k': {}, '24k': {} }, // [v1.0.2] 数组→宿主期望的映射（宿主按 qualities[档]取数，数组形态恒 undefined）
+      // fee 停写：接口不返回付费标记，硬编码 0 等于对所有曲目宣称免费
       alias: undefined
     });
   }
@@ -587,11 +587,17 @@ async function getMediaSourceImpl(musicItem, quality) {
           if (diff > SIZE_TOLERANCE) continue; // 大小不符，跳过该 url
         }
         // 命中！魔数 / 大小 / 候选 tier 一致
+        // [v1.0.2] quality 不再回显请求档：hostQuality 是用户要的档，实际命中的是
+        // TIER_TO_HOST_LABEL[tier]。候选链会降档（如 128k 请求只命中 24kbps 版），
+        // 回显请求档即虚标——宿主 plugin.ts 读的就是 result.quality。
+        // size 一并回传（probe 已实测总字节），供宿主下载进度与音质面板。
+        var aq = TIER_TO_HOST_LABEL[tier];
         return {
           url: url,
-          quality: hostQuality,
+          quality: aq,
           headers: { 'User-Agent': UA },
-          actualQuality: TIER_TO_HOST_LABEL[tier]
+          actualQuality: aq,
+          size: probe.totalBytes > 0 ? probe.totalBytes : undefined
         };
       }
     }
@@ -615,11 +621,15 @@ async function getMediaSourceWebFallback(channelId, programId, hostQuality, musi
   }
   var duration = Number(musicItem && musicItem.duration) || 0;
   var actualTier = estimateTierFromUrl(url, probe.totalBytes, duration);
+  // [v1.0.2] Web 兜底路线同口径：实际档由 estimateTierFromUrl 得出，
+  // quality/actualQuality 均用它，不回显请求档；size 用实测总字节。
+  var webAq = TIER_TO_HOST_LABEL[actualTier];
   return {
     url: url,
-    quality: hostQuality,
+    quality: webAq,
     headers: { 'User-Agent': UA },
-    actualQuality: TIER_TO_HOST_LABEL[actualTier]
+    actualQuality: webAq,
+    size: probe.totalBytes > 0 ? probe.totalBytes : undefined
   };
 }
 
@@ -664,8 +674,8 @@ async function importMusicItemImpl(urlLike) {
           artwork: meta.cover || pcover || undefined,
           duration: Number(progs[i].duration) > 0 ? Math.round(Number(progs[i].duration)) : undefined,
           __channel_id: chId,
-          qualities: ['128k', '64k', '24k'],
-          fee: 0,
+          qualities: { '128k': {}, '64k': {}, '24k': {} }, // [v1.0.2] 数组→宿主期望的映射（宿主按 qualities[档]取数，数组形态恒 undefined）
+          // fee 停写：接口不返回付费标记，硬编码 0 等于对所有曲目宣称免费
           alias: undefined
         };
         break;
@@ -685,8 +695,8 @@ async function importMusicItemImpl(urlLike) {
       artwork: undefined,
       duration: undefined,
       __channel_id: chId,
-      qualities: ['128k', '64k', '24k'],
-      fee: 0,
+      qualities: { '128k': {}, '64k': {}, '24k': {} }, // [v1.0.2] 数组→宿主期望的映射（宿主按 qualities[档]取数，数组形态恒 undefined）
+      // fee 停写：接口不返回付费标记，硬编码 0 等于对所有曲目宣称免费
       alias: undefined
     };
   }
@@ -724,10 +734,10 @@ function getAlbumInfo(albumItem, page) { return getAlbumInfoImpl(albumItem, page
 // ==================== 插件定义 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qingting-source.plugin.v1.0.1.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qingting-source.plugin.v1.0.2.js',
   name: '蜻蜓FM',
   platform: 'qingting',
-  version: '1.0.1',
+  version: PLUGIN_VERSION,
   author: '研发1号',
   description: '蜻蜓FM（Qingting FM）独立源插件（v1.0.1）：免登录可搜索/播放/下载，付费内容免登录可播；HMAC-MD5 签名（App 密钥 `99@b8#571(bb38_b` / Web `fpMn12&38f_2e`）；3 档音质（128k MP3 / 64k M4A / 24k M4A）；auth_key 12h 有效期。能力：搜索（music/album）、专辑详情、节目导入、取链（魔数 + 大小比对 + Web 302 兜底）、音乐详情。Stub 不支持：歌词（有声内容）/ 热榜 / 歌单 / 歌手 / 评论 / 直播电台 HLS。',
   supportedSearchType: ['music', 'album'],  // 文档 §3.1 支持 program_ondemand + channel_ondemand
