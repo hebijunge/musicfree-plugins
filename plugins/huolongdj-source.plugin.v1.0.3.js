@@ -4,6 +4,15 @@
 var axios = require('axios');
 /**
  * 火龙DJ 独立源插件（MusicFree）
+ *
+ * v1.0.3（2026-10-03 标准档实测收口）：p 域「标准音质」6/6 首实测恒为 65kbps m4a
+ * （29,413,640B÷3599s、37,247,652B÷4558s、39,343,922B÷4814s、31,054,881B÷3800s、
+ *   33,429,032B÷4090s、33,254,991B÷4069s），而站点接口按「标准音质 128kbps」标称
+ * （docs 音质接口详细分析报告 §1.1）。旧实现对 std 档不做反推、恒回标 128k
+ * → 系统性虚高 2 倍。现 std / pure 两档统一走 snapLossyLabel（体积×8÷时长）贴最近内置档；
+ * supportedQualities 的 128k 改为 64k；normalizeQuality 补 64k/96k/exhigh 归一。
+ * 实测 A/B：128k 请求 旧 回标 128k（实 65kbps）→ 新 回标 64k；320k 请求在某首实际只有
+ * 128kbps 的情况下（源为 m4a 转码）从恒标 320k 改为如实标 128k。
  * ================================
  * v1.0.2（2026-09-24 交叉质检修复版二，质检1号）：🟢 三项注释/边界口径收尾——① 头部搜索说明
  *    由陈旧的 Pz=20 更正为实际 Pz=50 + 倾倒切片兜底口径；② getMusicInfo 注释与实现对齐：
@@ -510,13 +519,28 @@ async function searchMusicImpl(cfg, keyword, page) {
 
 // ==================== 取链 ====================
 
-// 档位归一：宿主音质键 → 内部档（std=128k / pure=320k / lossless=flac）
+// 档位归一：宿主音质键 → 内部档（std=标准档实测 65kbps / pure=高品档 / lossless=真无损）
 function normalizeQuality(q) {
   var s = str(q).toLowerCase();
-  if (s === 'low' || s === 'standard' || s === '128k' || s === '') return 'std';
-  if (s === 'high' || s === '192k' || s === '320k') return 'pure';
+  // [v1.0.3] 补 64k/96k：标准档实测恒为 65kbps，菜单档位改名后宿主会传 64k
+  if (s === 'low' || s === 'standard' || s === '64k' || s === '96k' || s === '128k' || s === '') return 'std';
+  if (s === 'high' || s === 'exhigh' || s === '192k' || s === '320k') return 'pure';
   if (s === 'super' || s === 'flac' || s === 'lossless') return 'lossless';
   return 'std';
+}
+
+// [v1.0.3 实测反推统一口径] 有损档按「体积×8÷时长」反推码率，贴到不超过实测值的最近内置档。
+// 依据（2026-10-03 逐首实测）：p 域标准档 6/6 首恒为 65kbps m4a
+// （29,413,640B÷3599s、37,247,652B÷4558s、39,343,922B÷4814s …），
+// 而站点接口把该档标称「标准音质 128kbps」（docs 音质接口详细分析报告 §1.1）——
+// 旧写法对 std 档不做反推、恒标 128k，等于系统性虚高一倍。
+function snapLossyLabel(kbps) {
+  if (!(kbps > 0)) return '64k';
+  if (kbps >= 300) return '320k';
+  if (kbps >= 210) return '192k';
+  if (kbps >= 112) return '128k';
+  if (kbps >= 80) return '96k';
+  return '64k';
 }
 
 async function getMediaSourceImpl(musicItem, quality) {
@@ -532,7 +556,7 @@ async function getMediaSourceImpl(musicItem, quality) {
     // 标准档：p 域原样 musicurl（m4a 封装），所有人可用
     url = cdnSignedUrl(cfg.cdnPlay, musicurl, cfg.fdKey);
     expectMagic = 'ftyp';
-    actualQuality = '128k';
+    actualQuality = '64k'; // [v1.0.3] 标准档实测 65kbps（见 snapLossyLabel 注释）
   } else if (tier === 'pure') {
     // 高品档：o 域纯格式；fmt ∉ {mp3,flac,wav,aac}（如 o）无纯格式版 → 拒（不做降级）
     if (!PURE_FORMATS[fmt]) {
@@ -561,16 +585,19 @@ async function getMediaSourceImpl(musicItem, quality) {
   // 源为 flac 的文件经 magic=fLaC 校验，标 flac（升档如实）；
   // duration 缺失无法反推时也降标 128k（宁低勿高）；v1.0.1 修复：去掉 60s 下限，
   // 短曲目（<60s）同样参与反推，避免短曲目虚标 320k
+  var durSec = Math.round(Number(musicItem.duration) || 0);
+  var measuredKbps = durSec > 0 ? probe.size * 8 / durSec / 1000 : 0;
   if (tier === 'pure') {
-    var dur = Math.round(Number(musicItem.duration) || 0);
     if (probe.magic === 'fLaC') {
-      actualQuality = 'flac';
-    } else if (dur > 0) {
-      var kbps = Math.round(probe.size * 8 / dur / 1000);
-      if (kbps > 0 && kbps < 224) actualQuality = '128k';
+      actualQuality = 'flac'; // 源为 flac 的文件经 magic=fLaC 校验，升档如实
     } else {
-      actualQuality = '128k';
+      // [v1.0.3] 高品档同样走统一反推（旧口径「<224kbps 就标 128k」会把 190kbps 的
+      // 降级文件继续虚标成 128k 之外的整数档，且与 std 档两套逻辑不一致）
+      actualQuality = measuredKbps > 0 ? snapLossyLabel(measuredKbps) : '64k';
     }
+  } else if (tier === 'std') {
+    // [v1.0.3] 标准档按实测：恒 65kbps → 64k；时长未知无法反推时同样落最低内置档（宁低勿高）
+    actualQuality = measuredKbps > 0 ? snapLossyLabel(measuredKbps) : '64k';
   }
 
   // 播放统计 best-effort（不 await，不阻断返回）
@@ -723,18 +750,20 @@ async function importMusicSheetImpl(urlLike) {
 // ==================== 插件对象 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/huolongdj-source.plugin.v1.0.2.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/huolongdj-source.plugin.v1.0.3.js',
   name: '火龙DJ',
   platform: 'huole',
-  version: '1.0.2',
+  version: '1.0.3',
   author: '研发3号',
   description: '火龙DJ独立源插件 v1.0.2：搜索（新式 JSON 签名接口 /api/Music/Search，小写 MD5 双层签名，Pz=50 + 上游分页倾倒兜底切片）、双榜单（热歌榜/车载新歌榜，免签名 HL 网关 h_r 真翻页）、用户歌曲歌单导入（h_j 按 uid，上限 500 首）、三档取链（128k=p 域 m4a 封装标准档 / 320k=o 域纯格式 / flac=仅源格式 flac 有货，入口即拒不虚标）、CDN 防盗链 sign/t 每次实时生成（t=(now+24h)/1000 hex，sign=md5(fdKey+path+t) 小写），取链后 Range 魔数（ftyp/fLaC/ID3/RIFF）+ 大小（≥64KB）双校验，actualQuality 诚实标注（pure 档反推码率 <224kbps 宁低勿高标 128k）、size 字段回传；UTOKEN/fdKey/四域名经 System/Token + System/Config 动态刷新（TTL 10 分钟）失败回退硬编码；播放统计 CountPlay 未登录 best-effort（hlReport 可关）；全曲库 haslrc=0 无歌词接口不声明。业务主机 app-a-djyyk.y2002.com（blueocean 家族，与 Y2002 电音独立网关独立密钥）。',
   supportedSearchType: ['music'],
   defaultSearchType: 'music',
   primaryKey: ['id'],
-  // 音质口径：128k=标准 m4a 封装档（p 域）；320k=高品纯格式（o 域，源 flac 时升档如实标）；
+  // 音质口径：64k=标准 m4a 封装档（p 域，2026-10-03 实测 6/6 首恒 65kbps，站点接口按
+  // 「标准音质 128kbps」标称，v1.0.2 及以前照抄标称恒回标 128k 属虚高一倍，现由体积×8÷时长反推）；
+  // 320k=高品纯格式（o 域，源 flac 时升档如实标）；
   // flac=真无损（仅源格式 flac 歌曲有货，无货抛错不降级不虚标）
-  supportedQualities: ['128k', '320k', 'flac'],
+  supportedQualities: ['64k', '320k', 'flac'],
   cacheControl: 'no-store', // 防盗链 sign/t ≈24h 时效，必须现取
   userVariables: [
     { key: 'hlReport', name: '播放统计上报（CountPlay，默认开）', hint: '取链成功后向火龙DJ上报播放进度（未登录可用）；设为 off 关闭' }
