@@ -124,7 +124,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | 宝贝DJ | 1.2.0 | [bibdj-source.plugin.v1.2.0.js](plugins/bibdj-source.plugin.v1.2.0.js) |
 | 172Mix | 1.2.0 | [172mix-source.plugin.v1.2.0.js](plugins/172mix-source.plugin.v1.2.0.js) |
 | DJ耶耶耶 | 1.1.1 | [djyyy-source.plugin.v1.1.1.js](plugins/djyyy-source.plugin.v1.1.1.js) |
-| 黑色音频 | 1.1.0 | [hy57-source.plugin.v1.1.0.js](plugins/hy57-source.plugin.v1.1.0.js) |
+| 黑色音频 | 1.1.1 | [hy57-source.plugin.v1.1.1.js](plugins/hy57-source.plugin.v1.1.1.js) |
 | 好听轻音乐 | 1.2.2 | [htqyy-source.plugin.v1.2.2.js](plugins/htqyy-source.plugin.v1.2.2.js) |
 | 我是DJ | 1.1.1 | [54dj-source.plugin.v1.1.1.js](plugins/54dj-source.plugin.v1.1.1.js) |
 | 电音阁 | 1.1.1 | [dianyinge-source.plugin.v1.1.1.js](plugins/dianyinge-source.plugin.v1.1.1.js) |
