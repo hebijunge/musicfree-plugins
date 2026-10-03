@@ -556,9 +556,13 @@ async function getRecommendSheetsByTagImpl(tagItem, page) {
 // ==================== 播放取链 · 千千通道（tracklink 四档回退 + 音流口径校验） ====================
 
 // 宿主音质键 → 内部档；请求档 → rate 回退链（硬性要求：3000→320→128→64）
+// [v1.0.3] 补齐 atmos_plus：它是宿主内置音质键之一（BUILTIN_QUALITY_KEYS），
+// 旧表漏了这一键，normalizeQuality 落回 'standard'，于是宿主音质优先级列表走到 atmos_plus
+// 时给的是 128k 流，而相邻的 atmos/dolby/master 给的是 flac——同族增强档之间倒退。
 var QUALITY_KEY_MAP = {
   '64k': 'low', '128k': 'standard', '192k': 'high', '320k': 'high',
-  'flac': 'super', 'flac24bit': 'super', 'hires': 'super', 'master': 'super', 'atmos': 'super', 'dolby': 'super', 'vinyl': 'super'
+  'flac': 'super', 'flac24bit': 'super', 'hires': 'super', 'master': 'super',
+  'atmos': 'super', 'atmos_plus': 'super', 'dolby': 'super', 'vinyl': 'super'
 };
 var RATE_CHAIN = {
   super: ['3000', '320', '128', '64'],
@@ -1465,10 +1469,10 @@ async function getMediaSourceImpl(musicItem, quality) {
 // ==================== 插件对象 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qianqian-source.plugin.v1.0.2.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/qianqian-source.plugin.v1.0.3.js',
   name: '千千音乐',
   platform: 'qianqian',
-  version: '1.0.2',
+  version: '1.0.3', // [v1.0.3] QUALITY_KEY_MAP 补 atmos_plus（宿主内置键，旧表漏致落回 standard 给 128k，与同族 atmos/dolby/master 给 flac 不一致）
   author: '研发3号',
   description: '千千音乐（91Q/Taihe）独立源插件 v1.0.2：MD5 签名（ASCII 升序+Secret 末尾追加，纯 JS 实现无 Buffer 依赖）；搜索歌曲（VIP 过滤）/搜索专辑（关键词净化重试）；播放取链走 /v1/song/tracklink 四档回退（3000 无损/320 极高/128 标准/64 低品 aac，path 空回退试听链），链接经音流口径严格校验（Content-Length 与声明 size 比对虚标拦截 + 魔数白名单 fail-closed + 试听/码率守卫）；千千全档失败自动酷我兜底（oiapi+官方 mobi.s 双通道竞速，严格同曲校验防串歌，结果如实标记来源）；歌词两步流程原文返回；歌单走分类列表+详情（搜索歌单 type=6 上游已失效不实现）；专辑/歌单导入与分享链接解析；无官方榜单 API，榜单入口以精选歌单顶位',
   primaryKey: ['id'],
