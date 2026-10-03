@@ -151,9 +151,14 @@ function formatMusicItem(program) {
         title: mainSong.name,
         artist: artistName || (program.dj && program.dj.nickname) || '网易电台',
         album: program.radio && program.radio.name,
-        duration: mainSong.duration,
+        // [v1.1.1] 宿主 duration 约定为秒（src/types/music.d.ts:40「时长(s)」），
+        // 而上游 mainSong.duration 是毫秒：447,936 直传会让宿主显示 124 小时时长。
+        duration: Math.round((parseInt(mainSong.duration, 10) || 0) / 1000) || undefined,
+        // [v1.1.1] qualities 键由 legacy 'standard' 改为宿主内置键 '128k'：
+        // fork 的 convertLegacyQuality 把 standard 映射成 192k，电台 128k 节目会在
+        // 音质菜单/下载面板上被当成 192k 档。
         qualities: {
-            standard: { size: (mainSong.lMusic || {}).size },
+            '128k': { size: (mainSong.lMusic || {}).size },
         },
         // [v1.1.0] VIP 标记：feeScope 0/8 免费，其余（VIP/数字专辑等）走第三方链
         _vip: !(program.feeScope === 0 || program.feeScope === 8),
@@ -306,7 +311,9 @@ function parseMbSize(s) {
 // 低码率语音节目（实测 37kbps）会误杀完整文件，声明大小比对无此问题。
 function guardCheckSize(total, musicItem) {
     var q = musicItem && musicItem.qualities;
-    var declared = q && q.standard && parseInt(q.standard.size, 10) || 0;
+    // [v1.1.1] 键改内置 '128k'；保留读旧 'standard' 键的兜底（宿主缓存里可能还有 v1.1.0 条目）
+    var declared = (q && q['128k'] && parseInt(q['128k'].size, 10))
+      || (q && q.standard && parseInt(q.standard.size, 10)) || 0;
     if (total > 0 && declared > 0) {
         if (total < declared * 0.6) {
             throw new Error('guard: trial clip ' + Math.round(total / 1024) + 'KB/' + Math.round(declared / 1048576 * 100) / 100 + 'MB declared');
@@ -691,7 +698,8 @@ function resolveRadioImpl(musicItem) {
     }).then(function (r) {
         resolveNegCacheDel(negKey);
         resolveOkCacheSet(negKey, { url: r.url, channel: r.channel, actualQuality: r.actualQuality, bytes: r.bytes });
-        return { url: r.url, quality: 'standard', actualQuality: r.actualQuality || '128k' };
+        // [v1.1.1] quality 不再回 legacy 'standard'（宿主按 192k 处理），统一内置键 128k
+        return { url: r.url, quality: r.actualQuality || '128k', actualQuality: r.actualQuality || '128k' };
     }, function (e) {
         resolveNegCacheSet(negKey, String((e && e.message) || '所有通道失败').slice(0, 80));
         throw e;
@@ -700,14 +708,18 @@ function resolveRadioImpl(musicItem) {
 
 module.exports = {
     platform: 'neteaseradio',
-    version: '1.1.0',
+    version: '1.1.1', // [v1.1.1] 三处口径修正：条目 duration 由毫秒改秒（宿主 music.d.ts:40 约定秒，447,936 直传会显示 124 小时）；qualities 键与对外 quality 由 legacy 'standard'（宿主 convertLegacyQuality 视作 192k）改内置键 '128k'；新增 supportedQualities 声明
     name: '网易云电台',
     author: '研发1号',
     description:
         '网易云音乐电台/播客：搜索电台与主播、浏览节目列表并播放；v1.1.0 起 VIP 节目进入列表并经第三方通道取链（wy.php/ikun/星海/oiapi/bugpk 等，官方通道优先免费节目）',
-    srcUrl: 'https://hebijunge.github.io/musicfree-plugins/plugins/neteaseradio-source.plugin.v1.1.0.js',
+    srcUrl: 'https://hebijunge.github.io/musicfree-plugins/plugins/neteaseradio-source.plugin.v1.1.1.js',
     cacheControl: 'no-store',
     supportedSearchType: ['album', 'artist'],
+    // [v1.1.1] 此前完全未声明 supportedQualities，宿主按默认列表给菜单；
+    // 电台节目官方只有 lMusic 一档（实测 7,167,405B÷447.9s=128kbps），第三方通道偶得更高码率
+    // 时由各通道 actualQuality 如实上报，故只声明实际可得的 128k。
+    supportedQualities: ['128k'],
 
     search: function (query, page, type) {
         if (type === 'album') {

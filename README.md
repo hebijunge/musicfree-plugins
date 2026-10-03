@@ -105,7 +105,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | 蜻蜓FM | 1.0.2 | [qingting-source.plugin.v1.0.2.js](plugins/qingting-source.plugin.v1.0.2.js) |
 | 喜马拉雅 | 1.2.0 | [ximalaya-source.plugin.v1.2.0.js](plugins/ximalaya-source.plugin.v1.2.0.js) |
 | 荔枝FM | 1.0.1 | [lizhi-source.plugin.v1.0.1.js](plugins/lizhi-source.plugin.v1.0.1.js) |
-| 网易云电台 | 1.1.0 | [neteaseradio-source.plugin.v1.1.0.js](plugins/neteaseradio-source.plugin.v1.1.0.js) |
+| 网易云电台 | 1.1.1 | [neteaseradio-source.plugin.v1.1.1.js](plugins/neteaseradio-source.plugin.v1.1.1.js) |
 | CCTV听音 | 1.0.0 | [cctv-source.plugin.v1.0.0.js](plugins/cctv-source.plugin.v1.0.0.js) |
 | Jamendo | 1.0.1 | [jamendo-source.plugin.v1.0.1.js](plugins/jamendo-source.plugin.v1.0.1.js) |
 | 聚合 | 1.9.16 | [agg-source.plugin.v1.9.16.js](plugins/agg-source.plugin.v1.9.16.js) |
