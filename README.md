@@ -90,7 +90,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | DJ多多 | 1.0.1 | [djduoduo-source.plugin.v1.0.1.js](plugins/djduoduo-source.plugin.v1.0.1.js) |
 | 5sing | 1.0.1 | [5sing-source.plugin.v1.0.1.js](plugins/5sing-source.plugin.v1.0.1.js) |
 | 千千音乐 | 1.0.3 | [qianqian-source.plugin.v1.0.3.js](plugins/qianqian-source.plugin.v1.0.3.js) |
-| Y2002电音 | 1.0.0 | [y2002-source.plugin.v1.0.0.js](plugins/y2002-source.plugin.v1.0.0.js) |
+| Y2002电音 | 1.0.1 | [y2002-source.plugin.v1.0.1.js](plugins/y2002-source.plugin.v1.0.1.js) |
 | 一听音乐 | 1.0.1 | [1ting-source.plugin.v1.0.1.js](plugins/1ting-source.plugin.v1.0.1.js) |
 | 懒人听书 | 1.0.1 | [lrts-source.plugin.v1.0.1.js](plugins/lrts-source.plugin.v1.0.1.js) |
 | 博看听书 | 1.0.0 | [bokantingshu-source.plugin.v1.0.0.js](plugins/bokantingshu-source.plugin.v1.0.0.js) |

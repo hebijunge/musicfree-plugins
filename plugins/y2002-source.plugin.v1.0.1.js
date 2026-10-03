@@ -516,11 +516,19 @@ function formatHex5h() {
   return v.toString(16);
 }
 
+// 内部档 → 宿主内置音质键（2026-10-03 实测：standard 65kbps、high 320~322kbps、super 原始无损）
+var QUALITY_HOST_LABEL = { standard: '64k', high: '320k', super: 'flac' };
+
 function normalizeQuality(q) {
   var s = String(q || '').toLowerCase();
-  if (s === 'standard' || s === '128k' || s === '64k' || s === 'low') return 'standard';
-  if (s === 'high' || s === '320k' || s === '192k') return 'high';
-  if (s === 'super' || s === 'flac' || s === 'hires' || s === 'master' || s === 'lossless') return 'super';
+  // [v1.0.1] 覆盖宿主全部内置键：旧表漏 96k / flac24bit / atmos / atmos_plus / dolby / vinyl /
+  // original / exhigh / higher / hq / sq / zq 等，宿主音质优先级列表走到这些键时直接抛
+  // 「不支持音质档位」，而不是拿到就近可得档并如实回标。
+  if (s === 'standard' || s === '64k' || s === '96k' || s === '128k' || s === 'low') return 'standard';
+  if (s === 'high' || s === 'exhigh' || s === 'higher' || s === 'hq' || s === '192k' || s === '320k') return 'high';
+  if (s === 'super' || s === 'lossless' || s === 'sq' || s === 'zq' || s === 'original'
+    || s === 'flac' || s === 'flac24bit' || s === 'hires' || s === 'master'
+    || s === 'atmos' || s === 'atmos_plus' || s === 'dolby' || s === 'vinyl') return 'super';
   return '';
 }
 
@@ -559,7 +567,9 @@ async function getMediaSourceImpl(musicItem, quality) {
     var mu = extractMu(html);
     if (!mu) throw new Error('[y2002] 详情页未提取到播放直链 (' + ownerid + '/' + id + ')');
     var v = await verifyMedia(mu, 'm4a');
-    return { url: mu, headers: { 'User-Agent': UA }, actualQuality: 'standard', size: v.total };
+    // [v1.0.1] 同时写宿主标准字段 quality：此前只给 actualQuality，宿主 plugin.ts 读的是
+    // result.quality（拿不到就沿用用户请求档），128k/320k 请求都会显示成自己要的档位。
+    return { url: mu, headers: { 'User-Agent': UA }, quality: QUALITY_HOST_LABEL.standard, actualQuality: QUALITY_HOST_LABEL.standard, size: v.total };
   }
 
   // high / super：原始格式完整文件，仅按歌曲原始上传格式派生（不虚标不静默降级）
@@ -580,7 +590,7 @@ async function getMediaSourceImpl(musicItem, quality) {
     // 档内无第二通道可接力，如实抛错交宿主回退 standard，不静默降级虚标
     throw new Error('[y2002] ' + q + ' (' + ext + ') 完整档不可用: ' + e.message);
   }
-  return { url: durl, headers: { 'User-Agent': UA }, actualQuality: q, size: v2.total };
+  return { url: durl, headers: { 'User-Agent': UA }, quality: QUALITY_HOST_LABEL[q], actualQuality: QUALITY_HOST_LABEL[q], size: v2.total };
 }
 
 // ==================== 单曲信息 / 歌词 ====================
@@ -610,16 +620,16 @@ async function getLyricImpl() {
 // ==================== 插件对象 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/y2002-source.plugin.v1.0.0.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/y2002-source.plugin.v1.0.1.js',
   name: 'Y2002电音',
   platform: PLATFORM,
-  version: '1.0.0',
+  version: '1.0.1', // [v1.0.1] 档位改用宿主内置键（64k/320k/flac，实测 65kbps / 320kbps / 原始无损），并补全 normalizeQuality 对 96k/flac24bit/atmos/atmos_plus/dolby/vinyl/exhigh 等内置键的归一；取链结果同时写宿主标准字段 quality（旧写法只给 actualQuality，宿主拿不到就沿用请求档，导致 128k/320k 显示成用户自己要的档）
   author: '研发3号',
   description: 'Y2002电音（y2002.com，blueocean 家族）独立源插件 v1.0.0：全免签名路线（App API 需爱加密 native 签名实测不可复现，勿用）。搜索/12 曲风分类/推荐走 PC API（pc-api.yy-5.com，deviceId 固定 UUID 持久化防风控）；「最新上传」首页第一页解析主站 HTML（class=song 锚点，标题真实），翻页回退 RecListOfPc（占位符标题自动回填详情页真实标题）；播放链走主站详情页 var mu 提取已签名直链（sign/t 时效数小时，no-store 每次实时获取，试听 m4a ftyp isom Range 206）；音质按 songurl 后缀如实派生：standard=试听 m4a（全量），high=原始 mp3 完整文件（_mp3 源，实测约 25% 有完整档），super=原始 wav/flac 完整文件（_wav/_flac 源），下载链 fd-y2-p-d + DOWNLOAD_KEY MD5 签名（纯 JS MD5 无 Buffer 依赖）；取链后 Range 探测魔数（m4a/mp3/wav/flac）+ 总大小校验，档位不符拒绝、不跨档静默降级；Y2002 无歌词/歌单/榜单接口（实测 404 或需签名），不实现相应入口',
   primaryKey: ['id'],
   supportedSearchType: ['music'],
   defaultSearchType: 'music',
-  supportedQualities: ['standard', 'high', 'super'],
+  supportedQualities: ['64k', '320k', 'flac'], // [v1.0.1] 内置键口径：实测 standard=65kbps、high=320kbps、super=原始 wav/flac（无 128k/192k 中间档，不虚列）
   cacheControl: 'no-store', // 播放链 sign/t 时效数小时，必须现取
   userVariables: [
     { key: 'y2002DeviceId', name: 'deviceId（可选）', hint: 'PC API 设备号，固定 UUID；留空使用内置默认值。频繁变更可能触发风控' }
