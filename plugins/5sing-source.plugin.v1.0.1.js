@@ -26,7 +26,8 @@
  *   - 不支持：歌单分类 / 用户歌单（平台无公开接口，文档 5.3）——本插件如实不实现
  *             getTopLists / getRecommendSheetTags 等方法，宿主侧入口自动隐藏，不虚标。
  *
- * 音质映射（MusicFree 档位）：SQ=无损/超清 → super（优先）、HQ=高品质 → high、LQ=流畅 → standard。
+ * 音质映射（MusicFree 档位）：SQ=超清(实测 319kbps MP3) → 320k（优先）、HQ=高品质 → 192k、LQ=流畅 → 128k。
+ * （v1.0.1：对宿主一律用内置音质键，不再透传 legacy 名 standard/high/super。）
  * 并非所有歌曲都有全 3 档（实测 songId=2716815 仅 lq），按实际返回降级，actualQuality 如实上报。
  *
  * 取链验证（音流口径）：请求哪个音质就优先取哪个音质；取链后做
@@ -58,6 +59,16 @@ var TIER_OF_FIELD = {
   hqurl: 'high', hqurl_backup: 'high',
   lqurl: 'standard', lqurl_backup: 'standard'
 };
+// [v1.0.1 宿主键协议对齐] 内部档 → 宿主内置音质键。旧代码把 legacy 名（standard/high/super）
+// 直接写进 result.quality，而宿主 plugin.ts 透传该字段且不做 legacy→内置转换，
+// 角标/下载命名于是落在非内置档位上。实测三档均为 MP3（2026-10-03，dur=262s）：
+// lq 4,185,069B≈128kbps、hq 6,277,582B≈192kbps、sq 10,462,607B≈319kbps——
+// 站点把 sq 叫「无损/超清」，但它不是 FLAC，故映射为 320k 而非 flac（不虚标无损）。
+var TIER_TO_HOST_KEY = {
+  standard: '128k',
+  high: '192k',
+  super: '320k'
+};
 // 请求档位 → 候选优先顺序（请求哪个音质就优先取哪个音质；请求档无货时按 super→high→standard 降级）
 var TIER_ORDER = {
   super: ['squrl', 'squrl_backup', 'hqurl', 'hqurl_backup', 'lqurl', 'lqurl_backup'],
@@ -65,9 +76,14 @@ var TIER_ORDER = {
   standard: ['lqurl', 'lqurl_backup', 'hqurl', 'hqurl_backup', 'squrl', 'squrl_backup']
 };
 // 宿主增强档别名 → 内部档（与仓库既有插件 normalizeQuality 口径一致）
+// [v1.0.1] 内置键按实测对齐：'128k'→lq(128kbps)、'192k'→hq(192kbps)、'320k'→sq(319kbps)。
+// 旧表把 '320k' 指到 hq，于是菜单声明的 320k 档永远只能拿到 192k 流（标签也跟着如实降成 192k，
+// 用户看不到 320k 实物）。legacy 键按宿主 legacyQualityMap 语义（low→128k/standard→192k/
+// high→320k/super→flac）；本站无 flac，故 super 及无损类键一律归最高档 sq。
 var QUALITY_ALIASES = {
-  standard: 'standard', '128k': 'standard', low: 'standard',
-  high: 'high', '192k': 'high', '320k': 'high',
+  low: 'standard', '64k': 'standard', '96k': 'standard', '128k': 'standard',
+  standard: 'high', '192k': 'high',
+  high: 'super', '320k': 'super',
   super: 'super', flac: 'super', flac24bit: 'super', hires: 'super', master: 'super', atmos: 'super'
 };
 var MIN_AUDIO_BYTES = 65536;      // <64KB 视为试听片段/错误响应，拒收
@@ -304,13 +320,14 @@ async function resolveMediaSource(musicItem, quality) {
     if (!url) { reasons.push(field + ':空'); continue; }
     var ok = await validateCandidate({ field: field, url: url, tier: TIER_OF_FIELD[field] }, songSize, reasons);
     if (ok) {
+      var hostKey = TIER_TO_HOST_KEY[ok.tier] || ok.tier;
       return {
         url: ok.url,
         headers: { 'User-Agent': UA },
-        quality: ok.tier,           // 宿主 v1.0.0 协议标准字段：实际命中的档位
-        actualQuality: ok.tier,     // 扩展回传（与仓库既有插件口径一致）
-        _magic: ok.magic,
-        _size: ok.size
+        quality: hostKey,           // 宿主 v1.0.0 协议标准字段：实际命中档位（内置键口径）
+        actualQuality: hostKey,     // 扩展回传（与仓库既有插件口径一致）
+        size: ok.size || undefined, // [v1.0.1] 改走宿主标准 size 字段（旧 _size 无人消费）
+        _magic: ok.magic
       };
     }
   }
@@ -472,18 +489,19 @@ async function importMusicSheetImpl(urlLike) {
 // ==================== 插件导出 ====================
 
 module.exports = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/5sing-source.plugin.v1.0.0.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/5sing-source.plugin.v1.0.1.js',
   name: '5sing',
   platform: '5sing',
-  version: '1.0.0',
+  version: '1.0.1', // [v1.0.1] 档位改用宿主内置键 128k/192k/320k（legacy standard/high/super 不再透传给宿主），
+  // sq 实测 319kbps MP3 故标 320k 不标 flac；取链结果 size 走宿主标准字段。
   author: '研发2号',
   primaryKey: ['id'],
   description: '5sing 独立源插件 v1.0.0（酷狗旗下原创音乐平台，原创 yc/翻唱 fc/伴奏 bz）：歌曲与歌单搜索（高亮标签清洗 + 320kbps 时长估算）、三档音质取链（SQ 无损/HQ 高品质/LQ 流畅，请求档优先、无货自动降级、actualQuality 如实上报，魔数 + Content-Length 比对 songSize 双重校验，CDN 签名直链实时获取）、LRC 歌词（伴奏无歌词如实报错）、歌单详情与导入（元数据 API + HTML 双通道，HTML 解析数少于元数据 E 时如实透出）、歌曲/歌单分享链接导入；歌单分类与用户歌单平台无公开接口，如实不实现（无排行榜/歌单广场入口）。平台接口全明文免登录。',
   supportedSearchType: ['music', 'sheet'],
-  supportedQualities: ['standard', 'high', 'super'],
+  supportedQualities: ['128k', '192k', '320k'], // [v1.0.1] legacy 键→内置键；sq 实测 319kbps MP3，不声明 flac
   cacheControl: 'no-store', // CDN 直链带时间戳+MD5 签名有时效，必须实时获取
   hints: {
-    search: ['搜索 5sing 曲库（原创/翻唱/伴奏），关键词即搜', '音质档位：无损(super)/较高(high)/标准(standard)，歌曲实际无该档时自动降级'],
+    search: ['搜索 5sing 曲库（原创/翻唱/伴奏），关键词即搜', '音质档位：320k/192k/128k（站点标称 SQ 实为 320kbps MP3，非无损），歌曲实际无该档时自动降级'],
     importMusicItem: ['支持 5sing 歌曲页链接，如 http://5sing.kugou.com/yc/5394963.html', 'yc=原创 fc=翻唱 bz=伴奏'],
     importMusicSheet: ['支持 5sing 歌单页链接，如 http://5sing.kugou.com/66401956/dj/5b17173cb0f5baf7df069c39.html', '链接中 userId 可缺省，会自动从歌单元数据补全', '歌单歌曲走页面解析，实际导入数可能少于页面标注数（差额为已删除/隐藏歌曲）']
   },

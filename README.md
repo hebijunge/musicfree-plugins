@@ -88,7 +88,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | B站 | 1.1.2 | [bilibili-source.plugin.v1.1.2.js](plugins/bilibili-source.plugin.v1.1.2.js) |
 | 番茄畅听 | 1.2.1 | [fanqie-source.plugin.v1.2.1.js](plugins/fanqie-source.plugin.v1.2.1.js) |
 | DJ多多 | 1.0.1 | [djduoduo-source.plugin.v1.0.1.js](plugins/djduoduo-source.plugin.v1.0.1.js) |
-| 5sing | 1.0.0 | [5sing-source.plugin.v1.0.0.js](plugins/5sing-source.plugin.v1.0.0.js) |
+| 5sing | 1.0.1 | [5sing-source.plugin.v1.0.1.js](plugins/5sing-source.plugin.v1.0.1.js) |
 | 千千音乐 | 1.0.2 | [qianqian-source.plugin.v1.0.2.js](plugins/qianqian-source.plugin.v1.0.2.js) |
 | Y2002电音 | 1.0.0 | [y2002-source.plugin.v1.0.0.js](plugins/y2002-source.plugin.v1.0.0.js) |
 | 一听音乐 | 1.0.1 | [1ting-source.plugin.v1.0.1.js](plugins/1ting-source.plugin.v1.0.1.js) |
