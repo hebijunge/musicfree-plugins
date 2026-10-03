@@ -120,15 +120,15 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | DJ766 | 1.4.0 | [dj766-source.plugin.v1.4.0.js](plugins/dj766-source.plugin.v1.4.0.js) |
 | 82DJ | 1.2.0 | [82dj-source.plugin.v1.2.0.js](plugins/82dj-source.plugin.v1.2.0.js) |
 | QQDJ | 1.2.1 | [qqdjs-source.plugin.v1.2.1.js](plugins/qqdjs-source.plugin.v1.2.1.js) |
-| 36DJ | 1.2.0 | [36dj-source.plugin.v1.2.0.js](plugins/36dj-source.plugin.v1.2.0.js) |
+| 36DJ | 1.2.1 | [36dj-source.plugin.v1.2.1.js](plugins/36dj-source.plugin.v1.2.1.js) |
 | 宝贝DJ | 1.2.0 | [bibdj-source.plugin.v1.2.0.js](plugins/bibdj-source.plugin.v1.2.0.js) |
 | 172Mix | 1.2.0 | [172mix-source.plugin.v1.2.0.js](plugins/172mix-source.plugin.v1.2.0.js) |
-| DJ耶耶耶 | 1.1.0 | [djyyy-source.plugin.v1.1.0.js](plugins/djyyy-source.plugin.v1.1.0.js) |
+| DJ耶耶耶 | 1.1.1 | [djyyy-source.plugin.v1.1.1.js](plugins/djyyy-source.plugin.v1.1.1.js) |
 | 黑色音频 | 1.1.0 | [hy57-source.plugin.v1.1.0.js](plugins/hy57-source.plugin.v1.1.0.js) |
-| 好听轻音乐 | 1.2.1 | [htqyy-source.plugin.v1.2.1.js](plugins/htqyy-source.plugin.v1.2.1.js) |
-| 我是DJ | 1.1.0 | [54dj-source.plugin.v1.1.0.js](plugins/54dj-source.plugin.v1.1.0.js) |
-| 电音阁 | 1.1.0 | [dianyinge-source.plugin.v1.1.0.js](plugins/dianyinge-source.plugin.v1.1.0.js) |
-| SpaceDJ | 1.1.0 | [spacedj-source.plugin.v1.1.0.js](plugins/spacedj-source.plugin.v1.1.0.js) |
+| 好听轻音乐 | 1.2.2 | [htqyy-source.plugin.v1.2.2.js](plugins/htqyy-source.plugin.v1.2.2.js) |
+| 我是DJ | 1.1.1 | [54dj-source.plugin.v1.1.1.js](plugins/54dj-source.plugin.v1.1.1.js) |
+| 电音阁 | 1.1.1 | [dianyinge-source.plugin.v1.1.1.js](plugins/dianyinge-source.plugin.v1.1.1.js) |
+| SpaceDJ | 1.1.1 | [spacedj-source.plugin.v1.1.1.js](plugins/spacedj-source.plugin.v1.1.1.js) |
 | DJ6 | 1.0.0 | [dj6-source.plugin.v1.0.0.js](plugins/dj6-source.plugin.v1.0.0.js) |
 
 ## 目录结构
