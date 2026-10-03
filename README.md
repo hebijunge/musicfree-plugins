@@ -100,7 +100,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | 猫耳FM | 1.0.1 | [missevan-source.plugin.v1.0.1.js](plugins/missevan-source.plugin.v1.0.1.js) |
 | DJ串烧集 | 1.0.0 | [djcsj-source.plugin.v1.0.0.js](plugins/djcsj-source.plugin.v1.0.0.js) |
 | DJ秀 | 1.0.3 | [djshow.plugin.v1.0.3.js](plugins/djshow.plugin.v1.0.3.js) |
-| Apple Music | 1.0.0 | [apple-music-v1.0.0.js](plugins/apple-music-v1.0.0.js) |
+| Apple Music | 1.0.1 | [apple-music-v1.0.1.js](plugins/apple-music-v1.0.1.js) |
 | 华为音乐 | 1.0.2 | [hwmusic-source.plugin.v1.0.2.js](plugins/hwmusic-source.plugin.v1.0.2.js) |
 | 蜻蜓FM | 1.0.2 | [qingting-source.plugin.v1.0.2.js](plugins/qingting-source.plugin.v1.0.2.js) |
 | 喜马拉雅 | 1.2.0 | [ximalaya-source.plugin.v1.2.0.js](plugins/ximalaya-source.plugin.v1.2.0.js) |
