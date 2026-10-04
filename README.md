@@ -109,7 +109,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | CCTV听音 | 1.0.1 | [cctv-source.plugin.v1.0.1.js](plugins/cctv-source.plugin.v1.0.1.js) |
 | Jamendo | 1.0.1 | [jamendo-source.plugin.v1.0.1.js](plugins/jamendo-source.plugin.v1.0.1.js) |
 | 聚合 | 1.9.16 | [agg-source.plugin.v1.9.16.js](plugins/agg-source.plugin.v1.9.16.js) |
-| JOOX音乐 | 1.1.1 | [joox-source.plugin.v1.1.1.js](plugins/joox-source.plugin.v1.1.1.js) |
+| JOOX音乐 | 1.1.2 | [joox-source.plugin.v1.1.2.js](plugins/joox-source.plugin.v1.1.2.js) |
 | djuu DJ | 1.1.1 | [djuu-source.plugin.v1.1.1.js](plugins/djuu-source.plugin.v1.1.1.js) |
 | 相声评书 | 1.0.2 | [xiangsheng-pingshu-source.plugin.v1.0.2.js](plugins/xiangsheng-pingshu-source.plugin.v1.0.2.js) |
 | 皮狗DJ | 1.1.1 | [pgdjz-source.plugin.v1.1.1.js](plugins/pgdjz-source.plugin.v1.1.1.js) |
