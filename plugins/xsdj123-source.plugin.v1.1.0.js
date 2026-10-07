@@ -1,8 +1,8 @@
-// 先上DJ (xsdj123.com) - MusicFree Plugin v1.0.0
+// 先上DJ (xsdj123.com) - MusicFree Plugin v1.1.0
 // 搜索: /music/find?keyword=xxx&page=N
 // 列表: /music/list-1-0?type=new&page=N
 // 详情: /music/info-{id} → <audio src> aac 直链
-// 免登录, AAC 直链
+// 免登录, AAC 直链; v1.1.0: 取链响应补 Referer/UA 头（CDN 403 防盗链）
 
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -38,10 +38,10 @@ module.exports = {
     cacheControl: 'no-cache',
     name: '先上DJ',
     platform: '先上DJ',
-    version: '1.0.0',
+    version: '1.1.0',
     author: 'hebijunge',
     description: '先上DJ - AAC直链/搜索/最新舞曲',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/xsdj123-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/xsdj123-source.plugin.v1.1.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {
@@ -79,7 +79,8 @@ module.exports = {
         });
         const m = res.data.match(/<audio[^>]+src="([^"]+\.aac[^"]*)"/i);
         if (!m) throw new Error('未找到播放地址');
-        return { url: m[1] };
+        // v1.1.0: CDN 403 需要 xsdj123 站点 Referer 才放行
+        return { url: m[1], headers: { 'Referer': SITE + '/', 'User-Agent': UA } };
     },
 
     async getLyric(musicItem) {

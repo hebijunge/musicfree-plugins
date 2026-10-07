@@ -1,6 +1,7 @@
-// 小熊电音 (xxedm.com) - MusicFree Plugin v1.0.0
+// 小熊电音 (xxedm.com) - MusicFree Plugin v1.0.1
 // 搜索: /search.htm?keyword={kw}
-// 取链: /thread-{id}.htm → <source src> pan.urlkj.com
+// 取链: /thread-{id}.htm → <source src> pan.urlkj.com（带 ?t=&sign= 时效签名）
+// v1.0.1: 修复搜索选择器（thread- 相对路径）与取链正则（mp3 后带签名参数）
 // 高品: /play/ → /down/
 
 const axios = require('axios');
@@ -10,10 +11,10 @@ module.exports = {
     name: '小熊电音',
     cacheControl: 'no-store',
     platform: '小熊电音',
-    version: '1.0.0',
+    version: '1.0.1',
     author: 'hebijunge',
     description: '小熊电音 - DJ舞曲论坛，128K/320K双档',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/xxedm-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/xxedm-source.plugin.v1.0.1.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {
@@ -24,7 +25,7 @@ module.exports = {
         });
         const $ = cheerio.load(res.data);
         const data = [];
-        $('a[href*="/thread-"]').each((i, el) => {
+        $('a[href*="thread-"]').each((i, el) => {
             const href = $(el).attr('href') || '';
             const m = href.match(/thread-(\d+)\.htm/);
             if (!m) return;
@@ -38,7 +39,7 @@ module.exports = {
 
     async getMediaSource(musicItem, quality) {
         const res = await axios.get('http://xxedm.com/thread-' + musicItem.id + '.htm');
-        const m = String(res.data).match(/<source[^>]+src="(https?:\/\/pan\.urlkj\.com\/[^"]+\.mp3)"/);
+        const m = String(res.data).match(/<source[^>]+src="(https?:\/\/pan\.urlkj\.com\/[^"]+\.mp3[^"]*)"/);
         if (!m) throw new Error('取链失败');
         let url = m[1];
         if (quality === 'high' || quality === 'super') {

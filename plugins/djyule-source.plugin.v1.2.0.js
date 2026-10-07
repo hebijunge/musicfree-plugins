@@ -76,7 +76,7 @@ module.exports = {
     version: '1.2.0',
     author: 'hebijunge',
     description: 'DJ娱乐网 - App XML搜索/排行榜/体验精选320k/歌词',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djyule-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/djyule-source.plugin.v1.2.0.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {

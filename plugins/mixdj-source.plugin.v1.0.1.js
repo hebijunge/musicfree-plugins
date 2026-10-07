@@ -47,10 +47,10 @@ module.exports = {
     cacheControl: 'no-cache',
     name: 'MixDJ',
     platform: 'MixDJ',
-    version: '1.0.0',
+    version: '1.0.1',
     author: 'hebijunge',
     description: '全球DJ舞曲同步网 - 48k试听/搜索/榜单/风格分类',
-    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/mixdj-source.plugin.v1.0.0.js',
+    srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/mixdj-source.plugin.v1.0.1.js',
     supportedSearchType: ['music'],
 
     async search(query, page, type) {
@@ -99,7 +99,8 @@ module.exports = {
         const res = await axios.get(SITE + '/music/info/id/' + musicItem.id + '.html', {
             headers: { 'User-Agent': UA }
         });
-        const m = res.data.match(/url="(\/MusicData\/play\/[^"]+\.mp3)"/);
+        // v1.0.1: 播放地址已从 HTML 属性迁移到页面内联 JS 变量 fileUrl
+        const m = res.data.match(/fileUrl\s*=\s*"([^"]+\.mp3)"/);
         if (!m) throw new Error('未找到播放地址');
         return { url: SITE + m[1] };
     },
