@@ -1,4 +1,25 @@
 /**
+ * [v1.9.19 海棠酷狗上档恢复版] 2026-10-08 复测推翻 v1.9.16「海棠上档不可达或恒等值于 flac」前提：
+ * 海棠统一接口 resolve-url 的酷狗上档真实有货且互异（晴天 hash=b3a52a7a958bf0aed0ebfba2e9a818b7，
+ * POST musicserver.haitangw.cc/v1/music/resolve-url，响应 201 {code:0,data:{url}}，均 fLaC）：
+ *   lossless 31,633,244B(≈940kbps) / hires 55,397,039B(≈1647kbps,24bit) / clear 121,767,659B
+ *   (≈3621kbps,24bit/96kHz，酷狗母带) / atmos 72,293,078B(≈2149kbps,6声道)；解析耗时 ~0.6s。
+ * ① QUALITY_KEY_MAP 幽灵键真实归一：flac24bit/hires→hires、master→master、atmos/atmos_plus→atmos
+ *   （海棠上档可达后仍归一 super 属错档降级）；dolby/vinyl 无上游维持 super。
+ * ② internalToHostQuality / haitangLevelOf 补 master→clear（酷狗母带）、atmos→atmos。
+ * ③ 新增 probeHaitangFlacMeta（Range 0-63 + fLaC 魔数 + STREAMINFO 文件字节 18~21 解析）与
+ *   haitangUpperHostLabel：6声道→atmos / 24bit≥88.2kHz→master / 24bit→hires / 其余→flac
+ *   （探测元数据确定性诚实标注，宁低勿高）；海棠 http 直链探测优先升级 https（实测 206 支持）。
+ * ④ resolveKugou：上档 hash 走 hashSq；kgLane 对 master/atmos 直接 reject（lx5 code:6 防错档
+ *   抢跑）；rest 链对 hires/master/atmos 改回落 flac 链（海棠 lossless→瓜子 flac→年信→星海）。
+ * ⑤ snapQualityToMeasured 补第 4 参 audioMeta：元数据证据优先，无元数据按位速阶梯
+ *   master≥2800 / atmos≥1900 / hires≥1500 kbps 宁低勿高，低于 hires 阈值落 flac。
+ * ⑥ MEDIA_URL_HTTP_HOST_ALLOWLIST 补 bdycdn.com——v1.9.16 起海棠 kg http 直链被 http 白名单
+ *   拒收、海棠赛道实质失效的隐性 bug 一并修复。
+ * ⑦ supportedQualities 七档 128k/320k/flac/flac24bit/hires/master/atmos（192k 站点无文件维持
+ *   剔除）；SOURCE_QUALITIES 扩 master/atmos；GOODS_QUALITY_MAP 恢复 high→hires/viper_atmos→
+ *   atmos/viper_clear→master 大小映射；hints 四路竞速口径。
+ * 基线 v1.9.18。真机未验证项：bdycdn http 直链安卓 WebView mixed-content 播放、上档真机取链成功率。
  * [v1.9.18 年信 + 星海 kg 双兜底吸收版] 承接 2026-10-03 全平台取链接口实测（对照 music.cwo.cc.cd 订阅
  * cihedai/quandouyao 音源），吸收两条第三方兜底通道，全部挂在竞速全败后的 rest 降级链
  * （不改变既有主链优先级，fail-closed）：
@@ -464,7 +485,8 @@ var SOURCE_WEIGHT = {
 // v0.8.0：酷狗新增洛雪v5 服务端中转为主力（128k/320k/flac/flac24bit 四档全通，md5 多级签名），
 //   trackercdn v1（免费歌 128k）与 zddyr.top（LX Music 兼容，128k/320k/flac）补充兜底，接力链见 resolveKugou
 var SOURCE_QUALITIES = {
-  kugou: ['standard', 'high', 'super', 'hires']
+  // [v1.9.19] 海棠上档恢复：master（海棠 clear=酷狗母带 24bit/96kHz）/atmos（6声道）实测有货
+  kugou: ['standard', 'high', 'super', 'hires', 'master', 'atmos']
 };
 
 function canServe(source, quality) {
@@ -1997,12 +2019,16 @@ function md5Hex(input) {
 
 // 海棠 resolve-url 公共封装（用户已确认接受第三方备源）：
 // source: 'kg'(酷狗)
-// level 映射（文档实测）：standard/exhigh/lossless/hires（master/flac24bit 会降级 128k，不用）
-// 文档实测：kg 必须 hash 全大写；酷狗 VIP 返回真 FLAC（酷狗 lossless 30.2MB / hires 24bit 52.8MB）
+// level 映射：standard/exhigh/lossless/hires/clear/atmos 全档可用。[v1.9.16 曾判「master/flac24bit
+// 会降级 128k 不用」——2026-10-08 复测推翻：上档真实有货且互异（晴天 hash：lossless 31.6MB /
+// hires 55.4MB / clear 121.8MB / atmos 72.3MB，均 fLaC，~0.6s）]。
+// 文档实测：kg 必须 hash 全大写；酷狗母带在海棠接口的档键为 clear。
 function haitangLevelOf(quality) {
   if (quality === 'super') return 'lossless';
   if (quality === 'hires') return 'hires';
   if (quality === 'high') return 'exhigh';
+  if (quality === 'master') return 'clear'; // [v1.9.19] 酷狗母带 = 海棠 clear
+  if (quality === 'atmos') return 'atmos';  // [v1.9.19] 全景声
   return 'standard';
 }
 
@@ -2018,14 +2044,10 @@ function haitangLevelOf(quality) {
 // （宿主音质菜单显示 + downloader 下载进度 expectedFileSize）。仅走非关键路径，不进取链。
 var GOODSMSTORE_URL = 'https://gateway.kugou.com/goodsmstore/v1/get_res_privilege';
 var GOODS_QUALITY_MAP = {
-  '128': '128k', '320': '320k', 'flac': 'flac', 'flac24bit': 'flac24bit'
-  // [v1.9.9 音质标识一致性修复] 剔除不可交付档位映射：high(hires)/dolby/viper_atmos(atmos)/
-  // viper_clear(master)。依据 2026-09-12 实测：酷狗自有取链通道仅 128k/320k/flac/flac24bit
-  // 全通（hires 及以上 code:6 未开放）；hires 原接力通道海棠已 404 下线、第三方洛雪无 hires
-  // 档，实测「晴天」请求 hires/atmos/master 全部取链失败（128k/320k/flac 成功）。此前列表页
-  // 按 get_res_privilege 透出这些键属虚标（点开取不到链接），与搜索页三档口径也不一致。
-  // 取链链路未动：QUALITY_KEY_MAP 对 hires/atmos/master 的内部归一与 actualQuality 如实
-  // 上报保持原样；supportedQualities 菜单声明（baka 对齐）保持原样。
+  '128': '128k', '320': '320k', 'flac': 'flac', 'flac24bit': 'flac24bit',
+  // [v1.9.19 恢复上档大小映射] 2026-10-08 海棠上档实测有货（v1.9.9 剔除时「海棠下线/自有通道
+  // code:6」属当时事实，现取链已由海棠上档链承接，列表页大小透出不再虚标）。
+  'high': 'hires', 'viper_atmos': 'atmos', 'viper_clear': 'master'
   // viper_tape 实测与 320k 同码率同 hash（2026-09-07），不映射，避免虚标
 };
 // [v1.9.9] 请求列表保持原 8 档不动：实测裁剪为 4 档时接口返回空 goods（2026-09-12
@@ -2140,17 +2162,18 @@ var QUALITY_KEY_MAP = {
   '96k': 'standard', '128k': 'standard',
   '192k': 'high', '320k': 'high',
   'flac': 'super',
-  // [v1.9.16 幽灵键归一到可用档] flac24bit/hires/master/atmos/atmos_plus/dolby/vinyl 原归一到
-  // 内部 hires（= lx5 flac24bit ‖ 海棠 hires）。实测该路径要么与 flac 逐字节相同，
-  // 要么直接取链失败（lx5 code:6、海棠已下线），而 flac 档稳定可取。宿主全局音质优先级
-  // 列表仍可能传入这些键，归一到 super 是可用降级；真实档位由 snapQualityToMeasured 复核。
-  'flac24bit': 'super', 'hires': 'super', 'master': 'super', 'atmos': 'super',
-  'atmos_plus': 'super', 'dolby': 'super', 'vinyl': 'super'
+  // [v1.9.19 上档恢复] 2026-10-08 实测海棠 kg 上档真实有货且互异（hires 55.4MB/24bit、
+  // clear 121.8MB/24bit-96kHz、atmos 72.3MB/6声道），幽灵键由 v1.9.16 归一 super 改回真实档：
+  // flac24bit/hires→hires（海棠 hires）、master→master（海棠 clear，酷狗母带）、
+  // atmos/atmos_plus→atmos（海棠 atmos）。dolby/vinyl 无上游可用档，维持 super 可用降级；
+  // 真实档位由 snapQualityToMeasured + probeHaitangFlacMeta 元数据复核（宁低勿高）。
+  'flac24bit': 'hires', 'hires': 'hires', 'master': 'master', 'atmos': 'atmos',
+  'atmos_plus': 'atmos', 'dolby': 'super', 'vinyl': 'super'
 };
 function normalizeQuality(q) {
   var s = String(q || '');
   if (QUALITY_KEY_MAP[s]) return QUALITY_KEY_MAP[s];
-  if (s === 'standard' || s === 'high' || s === 'super' || s === 'hires') return s;
+  if (s === 'standard' || s === 'high' || s === 'super' || s === 'hires' || s === 'master' || s === 'atmos') return s; // [v1.9.19] 上档内部档
   return 'standard';
 }
 
@@ -2162,12 +2185,58 @@ function internalToHostQuality(q) {
   if (q === 'high') return '320k';
   if (q === 'super') return 'flac';
   if (q === 'hires') return 'hires';
+  if (q === 'master') return 'master'; // [v1.9.19] 海棠 clear（酷狗母带）
+  if (q === 'atmos') return 'atmos';   // [v1.9.19] 海棠 atmos
   return '128k'; // standard / low / 未知
+}
+
+// [v1.9.19 上档诚实标注] 海棠上档（hires/master/atmos）探测元数据：Range 0-63 取文件头，
+// fLaC 魔数校验 + STREAMINFO 解析（采样率/声道/位深在文件字节 18~21，32 位安全无 BigInt）：
+//   sampleRate=(b18<<12)|(b19<<4)|(b20>>4)；channels=((b20>>1)&7)+1；bitsPerSample=(((b20&1)<<4)|(b21>>4))+1
+// 探测失败 fail-soft 返回 null（宁缺毋假，不改标）。海棠返回直链多为 http（bdycdn CDN），
+// 安卓 WebView https 页面加载 http 音频受 mixed-content 限制——探测优先升级 https 复测
+// （2026-10-08 实测 bdycdn https 支持 Range 206）。
+function probeHaitangFlacMeta(url) {
+  if (!url || typeof url !== 'string') return Promise.resolve(null);
+  var probeUrl = /^http:\/\//i.test(url) ? url.replace(/^http:/i, 'https:') : url;
+  var attempt = function (u) {
+    return axios.get(u, {
+      timeout: RELAY_TIMEOUT,
+      headers: { Range: 'bytes=0-63' },
+      responseType: 'arraybuffer',
+      validateStatus: function (s) { return s >= 200 && s < 400; }
+    }).then(function (res) {
+      var buf = new Uint8Array(res.data || []);
+      if (buf.length < 42 || buf[0] !== 0x66 || buf[1] !== 0x4C || buf[2] !== 0x61 || buf[3] !== 0x43) return null; // 'fLaC'
+      return {
+        sampleRate: ((buf[18] << 12) | (buf[19] << 4) | (buf[20] >> 4)) & 0x1FFFFF,
+        channels: ((buf[20] >> 1) & 7) + 1,
+        bitsPerSample: (((buf[20] & 1) << 4) | (buf[21] >> 4)) + 1
+      };
+    });
+  };
+  return attempt(probeUrl).catch(function () {
+    if (probeUrl === url) return null;
+    return attempt(url).catch(function () { return null; });
+  });
+}
+
+// 探测元数据 → 宿主音质键（确定性诚实标注，宁低勿高）：
+// 6 声道 → atmos；24bit 且 ≥88.2kHz（96k/192k 母带形态）→ master；24bit → hires；其余 → flac。
+function haitangUpperHostLabel(meta) {
+  if (!meta || !meta.channels || !meta.bitsPerSample) return 'flac';
+  if (meta.channels >= 6) return 'atmos';
+  if (meta.bitsPerSample >= 24 && meta.sampleRate >= 88200) return 'master';
+  if (meta.bitsPerSample >= 24) return 'hires';
+  return 'flac';
 }
 
 function resolveHaitang(source, rid, quality) {
   var r = String(rid || '');
   if (source === 'kg') r = r.toUpperCase(); // 文档实测：酷狗小写 hash 返回 UPSTREAM_RESOLVE_FAILED
+  // [v1.9.19] 上档返回后追加 fLaC STREAMINFO 探测：元数据证据决定诚实标注（audioMeta 随结果
+  // 上交 snapQualityToMeasured 优先采信），上游虚标/错档在此纠偏；探测失败维持请求档标注。
+  var isUpper = quality === 'hires' || quality === 'master' || quality === 'atmos';
   return axios.post('https://musicserver.haitangw.cc/v1/music/resolve-url', {
     source: source, rid: r, level: haitangLevelOf(quality)
   }, {
@@ -2177,7 +2246,15 @@ function resolveHaitang(source, rid, quality) {
     var d = res.data && res.data.data;
     if (!res.data || res.data.code !== 0 || !d || !d.url) throw new Error('haitang no url');
     // [v0.7.2 fix#10] actualQuality：海棠 level 与请求档一一对应（standard→128k / exhigh→320k / lossless→flac / hires→hires）
-    return { url: String(d.url), actualQuality: internalToHostQuality(quality) };
+    if (!isUpper) return { url: String(d.url), actualQuality: internalToHostQuality(quality) };
+    return probeHaitangFlacMeta(String(d.url)).then(function (meta) {
+      var out = { url: String(d.url), actualQuality: internalToHostQuality(quality) };
+      if (meta) {
+        out.actualQuality = haitangUpperHostLabel(meta);
+        out.audioMeta = meta;
+      }
+      return out;
+    });
   });
 }
 
@@ -2307,7 +2384,7 @@ function resolveKugou(raw, quality, musicItem, hostQuality) {
   // 海棠实测任意 hash 也能解出对应档位，缺档时回退主 hash）
   var hash = raw.hash;
   if (quality === 'high' && raw.hash320) hash = raw.hash320;
-  if ((quality === 'super' || quality === 'hires') && raw.hashSq) hash = raw.hashSq;
+  if ((quality === 'super' || quality === 'hires' || quality === 'master' || quality === 'atmos') && raw.hashSq) hash = raw.hashSq; // [v1.9.19] 上档全走 sqhash
   if (!hash) hash = raw.hash;
   // ① 官方 m.kugou getSongInfo（仅免费歌约28%可下，VIP 歌 status=0 无 URL；固定返回 128k 直链 → 仅 standard 档参与；
   //    惰性创建：非 standard 档不构造该 rejected promise，避免成功路径上的 unhandled rejection）
@@ -2350,15 +2427,19 @@ function resolveKugou(raw, quality, musicItem, hostQuality) {
   // 只有前级失败才创建下一级 promise，避免成功路径上的 unhandled rejection
   // [v1.6.0] trackercdn v2 接回接力链（official→lx5 之后）：主线 VIP 歌 url 为空时兜底，
   // 匿名环境（无 kugouCookie）内自动 reject 跳过，不影响既有链
-  var kgLane = (quality === 'standard'
+  // [v1.9.19] master/atmos 档酷狗自有通道全档未开放（lx5 code:6），kgLane 直接 reject 不参与
+  // 竞速（防 lx5 对未知档错配 flac 档抢跑）；standard/high/super/hires 走原链不变
+  var kgLane = (quality === 'master' || quality === 'atmos')
+    ? Promise.reject(new Error('kugou lane: ' + quality + ' 自有通道未开放'))
+    : (quality === 'standard'
     ? [['official', function () { return official; }], ['lx5', lx5Thunk], ['trackercdn', function () { return resolveKugouTrackercdn(raw, quality); }]]
     : [['lx5', lx5Thunk], ['trackercdn', function () { return resolveKugouTrackercdn(raw, quality); }]]
-  ).reduce(function (acc, pair) {
-    return acc.catch(function () {
-      return pair[1]().then(function (r) { return statTag(pair[0], r); });
-    });
-  }, Promise.reject(new Error('kugou lane start')));
-  // 赛道 B：海棠（全档兜底，VIP 歌真 FLAC/hires）
+    ).reduce(function (acc, pair) {
+      return acc.catch(function () {
+        return pair[1]().then(function (r) { return statTag(pair[0], r); });
+      });
+    }, Promise.reject(new Error('kugou lane start')));
+  // 赛道 B：海棠（全档兜底，VIP 歌真 FLAC/hires；v1.9.19 上档 clear/atmos 恢复接入）
   var htLane = resolveHaitang('kg', hash, quality).then(function (r) { return statTag('haitang', r); });
   // 赛道 C：酷我官方直取（曲名+歌手搜 rid → convert_url_with_sign 五变体竞速，rid 10min 缓存）
   var kwLane = resolveKuwoFallback(musicItem, quality).then(function (r) { return statTag('kuwo', r); });
@@ -2383,16 +2464,27 @@ function resolveKugou(raw, quality, musicItem, hostQuality) {
     guarded(kwLane, 'kuwo'),
     guarded(gzLane, 'guazi')
   ]);
-  if (quality === 'hires') return raced; // hires：酷狗自有链本就只有洛雪+海棠，竞速全败即失败
+  // [v1.9.19] 上档（hires/master/atmos）不再竞速全败即终局：落到下方 rest 链按「宁低勿高」
+  // 回落 flac 档（haitang-super→guazi-flac→nianxin→zddyr），实际档位如实标注，不锁死取链
   // 竞速全败 → 原降级链剩余段照旧（HYWmusic → zddyr.top，逐级 catch 降级，全失败才抛错；
   // zddyr 有 QPS 限制勿并发，此处串行接力且只在竞速失败后才会创建请求）
   // [v1.9.4 disabled since 2026-09-11] HYWmusic 实测整体失效，从接力链移除
   // [v1.9.18 吸收 2026-10-03] 年信 kg（换源 m4a 快稳）先行，星海 kg 复活置后串行（QPS 限流勿并发）；
   // 两通道均 fail-closed，URL 非 http(s) 由 rest.reduce 抛错继续接力
-  var rest = [
-    ['nianxin', function () { return resolveKugouNianxin(raw, quality); }],
-    ['zddyr', function () { return resolveKugouZddyr(raw, quality); }]
-  ];
+  // [v1.9.19] 年信/星海 kg 仅支持 128kmp3/320kmp3/flac 三档（上档请求即 reject 不必试）。
+  // 上档竞速全败时按「宁低勿高」回落 flac 链（海棠 lossless→瓜子 flac→年信 flac→星海 flac），
+  // 实际档位由 actualQuality / snapQualityToMeasured 如实标注，不锁死取链。
+  var rest = quality === 'hires' || quality === 'master' || quality === 'atmos'
+    ? [
+      ['haitang-super', function () { return resolveHaitang('kg', hash, 'super'); }],
+      ['guazi-flac', function () { return resolveKugouGuazi(raw, 'flac', musicItem); }],
+      ['nianxin', function () { return resolveKugouNianxin(raw, 'super'); }],
+      ['zddyr', function () { return resolveKugouZddyr(raw, 'super'); }]
+    ]
+    : [
+      ['nianxin', function () { return resolveKugouNianxin(raw, quality); }],
+      ['zddyr', function () { return resolveKugouZddyr(raw, quality); }]
+    ];
   return raced.catch(function () {
     return rest.reduce(function (acc, pair) {
       return acc.catch(function () {
@@ -3270,7 +3362,7 @@ function pickCandidates(srcMap, quality) {
 // 不在白名单的直链视为该源失败继续接力（与 http 拒绝行为一致）。
 var MEDIA_URL_HTTPS_HOST_ALLOWLIST = [
   /\.kugou\.com$/i, /\.kugou\.net$/i, /\.kgimg\.com$/i,            // 酷狗官方 CDN/分享域
-  /\.bdycdn\.com$/i,                                               // 海棠中转回源 CDN（实测取链前置域）
+  /\.bdycdn\.(com|cn)$/i,                                          // 海棠中转回源 CDN（实测 v3-*.a.bdycdn.cn；.com 兼容历史形态）
   /\.haitangw\.cc$/i,                                              // 海棠
   /(^|\.)zddyr\.top$/i,                                            // zddyr
   /(^|\.)xn--fiqs8s$/i,                                            // 洛雪v5 中转域（中文域名 punycode）
@@ -3278,6 +3370,7 @@ var MEDIA_URL_HTTPS_HOST_ALLOWLIST = [
 ];
 var MEDIA_URL_HTTP_HOST_ALLOWLIST = [
   /\.kugou\.com$/i, /\.kugou\.net$/i, /\.kgimg\.com$/i, // 酷狗
+  /\.bdycdn\.(com|cn)$/i, // [v1.9.19] 海棠 bdycdn 直链为 http（实测 .cn 域）——v1.9.16 起缺失致海棠 kg 全档被 http 白名单拒收（赛道隐性失效），补回
   /(^|\.)kuwo\.cn$/i, // [v1.4.0] 酷我兜底：升级 https 失败时保底放行（白名单域不变）
 ];
 
@@ -3342,13 +3435,34 @@ function probeHeadSize(url, timeoutMs) {
 // size 或 duration 任一未知 → 原样返回（不猜）。
 var KG_LOSSY_TIERS = [64, 96, 128, 192, 320];
 var KG_LOSSLESS_LABELS = { flac: 1, flac24bit: 1, hires: 1, master: 1, atmos: 1, atmos_plus: 1, dolby: 1, vinyl: 1 };
-function snapQualityToMeasured(q, size, durationSec) {
+// [v1.9.19] 无损上档位速阶梯（无元数据时的宁低勿高判据）：实测晴天 master≈3621kbps、
+// atmos≈2149kbps、hires≈1647kbps、flac≈940kbps；低于 hires 阈值即视作普通 flac。
+var KG_UPPER_KBPS_TIERS = [
+  { label: 'master', minKbps: 2800 },
+  { label: 'atmos', minKbps: 1900 },
+  { label: 'hires', minKbps: 1500 }
+];
+function snapQualityToMeasured(q, size, durationSec, audioMeta) {
   var label = String(q || '');
   var bytes = Number(size) || 0;
   var sec = Number(durationSec) || 0;
+  // [v1.9.19] 探测元数据证据优先：取链段已用 fLaC STREAMINFO 验证的声道/位深/采样率是确定性
+  // 判据，优先于位速估算（6声道 atmos 位速可低于阈值）。元数据只标到验证档，不虚标。
+  if ((label === 'master' || label === 'atmos' || label === 'hires') && audioMeta) {
+    return haitangUpperHostLabel(audioMeta);
+  }
   if (!label || bytes <= 0 || sec <= 0) return label;
   var kbps = (bytes * 8) / sec / 1000;
-  if (KG_LOSSLESS_LABELS[label]) return kbps >= 2000 ? 'hires' : 'flac';
+  if (KG_LOSSLESS_LABELS[label]) {
+    if (label === 'master' || label === 'atmos' || label === 'hires') {
+      // [v1.9.19] 上档无元数据兜底：按位速阶梯贴最高可证档（低于 hires 阈值落 flac，宁低勿高）
+      for (var u = 0; u < KG_UPPER_KBPS_TIERS.length; u++) {
+        if (kbps >= KG_UPPER_KBPS_TIERS[u].minKbps) return KG_UPPER_KBPS_TIERS[u].label;
+      }
+      return 'flac';
+    }
+    return kbps >= 2000 ? 'hires' : 'flac';
+  }
   var fit = 0;
   for (var i = 0; i < KG_LOSSY_TIERS.length; i++) {
     if (KG_LOSSY_TIERS[i] <= kbps * 1.08) fit = KG_LOSSY_TIERS[i];
@@ -3783,7 +3897,7 @@ async function getLyricImpl(musicItem) {
 // ==================== 插件定义 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/kugou-source.plugin.v1.9.18.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/kugou-source.plugin.v1.9.19.js',
   name: '酷狗音乐',
   platform: 'kugou',
   // [v1.3.0 P1-4] 版本号与文件名对齐（v1.2.1 时代 manifest 误标 1.2.0）。
@@ -3792,26 +3906,26 @@ var plugin = {
   // [v1.3.1] 取链新增 HYWmusic 通道（用户提供的卡密制第三方，128k/320k/flac 三档、VIP 歌真
   // FLAC）：插在海棠与 zddyr 之间接替 zddyr 的实质兜底位（zddyr 限流常态）；免费歌 320k/flac
   // 假文件在通道内按搜索档位字节自检拒收后自动落 zddyr。卡密可经 userVariables.hywCardKey 覆盖。
-  version: '1.9.18', // [v1.9.18 年信 + 星海 kg 双兜底吸收版（2026-10-03 实测）：① 新增 rest 链年信 kg 通道 mcp.nianxinxz.com/share/ceshi/kg.php（仓库此前仅知 QQ 段念心 /ceshi/ 下线，kg 的 /share/ceshi/ 路径实测存活且未接入，酷狗 hash 换源返回酷我 m4a 直链）；② 复活星海 kg（yy.zddyr.top/lx/api/，v1.9.4 曾判死，实测恢复可用，X-Token+X-Client 鉴权，128kmp3/320kmp3/flac 三档，QPS 限流串行置年信之后）；两通道均 fail-closed 挂竞速全败后的 rest 降级链，不改变主链优先级；详见头部 changelog；v1.9.17 瓜子中转 kg 通道吸收版（新增 guazi 竞速第 4 路，实测 master→96kHz 母带/atmos 6声道，恢复 flac24bit/hires/master/atmos 四档声明，userVariables.kugouGuazi 默认开）；v1.9.16 档位诚实性收口版 2026-10-03：① supportedQualities 由 8 档收敛为 128k/320k/flac 三档——192k 站点无文件，flac24bit/hires/atmos/master 需 SVIP 且通道不可达（lx5 code:6、海棠已下线），实测 hires/atmos/master 或取链失败或与 flac 逐字节相同；② QUALITY_KEY_MAP 幽灵键归一由内部 hires 改为 super（可用降级优于随机硬失败）；③ 新增 snapQualityToMeasured，size 到手后按字节÷时长(秒)反推码率重标，无损族 <2000kbps 一律 flac（宁低勿高），有损族贴实测档位，只降不升，size/duration 未知则不改标。详见头部 changelog；v1.9.15 v1.9.15 接口吸收版（kuwo/netease/qq 三源集成调研吸收通道：酷我 kw.php/nxinxz/antiserver-high、网易 eapi 响应解密修复+wy.php 兜底、QQ xunhuisi；详见各源 changelog），本源无代码改动，随包升版；；v1.9.14 包升版（网易源集成长青 SVIP 网易替补通道 yinyue.haitangw.net，本源无代码改动，随包升版）；v1.9.13 包升版（QQ 源 a.aa.cab 通道方案A 拒绝虚标修复，本源无代码改动）；v1.9.12 包升版（QQ 源接入 a.aa.cab 新通道，本源无代码改动）；v1.9.10 KRC 接力域名修复版：fetchKugouKrcRelay 搜索域名 mobilecdn.kugou.com → mobiles.kugou.com（http→https 同步升级）——mobilecdn 在部分网络 DNS 污染致逐字歌词接力断链，mobiles 同构（参数/响应一致），2026-09-12 实测全链路打通；搜索/榜单/歌单等既有 mobilecdn 通道属 v1.2.x 老链路不在本版范围，零改动；v1.9.9 音质标识一致性修复版：GOODS_QUALITY_MAP 剔除不可交付档映射 high(hires)/dolby/viper_atmos(atmos)/viper_clear(master)——2026-09-12 实测该曲请求 hires/atmos/master 取链全败（自有通道 code:6 未开放、海棠已下线），列表页透出属虚标且与搜索页三档口径不一致；enrichKugouQualities cap 缺省全量（原榜单 30/专辑 60/歌手 40/导入 200 截断致同歌跨页键集不一致）；RES_PRIVILEGE_QUALITIES 请求列表保持 8 档（裁剪 4 档实测返空 goods）；取链链路零改动，六页复测 7/7 全一致，详见排查总表-v1.9.9；v1.9.8版本号统一 + 封面 https 升级版（导出边界把封面/头像类字段 http→https，白名单 *.kugou.com，cleartext 兼容）；v1.9.4 第三方取链修复 + size 字段版：HYWmusic（103.79.184.97/api 返 500、根路径已 Next.js 化）+ zddyr.top（yy.zddyr.top 503 鉴权）共 2 通道从竞速池移除，保留函数体注释掉，2026-09-11 标记失效；getMediaSource 返回值补 size 字段（取链响应直带 > HEAD Range 0-0 探测 > 留空），详见头部 changelog；v1.9.3 WebView 短链跟随修复版：followRedirects 非 3xx 分支新增 responseURL 自动跟随检测——真机 WebView 下 XHR 自动跟随 302（maxRedirects:0 仅 Node 生效），短链解析拿到最终 URL 而非原始短链，修复真机 SHEET_URL_UNRECOGNIZED，详见头部 changelog；v1.9.1 歌单全量导入修复版：gcid「我喜欢」类歌单经 collection_3_{uid}_2_0 通道全量导入（签名串补 mid+dfid 修复 20006，specialid=0 不再误判），详见头部 changelog；v1.9.0 BakaMusic 高价值音源接入版：零代码增量随包升版——ikun kg 无卡密假成功不接入、次合代等酷狗端点 haitangw.cc 已挂、聆澜无卡密不实测，详见头部 changelog；v1.8.4] 歌单导入元数据版：importMusicSheet 返回完整 IMusicSheetItem（title/description 对齐宿主契约，specialid 通道拉 v3/special/info 免签元数据）；[v1.8.3] 质检遗留优化版（Q-01 specialid 正则收紧 / Q-02 错误前缀统一 / Q-03 code 统一 / Q-04 免签通道 album-artwork 零请求补齐，详见头部）；[v1.8.2] 歌单解析修复版：P0-2 gateway 签名失效免签绕行（specialid 链路）+ P1-2 gcid 分享 token 解码修正 + P2 条目 platform + P2 错误码（详见头部 v1.8.2 changelog）；[v1.8.0] MV 参数对齐基线：getMvSourceImpl 顶层字段兜底+result 补 userAgent/width/height/codec/videoQuality 写回（基线 v1.6.0 P1 trackercdn v2 + 搜索风控；v1.5.0 宿主字段补齐；v1.4.1 严格同曲校验；v1.4.0 三路竞速；v1.2.0 baka 对齐）
+  version: '1.9.19', // [v1.9.19 海棠酷狗上档恢复版（2026-10-08 实测）：海棠 resolve-url 酷狗上档 lossless/hires/clear/atmos 真实有货且互异——恢复 flac24bit/hires/master/atmos 四档（菜单七档）、QUALITY_KEY_MAP 幽灵键真实归一（flac24bit/hires→hires、master→master、atmos→atmos）、新增 probeHaitangFlacMeta fLaC STREAMINFO 探测诚实标注（6声道→atmos/24bit-96kHz→master/24bit→hires，宁低勿高）、rest 链上档全败回落 flac 链不锁死、http 白名单补 bdycdn 修复海棠赛道隐性失效；基线 v1.9.18；前一版 v1.9.18 年信 + 星海 kg 双兜底吸收版（2026-10-03 实测）：① 新增 rest 链年信 kg 通道 mcp.nianxinxz.com/share/ceshi/kg.php（仓库此前仅知 QQ 段念心 /ceshi/ 下线，kg 的 /share/ceshi/ 路径实测存活且未接入，酷狗 hash 换源返回酷我 m4a 直链）；② 复活星海 kg（yy.zddyr.top/lx/api/，v1.9.4 曾判死，实测恢复可用，X-Token+X-Client 鉴权，128kmp3/320kmp3/flac 三档，QPS 限流串行置年信之后）；两通道均 fail-closed 挂竞速全败后的 rest 降级链，不改变主链优先级；详见头部 changelog；v1.9.17 瓜子中转 kg 通道吸收版（新增 guazi 竞速第 4 路，实测 master→96kHz 母带/atmos 6声道，恢复 flac24bit/hires/master/atmos 四档声明，userVariables.kugouGuazi 默认开）；v1.9.16 档位诚实性收口版 2026-10-03：① supportedQualities 由 8 档收敛为 128k/320k/flac 三档——192k 站点无文件，flac24bit/hires/atmos/master 需 SVIP 且通道不可达（lx5 code:6、海棠已下线），实测 hires/atmos/master 或取链失败或与 flac 逐字节相同；② QUALITY_KEY_MAP 幽灵键归一由内部 hires 改为 super（可用降级优于随机硬失败）；③ 新增 snapQualityToMeasured，size 到手后按字节÷时长(秒)反推码率重标，无损族 <2000kbps 一律 flac（宁低勿高），有损族贴实测档位，只降不升，size/duration 未知则不改标。详见头部 changelog；v1.9.15 v1.9.15 接口吸收版（kuwo/netease/qq 三源集成调研吸收通道：酷我 kw.php/nxinxz/antiserver-high、网易 eapi 响应解密修复+wy.php 兜底、QQ xunhuisi；详见各源 changelog），本源无代码改动，随包升版；；v1.9.14 包升版（网易源集成长青 SVIP 网易替补通道 yinyue.haitangw.net，本源无代码改动，随包升版）；v1.9.13 包升版（QQ 源 a.aa.cab 通道方案A 拒绝虚标修复，本源无代码改动）；v1.9.12 包升版（QQ 源接入 a.aa.cab 新通道，本源无代码改动）；v1.9.10 KRC 接力域名修复版：fetchKugouKrcRelay 搜索域名 mobilecdn.kugou.com → mobiles.kugou.com（http→https 同步升级）——mobilecdn 在部分网络 DNS 污染致逐字歌词接力断链，mobiles 同构（参数/响应一致），2026-09-12 实测全链路打通；搜索/榜单/歌单等既有 mobilecdn 通道属 v1.2.x 老链路不在本版范围，零改动；v1.9.9 音质标识一致性修复版：GOODS_QUALITY_MAP 剔除不可交付档映射 high(hires)/dolby/viper_atmos(atmos)/viper_clear(master)——2026-09-12 实测该曲请求 hires/atmos/master 取链全败（自有通道 code:6 未开放、海棠已下线），列表页透出属虚标且与搜索页三档口径不一致；enrichKugouQualities cap 缺省全量（原榜单 30/专辑 60/歌手 40/导入 200 截断致同歌跨页键集不一致）；RES_PRIVILEGE_QUALITIES 请求列表保持 8 档（裁剪 4 档实测返空 goods）；取链链路零改动，六页复测 7/7 全一致，详见排查总表-v1.9.9；v1.9.8版本号统一 + 封面 https 升级版（导出边界把封面/头像类字段 http→https，白名单 *.kugou.com，cleartext 兼容）；v1.9.4 第三方取链修复 + size 字段版：HYWmusic（103.79.184.97/api 返 500、根路径已 Next.js 化）+ zddyr.top（yy.zddyr.top 503 鉴权）共 2 通道从竞速池移除，保留函数体注释掉，2026-09-11 标记失效；getMediaSource 返回值补 size 字段（取链响应直带 > HEAD Range 0-0 探测 > 留空），详见头部 changelog；v1.9.3 WebView 短链跟随修复版：followRedirects 非 3xx 分支新增 responseURL 自动跟随检测——真机 WebView 下 XHR 自动跟随 302（maxRedirects:0 仅 Node 生效），短链解析拿到最终 URL 而非原始短链，修复真机 SHEET_URL_UNRECOGNIZED，详见头部 changelog；v1.9.1 歌单全量导入修复版：gcid「我喜欢」类歌单经 collection_3_{uid}_2_0 通道全量导入（签名串补 mid+dfid 修复 20006，specialid=0 不再误判），详见头部 changelog；v1.9.0 BakaMusic 高价值音源接入版：零代码增量随包升版——ikun kg 无卡密假成功不接入、次合代等酷狗端点 haitangw.cc 已挂、聆澜无卡密不实测，详见头部 changelog；v1.8.4] 歌单导入元数据版：importMusicSheet 返回完整 IMusicSheetItem（title/description 对齐宿主契约，specialid 通道拉 v3/special/info 免签元数据）；[v1.8.3] 质检遗留优化版（Q-01 specialid 正则收紧 / Q-02 错误前缀统一 / Q-03 code 统一 / Q-04 免签通道 album-artwork 零请求补齐，详见头部）；[v1.8.2] 歌单解析修复版：P0-2 gateway 签名失效免签绕行（specialid 链路）+ P1-2 gcid 分享 token 解码修正 + P2 条目 platform + P2 错误码（详见头部 v1.8.2 changelog）；[v1.8.0] MV 参数对齐基线：getMvSourceImpl 顶层字段兜底+result 补 userAgent/width/height/codec/videoQuality 写回（基线 v1.6.0 P1 trackercdn v2 + 搜索风控；v1.5.0 宿主字段补齐；v1.4.1 严格同曲校验；v1.4.0 三路竞速；v1.2.0 baka 对齐）
   author: '研发2号',
-  description: '酷狗音乐独立源插件 v1.9.8（v1.9.8 版本号统一 + 封面 https 升级版：导出边界把封面/头像类字段 http→https（白名单 *.kugou.com，安卓 cleartext 兼容）；v1.9.5 全页面音质标识核查 + VIP 标识移除版：榜单/歌单/专辑/歌手作品/导入入口补 qualities 音质标识（get_res_privilege 批量）；全接口停写 fee（VIP 角标）；上一版 v1.9.3 WebView 短链跟随修复版：followRedirects 非 3xx 分支新增 responseURL 自动跟随检测——真机 WebView 下 XHR 自动跟随 302（axios maxRedirects:0 仅 Node 生效），短链解析拿到最终 URL 而非原始短链，修复真机导入 SHEET_URL_UNRECOGNIZED，详见头部 changelog；上一版 v1.9.2 为分享链接文本自动提取 URL 版；v1.9.1 酷狗歌单全量导入修复版：gcid 分享链 specialid=0 时改提取 listinfo 创建者走 collection_3_{uid}_2_0 全量通道，gateway 签名串补 mid+dfid 修复 error_code 20006，实测 99 首一次拉全，详见头部 v1.9.1 changelog；v1.9.0 BakaMusic 高价值音源接入版：零代码增量随包升版——酷狗侧无高价值增量（ikun kg 无卡密假成功链不接入、第三方酷狗端点 haitangw.cc 实测已挂、聆澜付费档无卡密不实测），详见头部 v1.9.0 changelog；v1.8.4 歌单导入元数据版：importMusicSheet 返回完整 IMusicSheetItem 歌单对象——specialid 通道经 mobilecdn v3/special/info 免签拉标题/介绍/封面/作者，介绍字段 description 对齐宿主 v1.0.0 契约，gcid/kucode 通道标题兜底；v1.8.3 质检遗留优化版：specialid 提取正则收紧 + 错误前缀/code 统一 + 免签通道 album/artwork 零额外请求补齐；v1.8.2 歌单解析修复版：gateway 静态签名密钥失效（error_code 20006）后 gcid 分享链/纯数字歌单码改走免签 specialid 链路（分享页手机 UA 提取 specialid → mobilecdn v3/special/song），签名通道保留兜底并明确抛错；v1.8.0 MV 参数对齐基线：getMvSourceImpl 顶层字段兜底+result 补 userAgent/width/height/codec/videoQuality 写回；基线 v1.6.0 P1 trackercdn v2 重写 + 搜索风控应对；v1.4.0 三路竞速 + 严格同曲校验；v1.2.0 baka 对齐）：搜索（含歌词搜索，v1.6.0 加指数退避重试 + 随机国内 IP 头应对 IP 限频风控）、三档音质取链（菜单 128k/320k/flac，内部 standard/high/super/hires，v1.4.0 升级为三路并行竞速：酷狗自有官方 getSongInfo→洛雪v5→trackercdn v2（v1.6.0 重写接回，hash 先小写再算 key，带 kugouCookie 时生效）‖ 海棠 ‖ 酷我官方直取，谁先返回有效链接用谁，全败回落 HYW→zddyr.top 降级链；v1.4.1 酷我赛道新增严格同曲校验——核心歌名+版本标签+歌手+时长四项全过才可参与竞速，校验不过的候选再快也直接丢弃）、fee VIP 标记全链路透出（搜索/详情/取链，宿主角标）、官方歌曲分享页 getMusicDetailPageUrl、KRC 逐字歌词+翻译/罗马音、官方榜单分类分组（真分页）、歌单广场（推荐位 pinned + 分类）与歌单导入（网页/分享链/酷狗码/gcid/kucode）、歌手信息与作品、专辑详情（真分页）、MV（480p/720p/1080p/4k）、官方评论接口，以及热门搜索/搜索推荐等 _internal 扩展接口；试听片段守卫与播放链接域名白名单校验保留',
+  description: '酷狗音乐独立源插件 v1.9.19（v1.9.19 海棠酷狗上档恢复版：海棠 resolve-url 酷狗上档 lossless/hires/clear/atmos 2026-10-08 实测有货且互异，七档菜单 128k/320k/flac/flac24bit/hires/master/atmos，fLaC STREAMINFO 探测诚实标注（6声道→atmos/24bit-96kHz→master/24bit→hires），上档全败回落 flac 链不锁死，http 白名单补 bdycdn 修复海棠赛道隐性失效；上一版 v1.9.8（v1.9.8 版本号统一 + 封面 https 升级版：导出边界把封面/头像类字段 http→https（白名单 *.kugou.com，安卓 cleartext 兼容）；v1.9.5 全页面音质标识核查 + VIP 标识移除版：榜单/歌单/专辑/歌手作品/导入入口补 qualities 音质标识（get_res_privilege 批量）；全接口停写 fee（VIP 角标）；上一版 v1.9.3 WebView 短链跟随修复版：followRedirects 非 3xx 分支新增 responseURL 自动跟随检测——真机 WebView 下 XHR 自动跟随 302（axios maxRedirects:0 仅 Node 生效），短链解析拿到最终 URL 而非原始短链，修复真机导入 SHEET_URL_UNRECOGNIZED，详见头部 changelog；上一版 v1.9.2 为分享链接文本自动提取 URL 版；v1.9.1 酷狗歌单全量导入修复版：gcid 分享链 specialid=0 时改提取 listinfo 创建者走 collection_3_{uid}_2_0 全量通道，gateway 签名串补 mid+dfid 修复 error_code 20006，实测 99 首一次拉全，详见头部 v1.9.1 changelog；v1.9.0 BakaMusic 高价值音源接入版：零代码增量随包升版——酷狗侧无高价值增量（ikun kg 无卡密假成功链不接入、第三方酷狗端点 haitangw.cc 实测已挂、聆澜付费档无卡密不实测），详见头部 v1.9.0 changelog；v1.8.4 歌单导入元数据版：importMusicSheet 返回完整 IMusicSheetItem 歌单对象——specialid 通道经 mobilecdn v3/special/info 免签拉标题/介绍/封面/作者，介绍字段 description 对齐宿主 v1.0.0 契约，gcid/kucode 通道标题兜底；v1.8.3 质检遗留优化版：specialid 提取正则收紧 + 错误前缀/code 统一 + 免签通道 album/artwork 零额外请求补齐；v1.8.2 歌单解析修复版：gateway 静态签名密钥失效（error_code 20006）后 gcid 分享链/纯数字歌单码改走免签 specialid 链路（分享页手机 UA 提取 specialid → mobilecdn v3/special/song），签名通道保留兜底并明确抛错；v1.8.0 MV 参数对齐基线：getMvSourceImpl 顶层字段兜底+result 补 userAgent/width/height/codec/videoQuality 写回；基线 v1.6.0 P1 trackercdn v2 重写 + 搜索风控应对；v1.4.0 三路竞速 + 严格同曲校验；v1.2.0 baka 对齐）：搜索（含歌词搜索，v1.6.0 加指数退避重试 + 随机国内 IP 头应对 IP 限频风控）、三档音质取链（菜单 128k/320k/flac，内部 standard/high/super/hires，v1.4.0 升级为三路并行竞速：酷狗自有官方 getSongInfo→洛雪v5→trackercdn v2（v1.6.0 重写接回，hash 先小写再算 key，带 kugouCookie 时生效）‖ 海棠 ‖ 酷我官方直取，谁先返回有效链接用谁，全败回落 HYW→zddyr.top 降级链；v1.4.1 酷我赛道新增严格同曲校验——核心歌名+版本标签+歌手+时长四项全过才可参与竞速，校验不过的候选再快也直接丢弃）、fee VIP 标记全链路透出（搜索/详情/取链，宿主角标）、官方歌曲分享页 getMusicDetailPageUrl、KRC 逐字歌词+翻译/罗马音、官方榜单分类分组（真分页）、歌单广场（推荐位 pinned + 分类）与歌单导入（网页/分享链/酷狗码/gcid/kucode）、歌手信息与作品、专辑详情（真分页）、MV（480p/720p/1080p/4k）、官方评论接口，以及热门搜索/搜索推荐等 _internal 扩展接口；试听片段守卫与播放链接域名白名单校验保留',
   // [v1.5.0 P2-3] primaryKey：条目唯一键声明（对齐网易云/咪咕）。酷狗条目 id=source_sid（稳定身份，
   // v0.7.1 P1-2 起），宿主跨源去重/缓存键按 primaryKey 读取。
   primaryKey: ['id'],
   supportedSearchType: ['music', 'album', 'artist', 'sheet', 'lyric'], // [v1.2.0] 增加 lyric（baka 对齐）
-  // [v1.9.16 档位菜单只列可达档] 此前 8 档声明里 192k / flac24bit / hires / atmos / master
-  // 均无对应可得文件：站点官方档位只有 128/320/flac/high/viper_atmos/viper_clear/viper_tape，
-  // 其中 high 与 viper_* 需 SVIP，取链通道（lx5 code:6、海棠已下线、酷我无对应档）拿不到。
-  // 实测「至少还有你」hires/atmos/master 直接取链失败；「晴天」「祝福祖国」同键返回与 flac
-  // 逐字节相同的文件却回标 hires——菜单多点一次就是「播不了」，比不列更差，故收敛为三档。
-  supportedQualities: ['128k', '192k', '320k', 'flac', 'flac24bit', 'hires', 'master', 'atmos'], // [v1.9.17 恢复] 瓜子 kg 通道实测可达 flac24bit/hires/master/atmos（96kHz/6声道），v1.9.16 因自有通道不可达收口为三档
+  // [v1.9.19 档位菜单七档] 2026-10-08 复测海棠 kg 上档真实有货且互异（hires 55.4MB/24bit、
+  // clear 121.8MB/24bit-96kHz 酷狗母带、atmos 72.3MB/6声道，均 fLaC ~0.6s），恢复
+  // flac24bit/hires/master/atmos 四档声明并新增 fLaC STREAMINFO 探测诚实标注（宁低勿高）；
+  // 192k 站点无文件维持剔除。取链：master/atmos 走海棠 clear/atmos，竞速全败回落 flac 链
+  // 不锁死；酷我/年信/星海无上档。
+  supportedQualities: ['128k', '320k', 'flac', 'flac24bit', 'hires', 'master', 'atmos'], // [v1.9.19 七档] 上档经海棠实测可达（探测校验+回落不锁死）
   cacheControl: 'no-store', // 各源播放链接多为签名短时效链接，必须现取
   userVariables: [
     { key: 'kugouCookie', name: '酷狗 Cookie（可选）', hint: '选填；填写后酷狗取链带登录态，可提升 VIP 曲目官方直链成功率，不填走第三方备源' }, // [v1.3.2] 补充声明 hywCardKey：v1.3.1 新增 HYWmusic 通道代码读取 userVariables.hywCardKey 覆盖卡密，但 manifest 未声明导致配置入口缺失（审查「一般」级问题）
     { key: 'hywCardKey', name: 'HYWmusic 卡密（可选）', hint: '留空使用默认值' }
   ],
   hints: {
-    search: ['搜索酷狗音乐曲库，结果为酷狗源列表', '播放时三路通道（酷狗自有/海棠/酷我官方）并行竞速，最快有效链接优先；全败自动回落 HYW→zddyr 降级链'],
+    search: ['搜索酷狗音乐曲库，结果为酷狗源列表', '播放时四路通道（酷狗自有/海棠/酷我官方/瓜子中转）并行竞速，最快有效链接优先；上档（hires/母带/全景声）走海棠并经无损头探测校验，全败自动回落 flac 降级链'],
     importMusicSheet: [
       '支持酷狗的歌单分享链接，如 kugou.com/playlist/id/xxx',
       '酷狗分享口令里的 gcid 链接也可识别；单次最多导入 400 首', // [P2-2 v1.1.0] 与 SHEET_MAX_PAGES(4)×100 实际上限对齐，原提示 500 虚标
@@ -3877,7 +3991,7 @@ var plugin = {
       // [v1.9.16 P1] 档位以实测为准：size 到手后按字节÷时长重标（只降不升）。
       // 宿主 plugin.ts 直接透传 result.quality，不做 legacy→新键转换，故此处必须落合法宿主键。
       var done = function () {
-        var measured = snapQualityToMeasured(r.actualQuality || q, r.size, musicItem.duration);
+        var measured = snapQualityToMeasured(r.actualQuality || q, r.size, musicItem.duration, r.audioMeta); // [v1.9.19] 上档探测元数据优先
         if (measured) {
           r.quality = measured;
           if (r.actualQuality) r.actualQuality = measured;
@@ -4066,6 +4180,10 @@ var plugin = {
     fetchKugouKrcRelay: fetchKugouKrcRelay,
     haitangLevelOf: haitangLevelOf,
     resolveHaitang: resolveHaitang,
+    // [v1.9.19] 上档探测诚实标注（自测/调试直调）
+    probeHaitangFlacMeta: probeHaitangFlacMeta,
+    haitangUpperHostLabel: haitangUpperHostLabel,
+    snapQualityToMeasured: snapQualityToMeasured,
     LYRIC_TIMEOUT: LYRIC_TIMEOUT,
     // v0.7.1 新增（走查修复自测用）
     isAllowedMediaUrl: isAllowedMediaUrl,
