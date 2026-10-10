@@ -1,5 +1,12 @@
 /**
- * [v1.9.17 年信 wy 兜底通道吸收版] 承接 2026-10-03 全平台取链接口实测（对照 music.cwo.cc.cd 订阅
+ * [v1.9.20 瓜子中转通道移除版] 2026-10-11 每日检测实测：瓜子中转 api.guazi.fun/lx（网易/QQ/酷狗三池共用）
+ *   连续第 3 天 403「Key 无效或已被删除」（10-09/10-10/10-11），按既定规则（连续 3 日失效移除或换 key）
+ *   处置；当前无可用新 key → resolveNeteaseGuazi 调用项自 stdChain / high+ 首段竞速 / high+ 链尾三处
+ *   全部移除。通道函数与开关定义保留（守卫与 fail-closed 逻辑零改动），仅不再被任何链调用；
+ *   其余通道与竞速优先级零变化。HYW 通道（103.79.184.97）卡密核对：v1.9.17 活跃代码已是公益版
+ *   新卡密 6C1F-53W0-GRKI-EVFG，无需改动。基线 v1.9.17。
+ */
+/** * [v1.9.17 年信 wy 兜底通道吸收版] 承接 2026-10-03 全平台取链接口实测（对照 music.cwo.cc.cd 订阅
  * cihedai/quandouyao 音源），吸收年信 wy 直连兜底通道：
  *   GET https://mcp.nianxinxz.com/share/ceshi/wy.php?id={id}&level={level}
  *   （level: standard/exhigh/lossless，与海棠 wy.php 同 level 映射）
@@ -2296,8 +2303,9 @@ function resolveNetease(raw, quality) {
         function () { return resolveHaitangWyPhp(raw, quality); },
         // [v1.9.17 吸收] 年信 wy 直连兜底（2026-10-03 实测存活，免费曲返网易官方直链；VIP 空 url 拒收）
         function () { return resolveNeteaseNianxin(raw, quality); },
-        // [v1.9.16 吸收] 瓜子中转 wy 通道（实测 master→192kHz 母带；neteaseGuazi 默认开，off 关闭）
-        function () { return resolveNeteaseGuazi(raw, quality); },
+        // [v1.9.20 移除 2026-10-11] 瓜子中转 wy 通道（v1.9.16 吸收）从 stdChain 移除：
+        // api.guazi.fun/lx 连续 3 日 403「Key 无效或已被删除」（10-09/10-10/10-11 每日检测实测），
+        // 且无可用新 key；守卫与 fail-closed 逻辑保留，resolveNeteaseGuazi 不再被任何链调用。
         function () { return resolveNeteaseOuterUrl(raw); }
       ];
       var walkStd = function (i) {
@@ -2325,9 +2333,9 @@ function resolveNetease(raw, quality) {
   // （zddyr().catch(longqing) 包裹），主力健康时零请求、不抢跑、不额外并发
   first.push(function () { return resolveNeteaseZddyr(raw, quality).catch(function () { return resolveNeteaseLongqing(raw, quality); }); });
   first.push(function () { return resolveNeteaseCenguigui(raw, quality); });
-  // [v1.9.16 吸收] 瓜子中转 wy 通道加入首段竞速：master 实测 flac@3806k/192kHz 真母带
-  // （海棠同档仅 48kHz），并行竞速先成功者胜；neteaseGuazi 默认开，off 关闭
-  first.push(function () { return resolveNeteaseGuazi(raw, quality); });
+  // [v1.9.20 移除 2026-10-11] 瓜子中转 wy 通道（v1.9.16 吸收，原首段竞速一路）从竞速池移除：
+  // api.guazi.fun/lx 连续 3 日 403「Key 无效或已被删除」（10-09/10-10/10-11 每日检测实测），
+  // 且无可用新 key；守卫与 fail-closed 逻辑保留，resolveNeteaseGuazi 不再被任何链调用。
   if (neteaseCookieValue()) first.push(function () { return neteaseEapiResolveV1(raw, quality); });
   // [v1.6.0 P0] 匿名 eapi 加入首段竞速（仅 standard/high/super 有匿名可用档位）：
   // 免费歌免 Cookie 取 exhigh/lossless 官方直链，先成功者胜；VIP 匿名空 url/试听自动拒收
@@ -2350,8 +2358,9 @@ function resolveNetease(raw, quality) {
     function () { return resolveHaitangWyPhp(raw, quality); },
     // [v1.9.17 吸收] 年信 wy 直连兜底（2026-10-03 实测存活，免费曲返网易官方直链；VIP 空 url 拒收）
     function () { return resolveNeteaseNianxin(raw, quality); },
-    // [v1.9.16 吸收] 瓜子中转 wy 通道（实测 master→192kHz 母带；neteaseGuazi 默认开，off 关闭）
-    function () { return resolveNeteaseGuazi(raw, quality); },
+    // [v1.9.20 移除 2026-10-11] 瓜子中转 wy 通道（v1.9.16 吸收）从 high+ 链尾移除：
+    // api.guazi.fun/lx 连续 3 日 403「Key 无效或已被删除」（10-09/10-10/10-11 每日检测实测），
+    // 且无可用新 key；守卫与 fail-closed 逻辑保留，resolveNeteaseGuazi 不再被任何链调用。
     function () { return resolveNeteaseOuterUrl(raw); }
   ];
   var attempt = function (i) {
@@ -2757,10 +2766,10 @@ async function getLyricImpl(musicItem) {
 // ==================== 插件定义 ====================
 
 var plugin = {
-  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/netease-source.plugin.v1.9.17.js',
+  srcUrl: 'https://raw.githubusercontent.com/hebijunge/musicfree-plugins/main/plugins/netease-source.plugin.v1.9.20.js',
   name: '网易云音乐',
   platform: 'netease',
-  version: '1.9.17', // [v1.9.17 年信 wy 兜底通道吸收版（2026-10-03 实测）：新增 netease:nianxin 链尾兜底（mcp.nianxinxz.com/share/ceshi/wy.php，standard/exhigh/lossless 三档，免费曲返网易官方直链、VIP 空 url 如实拒收接力），挂 stdChain 与 high+ 链尾（outerUrl 之前、海棠 wy.php 之后），不改变主链优先级；仓库此前仅知 QQ 段念心 /ceshi/ 下线，wy 的 /share/ceshi/ 路径实测存活且从未接入；详见头部 changelog；v1.9.16 瓜子中转 wy 通道吸收版（新增 netease:guazi 链尾兜底，实测 master→192kHz 母带，userVariables.neteaseGuazi 默认开）；v1.9.15 v1.9.15 接口吸收版（承接「23 个音乐插件可吸收取链接口」调研，实测存活口径 2026-09-25）：① P1-3 既有三路 eapi 通道响应解密修复——2026-09-25 真网探针实测 eapi 响应体为 AES-128-ECB 密文（同 key e82ckenh8dichen8），旧实现明文 JSON.parse 必失败致通道静默失效，本版改 arraybuffer 接收 + 纯 JS AES 解密（新增 aes128EcbDecrypt/bytesToUtf8/eapiParseResponseData）+ 明文错误响应兜底直解，修复后游客态免费曲（fee=0）实测取回 m8xx.music.126.net 官方直链、VIP/无版权 url=null 如实拒收接力；② P0-2 海棠 wy.php 直连兜底（music.haitangw.cc/music/wy.php，302/JSON 双形态，standard→standard/high→exhigh/super→lossless）挂 stdChain 与 high+ 链尾第二兜底（outerUrl 之前），不改变主链优先级，actualQuality 如实声明由外层守卫 fail-closed；详见头部 changelog；；v1.9.14 长青 SVIP 网易（yinyue.haitangw.net/wy/wy.php）故障替补通道接入版：新增 netease:longqing 通道作为星海主力 yy.zddyr.top 的替补，standard 接力链与 high+ 首段竞速均为 zddyr().catch(longqing) 包裹仅主力失效后启用；high 档映射 exhigh（真 320k）绕开长青 320k 档服务端虚标（实返 fLaC 28.4MB），有损档响应 fLaC 魔数守卫拒收接力；详见头部 changelog；v1.9.13 包升版（QQ 源 a.aa.cab 通道方案A 拒绝虚标修复，本源无代码改动）；v1.9.12 包升版（QQ 源接入 a.aa.cab 新通道，本源无代码改动）；v1.9.11 星澜 stellarwave v4.0.0 可用通道接入版：wy 侧新增 netease:stellarwave-zddyr（yy.zddyr.top lx API）与 netease:stellarwave-cenguigui（api.cenguigui.cn）两通道——standard 接力链 + high/super 首段竞速，lossless 档 fLaC 魔数 + br 双防虚标校验（实测 2737753398 flac 虚标回 128k mp3），星海 wy 后端（gdstudio）与官方 eapi（=既有 neteaseEapiAnonResolve 同源）等无增量不重复接入，详见头部 changelog；v1.9.10 随包升版（无代码改动，版本号统一升）；v1.9.9 音质标识一致性核查版（无代码行为改动，版本号统一升）：六页键集核查 0 虚标 0 不一致，取链真实性实测 9/9 通过（含 flac24bit/hires 实档），详见排查总表-v1.9.9；v1.9.8版本号统一 + 封面 https 升级版（导出边界把封面/头像类字段 http→https，白名单 *.126.net，cleartext 兼容）；v1.9.5 MV 画质表修复版：官方通道改以 api/mv/detail brs 上游实档构建 availableVideoQualities（旧版单实档致宿主画质菜单无法切档），enhance url 单档通道降为兜底，海棠 WYMV 兜底不变；v1.9.4 第三方取链修复 + size 字段版：GD Studio（music-api.gdstudio.xyz 实测整体失效、5min 限流） + 7boe + sedet + 听会（47.109.94.179 死亡）共 4 通道从竞速池移除，保留函数体注释掉，2026-09-11 标记失效；getMediaSource 返回值补 size 字段（取链响应直带 bytes > HEAD Range 0-0 探测 > 留空），详见头部 changelog；v1.9.3 WebView 短链跟随修复版：followRedirects 非 3xx 分支新增 responseURL 自动跟随检测——真机 WebView 下 XHR 自动跟随 302（maxRedirects:0 仅 Node 生效），短链解析拿到最终 URL 而非原始短链，修复真机 SHEET_URL_UNRECOGNIZED，详见头部 changelog；v1.9.1 随包升版：歌单对象补 author 别名字段（宿主协议读 artist，任务字段清单要求 author，两者都传），导入修复详见酷狗 v1.9.1 changelog 与本轮自测清单；v1.9.0 BakaMusic 高价值音源接入版：零代码增量随包升版——次合代 wy=既有星海通道、ikun wy=既有 ikun 通道（atmos 实测 ~2740kbps），复核详见头部 changelog；v1.8.4] 歌单导入元数据版：importMusicSheet 返回完整 IMusicSheetItem（title/description 对齐宿主契约，meta 随 v6 detail 响应零额外请求回传）；[v1.8.3] 质检遗留优化版（Q-02 错误前缀统一 / Q-03 code 统一，详见头部）；[v1.8.2] 歌单解析修复版：P0-1 mobile URL 正则放宽 + P1-3 短链路径形态 + P2 条目 platform + P2 错误码（详见头部 v1.8.2 changelog）；[v1.8.0] MV 参数对齐基线，对照 MusicFree v1.0.0 宿主协议（getMvSourceImpl 顶层守卫字段兜底 + P1 字段补齐，详见头部 v1.8.0 changelog）
+  version: '1.9.20', // [v1.9.20 瓜子中转通道移除版（2026-10-11 每日检测）：api.guazi.fun/lx 连续 3 日 403「Key 无效或已被删除」且无可用新 key，resolveNeteaseGuazi 调用项自 stdChain/首段竞速/high+ 链尾三处移除（守卫与 fail-closed 逻辑保留），其余通道与优先级零变化；详见头部 changelog；v1.9.17 年信 wy 兜底通道吸收版（2026-10-03 实测）：新增 netease:nianxin 链尾兜底（mcp.nianxinxz.com/share/ceshi/wy.php，standard/exhigh/lossless 三档，免费曲返网易官方直链、VIP 空 url 如实拒收接力），挂 stdChain 与 high+ 链尾（outerUrl 之前、海棠 wy.php 之后），不改变主链优先级；仓库此前仅知 QQ 段念心 /ceshi/ 下线，wy 的 /share/ceshi/ 路径实测存活且从未接入；详见头部 changelog；v1.9.16 瓜子中转 wy 通道吸收版（新增 netease:guazi 链尾兜底，实测 master→192kHz 母带，userVariables.neteaseGuazi 默认开）；v1.9.15 v1.9.15 接口吸收版（承接「23 个音乐插件可吸收取链接口」调研，实测存活口径 2026-09-25）：① P1-3 既有三路 eapi 通道响应解密修复——2026-09-25 真网探针实测 eapi 响应体为 AES-128-ECB 密文（同 key e82ckenh8dichen8），旧实现明文 JSON.parse 必失败致通道静默失效，本版改 arraybuffer 接收 + 纯 JS AES 解密（新增 aes128EcbDecrypt/bytesToUtf8/eapiParseResponseData）+ 明文错误响应兜底直解，修复后游客态免费曲（fee=0）实测取回 m8xx.music.126.net 官方直链、VIP/无版权 url=null 如实拒收接力；② P0-2 海棠 wy.php 直连兜底（music.haitangw.cc/music/wy.php，302/JSON 双形态，standard→standard/high→exhigh/super→lossless）挂 stdChain 与 high+ 链尾第二兜底（outerUrl 之前），不改变主链优先级，actualQuality 如实声明由外层守卫 fail-closed；详见头部 changelog；；v1.9.14 长青 SVIP 网易（yinyue.haitangw.net/wy/wy.php）故障替补通道接入版：新增 netease:longqing 通道作为星海主力 yy.zddyr.top 的替补，standard 接力链与 high+ 首段竞速均为 zddyr().catch(longqing) 包裹仅主力失效后启用；high 档映射 exhigh（真 320k）绕开长青 320k 档服务端虚标（实返 fLaC 28.4MB），有损档响应 fLaC 魔数守卫拒收接力；详见头部 changelog；v1.9.13 包升版（QQ 源 a.aa.cab 通道方案A 拒绝虚标修复，本源无代码改动）；v1.9.12 包升版（QQ 源接入 a.aa.cab 新通道，本源无代码改动）；v1.9.11 星澜 stellarwave v4.0.0 可用通道接入版：wy 侧新增 netease:stellarwave-zddyr（yy.zddyr.top lx API）与 netease:stellarwave-cenguigui（api.cenguigui.cn）两通道——standard 接力链 + high/super 首段竞速，lossless 档 fLaC 魔数 + br 双防虚标校验（实测 2737753398 flac 虚标回 128k mp3），星海 wy 后端（gdstudio）与官方 eapi（=既有 neteaseEapiAnonResolve 同源）等无增量不重复接入，详见头部 changelog；v1.9.10 随包升版（无代码改动，版本号统一升）；v1.9.9 音质标识一致性核查版（无代码行为改动，版本号统一升）：六页键集核查 0 虚标 0 不一致，取链真实性实测 9/9 通过（含 flac24bit/hires 实档），详见排查总表-v1.9.9；v1.9.8版本号统一 + 封面 https 升级版（导出边界把封面/头像类字段 http→https，白名单 *.126.net，cleartext 兼容）；v1.9.5 MV 画质表修复版：官方通道改以 api/mv/detail brs 上游实档构建 availableVideoQualities（旧版单实档致宿主画质菜单无法切档），enhance url 单档通道降为兜底，海棠 WYMV 兜底不变；v1.9.4 第三方取链修复 + size 字段版：GD Studio（music-api.gdstudio.xyz 实测整体失效、5min 限流） + 7boe + sedet + 听会（47.109.94.179 死亡）共 4 通道从竞速池移除，保留函数体注释掉，2026-09-11 标记失效；getMediaSource 返回值补 size 字段（取链响应直带 bytes > HEAD Range 0-0 探测 > 留空），详见头部 changelog；v1.9.3 WebView 短链跟随修复版：followRedirects 非 3xx 分支新增 responseURL 自动跟随检测——真机 WebView 下 XHR 自动跟随 302（maxRedirects:0 仅 Node 生效），短链解析拿到最终 URL 而非原始短链，修复真机 SHEET_URL_UNRECOGNIZED，详见头部 changelog；v1.9.1 随包升版：歌单对象补 author 别名字段（宿主协议读 artist，任务字段清单要求 author，两者都传），导入修复详见酷狗 v1.9.1 changelog 与本轮自测清单；v1.9.0 BakaMusic 高价值音源接入版：零代码增量随包升版——次合代 wy=既有星海通道、ikun wy=既有 ikun 通道（atmos 实测 ~2740kbps），复核详见头部 changelog；v1.8.4] 歌单导入元数据版：importMusicSheet 返回完整 IMusicSheetItem（title/description 对齐宿主契约，meta 随 v6 detail 响应零额外请求回传）；[v1.8.3] 质检遗留优化版（Q-02 错误前缀统一 / Q-03 code 统一，详见头部）；[v1.8.2] 歌单解析修复版：P0-1 mobile URL 正则放宽 + P1-3 短链路径形态 + P2 条目 platform + P2 错误码（详见头部 v1.8.2 changelog）；[v1.8.0] MV 参数对齐基线，对照 MusicFree v1.0.0 宿主协议（getMvSourceImpl 顶层守卫字段兜底 + P1 字段补齐，详见头部 v1.8.0 changelog）
   author: '研发2号',
   description: '网易云音乐独立源插件 v1.9.8（v1.9.8 版本号统一 + 封面 https 升级版：导出边界把封面/头像类字段 http→https（白名单 *.126.net，安卓 cleartext 兼容）；v1.9.5 MV 画质表修复版：官方 MV 通道改以 api/mv/detail brs 上游实档构建 availableVideoQualities，宿主画质菜单可按实档切档；v1.9.3 WebView 短链跟随修复版：followRedirects 非 3xx 分支新增 responseURL 自动跟随检测——真机 WebView 下 XHR 自动跟随 302（axios maxRedirects:0 仅 Node 生效），短链解析拿到最终 URL 而非原始短链，修复真机导入 SHEET_URL_UNRECOGNIZED，详见头部 changelog；上一版 v1.9.2 为分享链接文本自动提取 URL 版；v1.9.1 随包升版：歌单对象补 author 别名字段，详见头部 v1.9.1 changelog；v1.9.0 BakaMusic 高价值音源接入版：零代码增量随包升版——BakaMusic 确认的次合代/ikun 网易云通道本插件 v1.3.1/v1.1.0 起已竞速接入（ikun atmos 实测 fLaC ~92MB ≈2740kbps 全场最高音质），全豆要 wy 实测虚标 128k 不接入，详见头部 v1.9.0 changelog；v1.8.4 歌单导入元数据版：importMusicSheet 返回完整 IMusicSheetItem 歌单对象——标题/介绍/封面/作者随 v6/playlist/detail 响应零额外请求回传，介绍字段 description 对齐宿主 v1.0.0 契约；v1.8.3 质检遗留优化版：错误消息统一 [netease] 前缀 + 兜底分支 code 统一为 SHEET_URL_UNRECOGNIZED；v1.8.2 歌单解析修复版：P0-1 移动端 m/playlist 链接导入修复 + P1-3 短链路径形态支持 + 歌单条目 platform 字段 + 歌单导入错误码统一；v1.8.0 MV 参数对齐基线：getMvSourceImpl 顶层守卫字段兜底（musicItem.mv/mvId/mvid 任一命中即映射到 _src.netease.mv），与酷我/QQ/咪咕 v1.8.0 行为一致；MV_SOURCE.netease 官方/海棠双通道已含 P1 字段（videoQuality/availableVideoQualities/size/expiresAt/userAgent/mimeType），v1.8.0 补：availableVideoQualities 补 width/height（按档位标称值 16:9 估算）+ getMvSourceImpl 内 videoQuality 写回 musicItem.videoQuality（宿主 UI 切档后回显）+ 海棠兜底 result 补 userAgent（对齐官方通道口径）；v1.6.0 匿名 eapi 取链通道（免费歌免 Cookie 提到 320k/无损）；YRC 逐字与 result.songs 解析路径实测核验在位）：搜索/取链/歌词（LRC/翻译/罗马音/YRC 逐字）/网易云官方榜 63 榜 + 新歌速递/歌单全量导入（trackIds 批量翻页）/专辑/歌手/歌单搜索与详情/MV 播放（画质菜单回填实际档位/大小/有效期/标称宽高）/精品歌单广场（hot 标签横向 pinned）/歌曲评论（按歌曲实际可用档位展示音质菜单，getMusicInfo 补齐音质大小）。',
   // [v1.2.0 P2] primaryKey：宿主 mediameta 存储约定（对齐 baka）
