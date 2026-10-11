@@ -3,8 +3,8 @@
   "plugins": [
     {
       "name": "QQ音乐",
-      "url": "https://gh-proxy.com/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/qq-source.plugin.v1.9.18.js",
-      "version": "1.9.18"
+      "url": "https://gh-proxy.com/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/qq-source.plugin.v1.9.20.js",
+      "version": "1.9.20"
     },
     {
       "name": "酷我音乐",
@@ -13,8 +13,8 @@
     },
     {
       "name": "酷狗音乐",
-      "url": "https://gh-proxy.com/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/kugou-source.plugin.v1.9.19.js",
-      "version": "1.9.19"
+      "url": "https://gh-proxy.com/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/kugou-source.plugin.v1.9.20.js",
+      "version": "1.9.20"
     },
     {
       "name": "咪咕音乐",
@@ -23,8 +23,8 @@
     },
     {
       "name": "网易云音乐",
-      "url": "https://gh-proxy.com/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/netease-source.plugin.v1.9.17.js",
-      "version": "1.9.17"
+      "url": "https://gh-proxy.com/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/netease-source.plugin.v1.9.20.js",
+      "version": "1.9.20"
     },
     {
       "name": "汽水音乐",
