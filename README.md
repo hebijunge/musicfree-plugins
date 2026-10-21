@@ -27,36 +27,38 @@ MusicFree 插件订阅仓库（57 个插件）+ 洛雪（LX Music）自定义源
 - 国内加速 ghproxy（清单与插件文件均经 ghproxy.net 代理直取 GitHub 源；2026-10-20 复测可用，速度较慢约 35 KB/s）：
   `https://ghproxy.net/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins-ghproxy.json`
 
-### 国内代理 · 实测收录（2026-10-20 复测，15 条中 8 条可用）
+### 国内代理 · 实测收录（2026-10-22 复测，15 条中 10 条可用）
 
-以下 8 条为独立订阅地址，内容与上方通道完全一致（57 个插件），插件文件经对应代理直取 GitHub 源。收录标准：清单可用 + JSON 校验 + 插件 js sha256 与源一致，按实测速度排序（实测为数据中心节点，速度仅作排序参考）。已失效通道移入下方「历史收录（已失效）」，其清单文件（plugins-proxy-05/06/07/08/12/13/15.json）仍保留在仓库中但不再推荐。
+以下 10 条为独立订阅地址，内容与上方通道完全一致（57 个插件），插件文件经对应代理直取 GitHub 源。收录标准：清单可用 + JSON 校验 + 插件 js sha256 与源一致，按实测速度排序（实测为数据中心节点，速度仅作排序参考）。已失效通道移入下方「历史收录（已失效）」，其清单文件（plugins-proxy-06/07/12/13/15.json）仍保留在仓库中但不再推荐。本次复测 05、08 两通道恢复但速度落入慢速档。
 
-- 代理02 · gh.acmsz.top（实测 667 KB/s · 10-20）：
+- 代理02 · gh.acmsz.top（实测 9.9 MB/s · 10-22）：
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-02.json`
-- 代理03 · gh-proxy.com（实测 527 KB/s · 10-20）：
-  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-03.json`
-- 代理01 · git.yylx.win（实测 358 KB/s · 10-20）：
+- 代理01 · git.yylx.win（实测 9.7 MB/s · 10-22）：
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-01.json`
-- 代理10 · gh.padao.fun（实测 317 KB/s · 10-20）：
-  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-10.json`
-- 代理11 · xsadwsd.kdns.fr（实测 173 KB/s · 10-20）：
-  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-11.json`
-- 代理09 · cdn.akaere.online（实测 132 KB/s · 10-20）：
-  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-09.json`
-- 代理14 · github.xxlab.tech（实测 114 KB/s · 10-20）：
-  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-14.json`
-- 代理04 · ghm.078465.xyz（实测 35 KB/s · 10-20）：
+- 代理03 · gh-proxy.com（实测 6.0 MB/s · 10-22）：
+  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-03.json`
+- 代理04 · ghm.078465.xyz（实测 5.4 MB/s · 10-22）：
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-04.json`
+- 代理10 · gh.padao.fun（实测 3.7 MB/s · 10-22）：
+  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-10.json`
+- 代理14 · github.xxlab.tech（实测 2.8 MB/s · 10-22）：
+  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-14.json`
+- 代理11 · xsadwsd.kdns.fr（实测 2.2 MB/s · 10-22）：
+  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-11.json`
+- 代理09 · cdn.akaere.online（实测 2.0 MB/s · 10-22）：
+  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-09.json`
+- 代理05 · ghproxy.053000.xyz（慢速 · 实测 0.3~0.5 MB/s · 10-22，恢复）：
+  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-05.json`
+- 代理08 · wget.la（慢速 · 实测约 50 KB/s · 10-22，恢复）：
+  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-08.json`
 
-#### 历史收录（已失效，2026-10-20 复测）
+#### 历史收录（已失效，2026-10-22 复测）
 
-- 代理05 · ghproxy.053000.xyz — 502 / 下载骤降至 3 KB/s
-- 代理06 · gh.927223.xyz — 连接超时
+- 代理06 · gh.927223.xyz — 连接/读取超时（两次复测均超时）
 - 代理07 · gh.halonice.com — 401，服务已要求鉴权
-- 代理08 · wget.la — 404
-- 代理12 · gh.idayer.com — 429 限流拒绝（Cloudflare 1027）
-- 代理13 · js.jiangss.shop — 502
-- 代理15 · gh.felicity.ac.cn — 429 限流拒绝（Cloudflare 1027）
+- 代理12 · gh.idayer.com — 429 限流拒绝（Cloudflare 1027，退避后复试仍 429）
+- 代理13 · js.jiangss.shop — 502（两次复测均 502）
+- 代理15 · gh.felicity.ac.cn — 429 限流拒绝（Cloudflare 1027，退避后复试仍 429）
 
 说明：
 - Pages 系清单文件均托管在本仓库（GitHub Pages 直出，实时同步）；区别仅在清单内插件文件的下载源——`plugins.json` 走 Pages、`plugins-fastly.json` 走 fastly CDN、`plugins-gcore.json` 走 gcore CDN、`plugins-cdn.json` 走 cdn.jsdelivr.net、`plugins-ghproxy.json` 与 `plugins-proxy-01..15.json` 走对应代理直取 GitHub 源。
