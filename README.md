@@ -91,19 +91,19 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 
 五源合一自定义源脚本，**仅适用于洛雪音乐 App**，与 MusicFree 插件不通用（2026-10-19 起已从本仓库全部 20 份 MusicFree 订阅清单中移除，请勿在 MusicFree 中使用）。
 
-- 脚本文件（v1.2.0）：[plugins/five-source-lx.plugin.v1.2.0.js](plugins/five-source-lx.plugin.v1.2.0.js)
+- 脚本文件（v1.4.0）：[plugins/five-source-lx.plugin.v1.4.0.js](plugins/five-source-lx.plugin.v1.4.0.js)
 - 在线导入链接（洛雪 App 内粘贴）：
-  `https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.2.0.js`
+  `https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.4.0.js`
 - 导入方法：洛雪 App → 设置 → 自定义源管理 → 导入（选「在线链接」粘贴上方地址，或下载 .js 后选「本地文件」导入）
 - 说明：洛雪自定义源为非订阅机制，一次导入一个脚本，导入后不会随清单自动更新；版本升级需重新导入
 
 ## 插件清单
 
 | QQ音乐 | 1.9.25 | [qq-source.plugin.v1.9.25.js](plugins/qq-source.plugin.v1.9.25.js) |
-| 酷我音乐 | 1.9.20 | [kuwo-source.plugin.v1.9.20.js](plugins/kuwo-source.plugin.v1.9.20.js) |
+| 酷我音乐 | 1.9.22 | [kuwo-source.plugin.v1.9.22.js](plugins/kuwo-source.plugin.v1.9.22.js) |
 | 酷狗音乐 | 1.9.22 | [kugou-source.plugin.v1.9.22.js](plugins/kugou-source.plugin.v1.9.22.js) |
 | 咪咕音乐 | 1.9.18 | [migu-source.plugin.v1.9.18.js](plugins/migu-source.plugin.v1.9.18.js) |
-| 网易云音乐 | 1.9.22 | [netease-source.plugin.v1.9.22.js](plugins/netease-source.plugin.v1.9.22.js) |
+| 网易云音乐 | 1.9.24 | [netease-source.plugin.v1.9.24.js](plugins/netease-source.plugin.v1.9.24.js) |
 | 汽水音乐 | 1.9.20 | [qishui-source.plugin.v1.9.20.js](plugins/qishui-source.plugin.v1.9.20.js) |
 | B站 | 1.1.4 | [bilibili-source.plugin.v1.1.4.js](plugins/bilibili-source.plugin.v1.1.4.js) |
 | 番茄畅听 | 1.2.2 | [fanqie-source.plugin.v1.2.2.js](plugins/fanqie-source.plugin.v1.2.2.js) |
@@ -161,7 +161,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 
 - `index.html` — 订阅站首页（数据自动跟随 `plugins.json`，含洛雪专区分区展示与插件搜索）
 - `plugins.json` — MusicFree 订阅清单（结构对齐 musicfreepluginshub：`desc` + `plugins[]`，每项 `name/url/version`；**不含洛雪脚本**）
-- `plugins/five-source-lx.plugin.v1.2.0.js` — 洛雪自定义源脚本（仅洛雪专区入口分发，不进任何 `plugins*.json`）
+- `plugins/five-source-lx.plugin.v1.4.0.js` — 洛雪自定义源脚本（仅洛雪专区入口分发，不进任何 `plugins*.json`）
 - `plugins-fastly.json` / `plugins-gcore.json` / `plugins-cdn.json` / `plugins-ghproxy.json` / `plugins-proxy-01..20.json` — 备用通道订阅清单（结构与 `plugins.json` 完全一致，仅插件 url 前缀不同）
 - `scripts/sync-jihulab.sh` — jihulab 镜像手动同步脚本（token 走环境变量，不落盘）
 - `.github/workflows/mirror-jihulab.yml` — master 推送后自动镜像到 jihulab（需 Secrets，未配置自动跳过；触发分支配置当前仍为 `main`，启用前需改为 `master`）
