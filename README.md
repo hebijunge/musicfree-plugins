@@ -27,9 +27,9 @@ MusicFree 插件订阅仓库（57 个插件）+ 洛雪（LX Music）自定义源
 - 国内加速 ghproxy（清单与插件文件均经 ghproxy.net 代理直取 GitHub 源；2026-10-24 复测可用，0.6MB 文件实测约 0.3 MB/s）：
   `https://ghproxy.net/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins-ghproxy.json`
 
-### 国内代理 · 实测收录（2026-10-24 复测，15 条中 12 条可用）
+### 国内代理 · 实测收录（2026-10-24 复测，20 条中 17 条可用）
 
-以下 12 条为独立订阅地址，内容与上方通道完全一致（57 个插件），插件文件经对应代理直取 GitHub 源。收录标准：清单可用 + JSON 校验 + 插件 js sha256 与源一致，按实测速度排序（实测为数据中心节点，速度仅作排序参考）。已失效通道移入下方「历史收录（已失效）」，其清单文件（plugins-proxy-06/07/13.json）仍保留在仓库中但不再推荐。本次复测 12（gh.idayer.com）、15（gh.felicity.ac.cn）两通道自 10-22 的 429 状态恢复；测速基准为 0.6MB 真实插件文件（qq-source v1.9.25），小文件受 TCP 爬坡影响，速度量级与 10-22 复测的 12MB 大文件口径不可直接对比。
+以下 17 条为独立订阅地址，内容与上方通道完全一致（57 个插件），插件文件经对应代理直取 GitHub 源。收录标准：清单可用 + JSON 校验 + 插件 js sha256 与源一致，按实测速度排序（实测为数据中心节点，速度仅作排序参考）。已失效通道移入下方「历史收录（已失效）」，其清单文件（plugins-proxy-06/07/13.json）仍保留在仓库中但不再推荐。本次复测 12（gh.idayer.com）、15（gh.felicity.ac.cn）两通道自 10-22 的 429 状态恢复，并新收编 16~20 五条候选通道（实测两轮取均值）；测速基准为 0.6MB 真实插件文件（qq-source v1.9.25），小文件受 TCP 爬坡影响，速度量级与 10-22 复测的 12MB 大文件口径不可直接对比。
 
 - 代理01 · git.yylx.win（实测 0.9 MB/s · 10-24）：
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-01.json`
@@ -41,16 +41,26 @@ MusicFree 插件订阅仓库（57 个插件）+ 洛雪（LX Music）自定义源
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-03.json`
 - 代理10 · gh.padao.fun（实测 0.4 MB/s · 10-24）：
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-10.json`
+- 代理16 · github.cnxiaobai.com（实测 0.38 MB/s · 10-24，新收编）：
+  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-16.json`
 - 代理15 · gh.felicity.ac.cn（实测 0.3 MB/s · 10-24，恢复）：
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-15.json`
 - 代理09 · cdn.akaere.online（实测 0.3 MB/s · 10-24）：
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-09.json`
 - 代理11 · xsadwsd.kdns.fr（实测 0.3 MB/s · 10-24）：
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-11.json`
+- 代理17 · 30006000.xyz（实测 0.28 MB/s · 10-24，新收编）：
+  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-17.json`
+- 代理18 · ghpxy.hwinzniej.top（实测 0.27 MB/s · 10-24，新收编）：
+  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-18.json`
 - 代理12 · gh.idayer.com（实测 0.3 MB/s · 10-24，恢复）：
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-12.json`
 - 代理14 · github.xxlab.tech（实测 0.26 MB/s · 10-24）：
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-14.json`
+- 代理19 · ghproxy.net（实测 0.26 MB/s · 10-24，新收编；另见上方 ghproxy 加速通道）：
+  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-19.json`
+- 代理20 · down.mxw.xx.kg（实测 0.26 MB/s · 10-24，新收编）：
+  `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-20.json`
 - 代理05 · ghproxy.053000.xyz（慢速 · 实测 0.1~0.4 MB/s 波动 · 10-24）：
   `https://hebijunge.github.io/musicfree-plugins/plugins-proxy-05.json`
 - 代理08 · wget.la（慢速 · 实测 0.02~0.4 MB/s 波动大 · 10-24）：
@@ -63,7 +73,7 @@ MusicFree 插件订阅仓库（57 个插件）+ 洛雪（LX Music）自定义源
 - 代理13 · js.jiangss.shop — 502（两次复测均 502）
 
 说明：
-- Pages 系清单文件均托管在本仓库（GitHub Pages 直出，实时同步）；区别仅在清单内插件文件的下载源——`plugins.json` 走 Pages、`plugins-fastly.json` 走 fastly CDN、`plugins-gcore.json` 走 gcore CDN、`plugins-cdn.json` 走 cdn.jsdelivr.net、`plugins-ghproxy.json` 与 `plugins-proxy-01..15.json` 走对应代理直取 GitHub 源。
+- Pages 系清单文件均托管在本仓库（GitHub Pages 直出，实时同步）；区别仅在清单内插件文件的下载源——`plugins.json` 走 Pages、`plugins-fastly.json` 走 fastly CDN、`plugins-gcore.json` 走 gcore CDN、`plugins-cdn.json` 走 cdn.jsdelivr.net、`plugins-ghproxy.json` 与 `plugins-proxy-01..20.json` 走对应代理直取 GitHub 源。
 - **jsdelivr 全兜底说明**：上面「jsdelivr 全兜底」三条的清单文件本身也经 jsdelivr 拉取（`@master` 分支引用），Pages 不可用时整条链路仍可用。已知限制：jsdelivr 对 `@master` 引用有边缘缓存（响应头 s-maxage=43200，即最长约 12 小时滞后），浏览器侧 max-age=7 天（强刷可绕过）；推送新版本后如需立即生效可调 purge（GET）：`https://purge.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins-cdn.json`（实测返回 finished，边缘收敛可能仍有分钟级滞后）。要求零滞后请以 GitHub Pages 主通道为准。
 - 导入时哪个通道报 Network Error / 连接重置，就换另一条订阅地址重试。
 - 单个插件卡备用直链：fastly / gcore / cdn.jsdelivr.net / raw.githubusercontent 均可用；raw 直连失败时可加代理前缀 `https://ghproxy.net/` + raw 地址。
@@ -152,7 +162,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 - `index.html` — 订阅站首页（数据自动跟随 `plugins.json`，含洛雪专区分区展示与插件搜索）
 - `plugins.json` — MusicFree 订阅清单（结构对齐 musicfreepluginshub：`desc` + `plugins[]`，每项 `name/url/version`；**不含洛雪脚本**）
 - `plugins/five-source-lx.plugin.v1.2.0.js` — 洛雪自定义源脚本（仅洛雪专区入口分发，不进任何 `plugins*.json`）
-- `plugins-fastly.json` / `plugins-gcore.json` / `plugins-cdn.json` / `plugins-ghproxy.json` / `plugins-proxy-01..15.json` — 备用通道订阅清单（结构与 `plugins.json` 完全一致，仅插件 url 前缀不同）
+- `plugins-fastly.json` / `plugins-gcore.json` / `plugins-cdn.json` / `plugins-ghproxy.json` / `plugins-proxy-01..20.json` — 备用通道订阅清单（结构与 `plugins.json` 完全一致，仅插件 url 前缀不同）
 - `scripts/sync-jihulab.sh` — jihulab 镜像手动同步脚本（token 走环境变量，不落盘）
 - `.github/workflows/mirror-jihulab.yml` — master 推送后自动镜像到 jihulab（需 Secrets，未配置自动跳过；触发分支配置当前仍为 `main`，启用前需改为 `master`）
 - `plugins/` — 插件 js 直链文件，文件名含版本号；更新插件时新增带新版本号的文件，并在 `plugins.json` 中把该项 `url` 与 `version` 指向新文件
