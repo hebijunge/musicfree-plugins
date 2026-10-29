@@ -99,12 +99,12 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 
 ## 插件清单
 
-| QQ音乐 | 1.9.25 | [qq-source.plugin.v1.9.25.js](plugins/qq-source.plugin.v1.9.25.js) |
-| 酷我音乐 | 1.9.23 | [kuwo-source.plugin.v1.9.23.js](plugins/kuwo-source.plugin.v1.9.23.js) |
-| 酷狗音乐 | 1.9.22 | [kugou-source.plugin.v1.9.22.js](plugins/kugou-source.plugin.v1.9.22.js) |
-| 咪咕音乐 | 1.9.18 | [migu-source.plugin.v1.9.18.js](plugins/migu-source.plugin.v1.9.18.js) |
-| 网易云音乐 | 1.9.25 | [netease-source.plugin.v1.9.25.js](plugins/netease-source.plugin.v1.9.25.js) |
-| 汽水音乐 | 1.9.21 | [qishui-source.plugin.v1.9.21.js](plugins/qishui-source.plugin.v1.9.21.js) |
+| QQ音乐 | 1.9.26 | [qq-source.plugin.v1.9.26.js](plugins/qq-source.plugin.v1.9.26.js) |
+| 酷我音乐 | 1.9.24 | [kuwo-source.plugin.v1.9.24.js](plugins/kuwo-source.plugin.v1.9.24.js) |
+| 酷狗音乐 | 1.9.24 | [kugou-source.plugin.v1.9.24.js](plugins/kugou-source.plugin.v1.9.24.js) |
+| 咪咕音乐 | 1.9.19 | [migu-source.plugin.v1.9.19.js](plugins/migu-source.plugin.v1.9.19.js) |
+| 网易云音乐 | 1.9.27 | [netease-source.plugin.v1.9.27.js](plugins/netease-source.plugin.v1.9.27.js) |
+| 汽水音乐 | 1.9.23 | [qishui-source.plugin.v1.9.23.js](plugins/qishui-source.plugin.v1.9.23.js) |
 | B站 | 1.1.4 | [bilibili-source.plugin.v1.1.4.js](plugins/bilibili-source.plugin.v1.1.4.js) |
 | 番茄畅听 | 1.2.2 | [fanqie-source.plugin.v1.2.2.js](plugins/fanqie-source.plugin.v1.2.2.js) |
 | DJ多多 | 1.0.2 | [djduoduo-source.plugin.v1.0.2.js](plugins/djduoduo-source.plugin.v1.0.2.js) |
