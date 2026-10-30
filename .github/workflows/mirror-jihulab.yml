@@ -7,7 +7,7 @@ name: mirror-jihulab
 # 安全约定：token 只存 GitHub Secrets，不写入任何代码文件。
 on:
   push:
-    branches: [main]
+    branches: [master]
   workflow_dispatch:
 
 permissions:

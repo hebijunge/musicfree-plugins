@@ -1,0 +1,60 @@
+{
+    "desc": "其它音乐平台 · B站、5sing、千千、Apple Music、华为、JOOX 等",
+    "plugins": [
+        {
+            "name": "B站",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/bilibili-source.plugin.v1.1.4.js",
+            "version": "1.1.4"
+        },
+        {
+            "name": "5sing",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/5sing-source.plugin.v1.0.2.js",
+            "version": "1.0.2"
+        },
+        {
+            "name": "千千音乐",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/qianqian-source.plugin.v1.0.4.js",
+            "version": "1.0.4"
+        },
+        {
+            "name": "一听音乐",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/1ting-source.plugin.v1.0.2.js",
+            "version": "1.0.2"
+        },
+        {
+            "name": "街声",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/streetvoice-source.plugin.v1.0.1.js",
+            "version": "1.0.1"
+        },
+        {
+            "name": "Apple Music",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/apple-music-v1.0.2.js",
+            "version": "1.0.2"
+        },
+        {
+            "name": "华为音乐",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/hwmusic-source.plugin.v1.0.3.js",
+            "version": "1.0.3"
+        },
+        {
+            "name": "Jamendo",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/jamendo-source.plugin.v1.0.2.js",
+            "version": "1.0.2"
+        },
+        {
+            "name": "聚合",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/agg-source.plugin.v1.9.18.js",
+            "version": "1.9.18"
+        },
+        {
+            "name": "JOOX音乐",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/joox-source.plugin.v1.1.3.js",
+            "version": "1.1.3"
+        },
+        {
+            "name": "好听轻音乐",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/htqyy-source.plugin.v1.2.3.js",
+            "version": "1.2.3"
+        }
+    ]
+}

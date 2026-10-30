@@ -114,138 +114,191 @@
     </div>
   </header>
 
-  <div class="sub-card" id="sec-sub">
-    <h2>📌 订阅地址</h2>
-    <p class="tip">在 MusicFree 中打开「插件设置 → 订阅」，粘贴下面任一地址即可一键安装 / 更新全部插件。</p>
-    <p class="tip eco-note">🎵 MusicFree 插件请使用下方订阅/插件链接，与洛雪脚本互不通用（洛雪用户请见下方「洛雪（LX Music）自定义源」专区）。</p>
+  <div class="sub-card" id="sec-cat">
+    <h2>🎯 按类别订阅（推荐）</h2>
+    <p class="tip">插件已拆成 5 份清单，<b>按需只装一类</b>，不必一次装 57 个。每份清单内的插件地址都走同一条加速线路，导入更快、失败面更小。</p>
+    <p class="tip" style="margin:0 0 10px">MusicFree「插件设置 → 订阅」粘贴即可；订阅 URL 必须以 <code>.json</code> 结尾，这是 App 的硬性校验。</p>
+
     <div class="sub-row">
-      <span class="label">推荐 · GitHub Pages</span>
-      <a id="url-ghp" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins.json</a>
-      <button class="btn" data-copy="url-ghp">复制</button>
+      <span class="label">① 常用六平台 · 6 个</span>
+      <a id="url-cat-main" class="code-link" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json" target="_blank" rel="noopener">https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json</a>
+      <span class="spd">QQ / 酷我 / 酷狗 / 咪咕 / 网易云 / 汽水 · 2.9 MB</span>
+      <button class="btn" data-copy="url-cat-main">复制</button>
     </div>
     <div class="sub-row">
-      <span class="label">国内加速 · ghproxy</span>
-      <a id="url-ghproxy" class="code-link" href="https://ghproxy.net/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins-ghproxy.json" target="_blank" rel="noopener">https://ghproxy.net/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins-ghproxy.json</a>
-      <button class="btn ghost" data-copy="url-ghproxy">复制</button>
+      <span class="label">② DJ / 舞曲 / 电音 · 30 个</span>
+      <a id="url-cat-dj" class="code-link" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json" target="_blank" rel="noopener">https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json</a>
+      <span class="spd">0.96 MB</span>
+      <button class="btn ghost" data-copy="url-cat-dj">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">③ 听书 / 电台 / 播客 · 10 个</span>
+      <a id="url-cat-radio" class="code-link" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/radio.json" target="_blank" rel="noopener">https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/radio.json</a>
+      <span class="spd">0.62 MB</span>
+      <button class="btn ghost" data-copy="url-cat-radio">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">④ 其它音乐平台 · 11 个</span>
+      <a id="url-cat-music" class="code-link" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/music.json" target="_blank" rel="noopener">https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/music.json</a>
+      <span class="spd">B站 / 5sing / 千千 / Apple Music / 华为 / JOOX … · 3.7 MB</span>
+      <button class="btn ghost" data-copy="url-cat-music">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">⑤ 全部插件 · 57 个</span>
+      <a id="url-cat-all" class="code-link" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json" target="_blank" rel="noopener">https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json</a>
+      <span class="spd">8.2 MB · 首次导入耗时较长</span>
+      <button class="btn ghost" data-copy="url-cat-all">复制</button>
     </div>
 
     <details class="more-sub">
-      <summary>更多订阅通道（17 条备用 · fastly/gcore 节点 + 15 条国内代理实测）</summary>
+      <summary>主线路连不上？换 fastly 节点 / GitHub Pages 官方直出</summary>
       <div class="inner">
-<div class="sub-row">
-      <span class="label">备用 · fastly 节点</span>
-      <a id="url-jsd" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-fastly.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-fastly.json</a>
-      <button class="btn ghost" data-copy="url-jsd">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">备用 · gcore 节点</span>
-      <a id="url-gcore" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-gcore.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-gcore.json</a>
-      <button class="btn ghost" data-copy="url-gcore">复制</button>
-    </div>
-        <div class="px-head">国内代理 · 实测收录</div>
-    <p class="tip" style="margin:6px 0 10px">2026-09-25 对 109 个候选代理全量实测（两轮复测），按「清单可用 + 内容校验一致 + 速度」收录 15 条；每条为独立订阅地址，内容与上方四条通道完全一致（57 个插件），插件 js 经对应代理直取 GitHub 源。上表任一通道报 Network Error 时可换用下面任一条。</p>
-    <div class="sub-row">
-      <span class="label">国内代理 01 · git.yylx.win</span>
-      <a id="url-px01" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-01.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-01.json</a>
-      <span class="spd">实测 434 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px01">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 02 · gh.acmsz.top</span>
-      <a id="url-px02" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-02.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-02.json</a>
-      <span class="spd">实测 401 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px02">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 03 · gh-proxy.com</span>
-      <a id="url-px03" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-03.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-03.json</a>
-      <span class="spd">实测 371 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px03">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 04 · ghm.078465.xyz</span>
-      <a id="url-px04" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-04.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-04.json</a>
-      <span class="spd">实测 305 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px04">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 05 · ghproxy.053000.xyz</span>
-      <a id="url-px05" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-05.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-05.json</a>
-      <span class="spd">实测 225 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px05">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 06 · gh.927223.xyz</span>
-      <a id="url-px06" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-06.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-06.json</a>
-      <span class="spd">实测 223 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px06">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 07 · gh.halonice.com</span>
-      <a id="url-px07" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-07.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-07.json</a>
-      <span class="spd">实测 197 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px07">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 08 · wget.la</span>
-      <a id="url-px08" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-08.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-08.json</a>
-      <span class="spd">实测 187 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px08">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 09 · cdn.akaere.online</span>
-      <a id="url-px09" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-09.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-09.json</a>
-      <span class="spd">实测 186 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px09">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 10 · gh.padao.fun</span>
-      <a id="url-px10" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-10.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-10.json</a>
-      <span class="spd">实测 184 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px10">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 11 · xsadwsd.kdns.fr</span>
-      <a id="url-px11" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-11.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-11.json</a>
-      <span class="spd">实测 183 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px11">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 12 · gh.idayer.com</span>
-      <a id="url-px12" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-12.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-12.json</a>
-      <span class="spd">实测 178 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px12">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 13 · js.jiangss.shop</span>
-      <a id="url-px13" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-13.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-13.json</a>
-      <span class="spd">实测 175 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px13">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 14 · github.xxlab.tech</span>
-      <a id="url-px14" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-14.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-14.json</a>
-      <span class="spd">实测 173 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px14">复制</button>
-    </div>
-    <div class="sub-row">
-      <span class="label">国内代理 15 · gh.felicity.ac.cn</span>
-      <a id="url-px15" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-15.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-15.json</a>
-      <span class="spd">实测 165 KB/s · 09-25</span>
-      <button class="btn ghost" data-copy="url-px15">复制</button>
-    </div>
-          </div>
+        <div class="px-head">fastly 节点（jsDelivr，较稳）</div>
+        <div class="sub-row">
+          <span class="label">常用六平台 · fastly</span>
+          <a id="url-cat-main-f" class="code-link" href="https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/sub/fastly/main.json" target="_blank" rel="noopener">https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/sub/fastly/main.json</a>
+          <button class="btn ghost" data-copy="url-cat-main-f">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">全部 · fastly</span>
+          <a id="url-cat-all-f" class="code-link" href="https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/sub/fastly/all.json" target="_blank" rel="noopener">https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/sub/fastly/all.json</a>
+          <button class="btn ghost" data-copy="url-cat-all-f">复制</button>
+        </div>
+        <div class="px-head">GitHub Pages 官方直出（最稳但最慢，无代理依赖）</div>
+        <div class="sub-row">
+          <span class="label">常用六平台 · Pages</span>
+          <a id="url-cat-main-g" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/sub/githubio/main.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/sub/githubio/main.json</a>
+          <button class="btn ghost" data-copy="url-cat-main-g">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">全部 · Pages</span>
+          <a id="url-cat-all-g" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/sub/githubio/all.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/sub/githubio/all.json</a>
+          <button class="btn ghost" data-copy="url-cat-all-g">复制</button>
+        </div>
+        <p class="tip">同一类的其它组合把文件名换成 <code>dj.json</code> / <code>radio.json</code> / <code>music.json</code> 即可。</p>
+      </div>
     </details>
 
-    <p class="tip" style="margin:10px 0 0">以上订阅内容完全一致（57 个插件，含备用通道）；哪个通道报 Network Error，就换另一条订阅地址重试。</p>
+    <p class="tip" style="margin:10px 0 0">2026-10-30 复核：本页所有类目与线路均逐条下载比对过 sha256（padao 线路 114 次请求全通过，最慢单条 1.6s）。已下架实测失效的 cdn.jsdelivr / ghproxy.net / gh.927223.xyz / gh.halonice.com / js.jiangss.shop 及内容被截断的 gh-proxy.com / ghm.078465.xyz。</p>
+  </div>
+
+  <div class="sub-card" id="sec-sub">
+    <h2>📦 全部插件（57 个）· 备用线路</h2>
+    <p class="tip">想一次装全就用这里；<b>只装常用平台建议用上面的分类订阅</b>，体积从 8.2 MB 降到 2.9 MB。下面各条清单内容完全一致，只是插件下载源不同。</p>
+    <div class="sub-row">
+      <span class="label">主线路 · gh.padao.fun</span>
+      <a id="url-all-main" class="code-link" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins.json" target="_blank" rel="noopener">https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins.json</a>
+      <span class="spd">实测 1.9s / 643 KB</span>
+      <button class="btn" data-copy="url-all-main">复制</button>
+    </div>
+    <div class="sub-row">
+      <span class="label">官方直出 · GitHub Pages</span>
+      <a id="url-all-ghp" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins.json</a>
+      <span class="spd">实测 6.7s / 643 KB</span>
+      <button class="btn ghost" data-copy="url-all-ghp">复制</button>
+    </div>
+
+    <details class="more-sub">
+      <summary>14 条国内加速通道（2026-10-30 逐条实测，按速度排序）</summary>
+      <div class="inner">
+        <p class="tip" style="margin:6px 0 10px">每条通道对应一个 <code>plugins-proxy-XX.json</code>，其内部 57 个插件地址全部指向同一代理域名。测速基准为真实插件 qq-source（643 KB），本机直连；手机网络会有差异，任一条报 Network Error 就换下一条。</p>
+        <div class="sub-row">
+          <span class="label">01 · gh.padao.fun</span>
+          <a id="url-px01" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-01.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-01.json</a>
+          <span class="spd">1.9s ✓</span>
+          <button class="btn ghost" data-copy="url-px01">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">02 · down.mxw.xx.kg</span>
+          <a id="url-px02" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-02.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-02.json</a>
+          <span class="spd">3.0s ✓</span>
+          <button class="btn ghost" data-copy="url-px02">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">03 · 30006000.xyz</span>
+          <a id="url-px03" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-03.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-03.json</a>
+          <span class="spd">3.6s ✓</span>
+          <button class="btn ghost" data-copy="url-px03">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">04 · wget.la</span>
+          <a id="url-px04" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-04.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-04.json</a>
+          <span class="spd">3.7s ✓</span>
+          <button class="btn ghost" data-copy="url-px04">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">05 · fastly.jsdelivr.net</span>
+          <a id="url-px05" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-05.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-05.json</a>
+          <span class="spd">3.7s ✓</span>
+          <button class="btn ghost" data-copy="url-px05">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">06 · github.cnxiaobai.com</span>
+          <a id="url-px06" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-06.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-06.json</a>
+          <span class="spd">3.8s ✓</span>
+          <button class="btn ghost" data-copy="url-px06">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">07 · cdn.akaere.online</span>
+          <a id="url-px07" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-07.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-07.json</a>
+          <span class="spd">4.0s ✓</span>
+          <button class="btn ghost" data-copy="url-px07">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">08 · xsadwsd.kdns.fr</span>
+          <a id="url-px08" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-08.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-08.json</a>
+          <span class="spd">4.3s ✓</span>
+          <button class="btn ghost" data-copy="url-px08">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">09 · ghpxy.hwinzniej.top</span>
+          <a id="url-px09" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-09.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-09.json</a>
+          <span class="spd">4.5s ✓</span>
+          <button class="btn ghost" data-copy="url-px09">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">10 · gh.acmsz.top</span>
+          <a id="url-px10" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-10.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-10.json</a>
+          <span class="spd">5.1s ✓</span>
+          <button class="btn ghost" data-copy="url-px10">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">11 · ghproxy.053000.xyz</span>
+          <a id="url-px11" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-11.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-11.json</a>
+          <span class="spd">5.2s ✓</span>
+          <button class="btn ghost" data-copy="url-px11">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">12 · gcore.jsdelivr.net</span>
+          <a id="url-px12" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-12.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-12.json</a>
+          <span class="spd">5.6s ✓</span>
+          <button class="btn ghost" data-copy="url-px12">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">13 · git.yylx.win</span>
+          <a id="url-px13" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-13.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-13.json</a>
+          <span class="spd">5.8s ✓</span>
+          <button class="btn ghost" data-copy="url-px13">复制</button>
+        </div>
+        <div class="sub-row">
+          <span class="label">14 · GitHub Pages 直取</span>
+          <a id="url-px14" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins-proxy-14.json" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins-proxy-14.json</a>
+          <span class="spd">6.7s ✓</span>
+          <button class="btn ghost" data-copy="url-px14">复制</button>
+        </div>
+        <p class="tip" style="margin:10px 0 0">已下架（实测不可用）：cdn.jsdelivr.net、ghproxy.net、gh.927223.xyz、gh.halonice.com、js.jiangss.shop、gh.felicity.ac.cn（429）、gh.idayer.com（429）、github.xxlab.tech（302）；gh-proxy.com 与 ghm.078465.xyz 返回被截断（302 KB / 490 KB，正常 643 KB），会让插件解析失败，一并下架。旧编号 proxy-15 ~ proxy-20 保留文件以兼容历史链接，内容已重排到上述可用线路。</p>
+      </div>
+    </details>
+
+    <p class="tip" style="margin:10px 0 0">导入失败先看两点：① 订阅地址是否以 <code>.json</code> 结尾；② 换一条更快的线路。MusicFree 对单个文件下载有超时限制，8.2 MB 的全量清单在慢线路上容易中途报错，只装常用平台会稳得多。</p>
   </div>
 
   <div class="lx-card" id="sec-lx">
-    <h2>🎧 洛雪（LX Music）自定义源 <span class="ver">v1.5.0</span></h2>
+    <h2>🎧 洛雪（LX Music）自定义源 <span class="ver">v1.6.0</span></h2>
     <p class="tip">五源合一自定义源脚本，仅适用于洛雪音乐 App。导入方式与 MusicFree 完全不同：非订阅机制、一次导入一个脚本，导入后不会随清单自动更新。</p>
     <div id="lx-list">
       <div class="sub-row lx-item">
-        <span class="label">五源合一(LX) · 导入链接 · v1.5.0</span>
+        <span class="label">五源合一(LX) · 导入链接 · v1.6.0</span>
         <a id="url-lx" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.6.0.js" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.6.0.js</a>
         <button class="btn" data-copy="url-lx">复制</button>
       </div>
@@ -335,8 +388,8 @@ function linksOf(file){
     + encodeURIComponent(file) + '">fastly</a>'
     + '<a class="lnk" href="https://gcore.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/'
     + encodeURIComponent(file) + '">gcore</a>'
-    + '<a class="lnk" href="https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/'
-    + encodeURIComponent(file) + '">raw</a>';
+    + '<a class="lnk" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/'
+    + encodeURIComponent(file) + '">加速</a>';
 }
 function cardHTML(p){
   var file=(p.url||'').split('/plugins/').pop()||p.file;

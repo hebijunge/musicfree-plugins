@@ -1,0 +1,155 @@
+{
+    "desc": "DJ / 舞曲 / 电音 · DJ 站与电音站合集",
+    "plugins": [
+        {
+            "name": "DJ多多",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/djduoduo-source.plugin.v1.0.2.js",
+            "version": "1.0.2"
+        },
+        {
+            "name": "Y2002电音",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/y2002-source.plugin.v1.0.2.js",
+            "version": "1.0.2"
+        },
+        {
+            "name": "火龙DJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/huolongdj-source.plugin.v1.0.4.js",
+            "version": "1.0.4"
+        },
+        {
+            "name": "快音",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/kuaiyin-source.plugin.v1.0.2.js",
+            "version": "1.0.2"
+        },
+        {
+            "name": "DJ串烧集",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/djcsj-source.plugin.v1.0.1.js",
+            "version": "1.0.1"
+        },
+        {
+            "name": "DJ秀",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/djshow.plugin.v1.0.4.js",
+            "version": "1.0.4"
+        },
+        {
+            "name": "djuu DJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/djuu-source.plugin.v1.1.2.js",
+            "version": "1.1.2"
+        },
+        {
+            "name": "皮狗DJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/pgdjz-source.plugin.v1.1.2.js",
+            "version": "1.1.2"
+        },
+        {
+            "name": "DJKK",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/djkk-source.plugin.v1.1.2.js",
+            "version": "1.1.2"
+        },
+        {
+            "name": "水晶舞曲",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/dj14-source.plugin.v1.2.2.js",
+            "version": "1.2.2"
+        },
+        {
+            "name": "清风DJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/ddddj-source.plugin.v1.2.2.js",
+            "version": "1.2.2"
+        },
+        {
+            "name": "DJ766",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/dj766-source.plugin.v1.4.1.js",
+            "version": "1.4.1"
+        },
+        {
+            "name": "82DJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/82dj-source.plugin.v1.2.1.js",
+            "version": "1.2.1"
+        },
+        {
+            "name": "QQDJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/qqdjs-source.plugin.v1.2.2.js",
+            "version": "1.2.2"
+        },
+        {
+            "name": "36DJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/36dj-source.plugin.v1.2.2.js",
+            "version": "1.2.2"
+        },
+        {
+            "name": "宝贝DJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/bibdj-source.plugin.v1.2.1.js",
+            "version": "1.2.1"
+        },
+        {
+            "name": "172Mix",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/172mix-source.plugin.v1.2.1.js",
+            "version": "1.2.1"
+        },
+        {
+            "name": "DJ耶耶耶",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/djyyy-source.plugin.v1.1.2.js",
+            "version": "1.1.2"
+        },
+        {
+            "name": "黑色音频",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/hy57-source.plugin.v1.1.2.js",
+            "version": "1.1.2"
+        },
+        {
+            "name": "我是DJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/54dj-source.plugin.v1.1.2.js",
+            "version": "1.1.2"
+        },
+        {
+            "name": "电音阁",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/dianyinge-source.plugin.v1.1.2.js",
+            "version": "1.1.2"
+        },
+        {
+            "name": "SpaceDJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/spacedj-source.plugin.v1.1.2.js",
+            "version": "1.1.2"
+        },
+        {
+            "name": "DJ6",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/dj6-source.plugin.v1.0.2.js",
+            "version": "1.0.2"
+        },
+        {
+            "name": "73DJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/73dj-source.plugin.v1.0.1.js",
+            "version": "1.0.1"
+        },
+        {
+            "name": "先上DJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/xsdj123-source.plugin.v1.1.1.js",
+            "version": "1.1.1"
+        },
+        {
+            "name": "MixDJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/mixdj-source.plugin.v1.0.2.js",
+            "version": "1.0.2"
+        },
+        {
+            "name": "波比DJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/bobidj-source.plugin.v1.0.1.js",
+            "version": "1.0.1"
+        },
+        {
+            "name": "魅力DJ",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/djmei-source.plugin.v1.0.1.js",
+            "version": "1.0.1"
+        },
+        {
+            "name": "DJ娱乐",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/djyule-source.plugin.v1.2.1.js",
+            "version": "1.2.1"
+        },
+        {
+            "name": "小熊电音",
+            "url": "https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/xxedm-source.plugin.v1.0.2.js",
+            "version": "1.0.2"
+        }
+    ]
+}

@@ -1,0 +1,55 @@
+{
+    "desc": "听书 / 电台 / 播客 · 有声书、FM、播客",
+    "plugins": [
+        {
+            "name": "番茄畅听",
+            "url": "https://hebijunge.github.io/musicfree-plugins/plugins/fanqie-source.plugin.v1.2.2.js",
+            "version": "1.2.2"
+        },
+        {
+            "name": "懒人听书",
+            "url": "https://hebijunge.github.io/musicfree-plugins/plugins/lrts-source.plugin.v1.0.3.js",
+            "version": "1.0.3"
+        },
+        {
+            "name": "博看听书",
+            "url": "https://hebijunge.github.io/musicfree-plugins/plugins/bokantingshu-source.plugin.v1.0.2.js",
+            "version": "1.0.2"
+        },
+        {
+            "name": "猫耳FM",
+            "url": "https://hebijunge.github.io/musicfree-plugins/plugins/missevan-source.plugin.v1.0.3.js",
+            "version": "1.0.3"
+        },
+        {
+            "name": "蜻蜓FM",
+            "url": "https://hebijunge.github.io/musicfree-plugins/plugins/qingting-source.plugin.v1.0.3.js",
+            "version": "1.0.3"
+        },
+        {
+            "name": "喜马拉雅",
+            "url": "https://hebijunge.github.io/musicfree-plugins/plugins/ximalaya-source.plugin.v1.2.1.js",
+            "version": "1.2.1"
+        },
+        {
+            "name": "荔枝FM",
+            "url": "https://hebijunge.github.io/musicfree-plugins/plugins/lizhi-source.plugin.v1.0.2.js",
+            "version": "1.0.2"
+        },
+        {
+            "name": "网易云电台",
+            "url": "https://hebijunge.github.io/musicfree-plugins/plugins/neteaseradio-source.plugin.v1.1.3.js",
+            "version": "1.1.3"
+        },
+        {
+            "name": "CCTV听音",
+            "url": "https://hebijunge.github.io/musicfree-plugins/plugins/cctv-source.plugin.v1.0.2.js",
+            "version": "1.0.2"
+        },
+        {
+            "name": "相声评书",
+            "url": "https://hebijunge.github.io/musicfree-plugins/plugins/xiangsheng-pingshu-source.plugin.v1.0.3.js",
+            "version": "1.0.3"
+        }
+    ]
+}
