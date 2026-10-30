@@ -100,6 +100,13 @@
   details.more-sub[open] summary::before{content:'▾ '}
   details.more-sub .inner{padding:2px 12px 10px}
   @media(max-width:520px){.sub-row code{font-size:11px}.wrap{padding:32px 14px 40px}h1{font-size:24px}.search-box input{font-size:16px}}
+  .dl-entry{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:linear-gradient(135deg,#2f6fed,#5b93f7);color:#fff;text-decoration:none;
+    border-radius:14px;padding:13px 16px;margin:0 0 18px;box-shadow:0 6px 18px rgba(47,111,237,.22)}
+  .dl-entry:active{opacity:.85}
+  .dl-entry .dl-t{font-size:15px;font-weight:600;line-height:1.4}
+  .dl-entry .dl-s{font-size:12.5px;opacity:.88;margin-top:2px}
+  .dl-entry .dl-i{font-size:22px;opacity:.85}
 </style>
 </head>
 <body>
@@ -113,6 +120,15 @@
       <span class="stat">页面数据 <b>自动跟随 plugins.json</b></span>
     </div>
   </header>
+
+  <a class="dl-entry" href="download.html">
+    <div>
+      <div class="dl-t">📥 在线导入总失败？改用离线安装包</div>
+      <div class="dl-s">下载 zip → 解压 → App 里「从本地安装插件」，不受 2 秒超时限制</div>
+    </div>
+    <div class="dl-i">→</div>
+  </a>
+
 
   <div class="sub-card" id="sec-cat">
     <h2>🎯 按类别订阅（推荐）</h2>

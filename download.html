@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MusicFree 插件 · 离线安装包</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --text:#1a1c1f; --sub:#6b7280; --line:#e6e8ec;
+    --accent:#2f6fed; --accent-soft:#eaf1ff; --ok:#0f9d58; --warn:#b45309; --warn-bg:#fff7ed;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:15px;line-height:1.6;padding:20px 14px 48px}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:21px;margin:0 0 6px;letter-spacing:.3px}
+  .lead{color:var(--sub);font-size:13.5px;margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+  .card h2{font-size:15px;margin:0 0 10px;display:flex;align-items:center;gap:6px}
+  .steps{counter-reset:s;list-style:none;padding:0;margin:0}
+  .steps li{counter-increment:s;position:relative;padding-left:30px;margin-bottom:10px;font-size:14px}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:21px;height:21px;
+    border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:600;
+    display:flex;align-items:center;justify-content:center}
+  .steps b{color:var(--text)}
+  .steps code{background:#f1f3f6;padding:1px 5px;border-radius:4px;font-size:12.5px}
+  .tip{background:var(--warn-bg);border:1px solid #fde3c7;color:var(--warn);
+    border-radius:10px;padding:10px 12px;font-size:13px;margin:12px 0 0}
+  .zip{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+  .zip:first-of-type{border-top:0;padding-top:2px}
+  .zip .meta{flex:1;min-width:0}
+  .zip .meta .n{font-weight:600;font-size:14.5px}
+  .zip .meta .d{color:var(--sub);font-size:12.5px}
+  .btn{display:inline-block;border:0;background:var(--accent);color:#fff;border-radius:9px;
+    padding:9px 14px;font-size:13.5px;font-weight:600;text-decoration:none;white-space:nowrap;cursor:pointer}
+  .btn.ghost{background:#fff;color:var(--accent);border:1px solid #c8d8fb}
+  .btn:active{opacity:.75}
+  .btn[disabled]{opacity:.5}
+  .alt{display:block;margin-top:6px;font-size:12px;color:var(--sub);text-align:right}
+  .alt a{color:var(--sub)}
+  #search{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
+    font-size:15px;outline:none;background:#fff}
+  #search:focus{border-color:#b9cdfb}
+  .plist{margin-top:10px}
+  .pitem{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid #f0f1f4}
+  .pitem:first-child{border-top:0}
+  .pitem .nm{flex:1;min-width:0;font-size:14px}
+  .pitem .nm small{color:var(--sub);font-size:12px;margin-left:6px}
+  .pitem .sz{color:var(--sub);font-size:12px;white-space:nowrap}
+  .mini{background:var(--accent-soft);color:var(--accent);border:0;border-radius:7px;
+    padding:6px 11px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .mini[disabled]{opacity:.55}
+  .empty{color:var(--sub);font-size:13px;text-align:center;padding:16px 0}
+  .foot{color:var(--sub);font-size:12.5px;text-align:center;margin-top:22px;line-height:1.8}
+  .foot a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>MusicFree 插件 · 离线安装包</h1>
+  <p class="lead">在线订阅会给每个插件下载设 2 秒超时，网络一慢就报失败。改成下载到本地再安装，不走这个超时。</p>
+
+  <div class="card">
+    <h2>📥 怎么装（三步）</h2>
+    <ol class="steps">
+      <li>下载下面的 <b>zip 压缩包</b>（手机浏览器会存到「下载」目录）</li>
+      <li>用系统文件管理器把 zip <b>解压</b>，得到一批 <code>.js</code> 文件</li>
+      <li>打开 MusicFree →「插件设置」→ 右下角 <b>+</b> →「从本地安装插件」→ 多选刚才的 <code>.js</code> 文件</li>
+    </ol>
+    <div class="tip">如果选文件时看不到 <code>.js</code>，在文件选择器里把类型筛选改成「所有文件」，或从「最近文件」里选。部分机型解压后文件名会带后缀，确认结尾是 <code>.js</code> 即可。</div>
+  </div>
+
+  <div class="card">
+    <h2>📦 分类安装包</h2>
+    <div class="zip">
+      <div class="meta">
+        <div class="n">常用六平台</div>
+        <div class="d">QQ / 酷我 / 酷狗 / 咪咕 / 网易云 / 汽水 · 6 个 · 1.06 MB</div>
+      </div>
+      <a class="btn" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-common-6.zip" download>下载</a>
+    </div>
+    <a class="alt" href="https://hebijunge.github.io/musicfree-plugins/dl/mf-common-6.zip" download>加速线路不通？走官方 Pages（较慢）</a>
+
+    <div class="zip" style="margin-top:12px">
+      <div class="meta">
+        <div class="n">全部插件</div>
+        <div class="d">57 个 · 2.99 MB</div>
+      </div>
+      <a class="btn ghost" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-all.zip" download>下载</a>
+    </div>
+
+    <div class="zip" style="margin-top:12px">
+      <div class="meta">
+        <div class="n">DJ / 舞曲 / 电音</div>
+        <div class="d">30 个 · 0.38 MB</div>
+      </div>
+      <a class="btn ghost" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-dj.zip" download>下载</a>
+    </div>
+
+    <div class="zip" style="margin-top:12px">
+      <div class="meta">
+        <div class="n">听书 / 电台 / 播客</div>
+        <div class="d">10 个 · 0.24 MB</div>
+      </div>
+      <a class="btn ghost" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-radio.zip" download>下载</a>
+    </div>
+
+    <div class="zip" style="margin-top:12px">
+      <div class="meta">
+        <div class="n">其它音乐平台</div>
+        <div class="d">11 个 · 1.31 MB</div>
+      </div>
+      <a class="btn ghost" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-music.zip" download>下载</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔗 单个插件直链</h2>
+    <p class="lead" style="margin:0 0 10px">只想补装某一个时用这里。点「下载」会保存成 <code>插件名.js</code> 原文件。</p>
+    <input id="search" type="search" placeholder="搜索插件名，如 QQ、网易云、DJ…" autocomplete="off">
+    <div class="plist" id="plist"><div class="empty">加载中…</div></div>
+  </div>
+
+  <div class="card">
+    <h2>ℹ️ 还想要在线订阅？</h2>
+    <p class="lead" style="margin:0">在线订阅地址在 <a href="./">首页</a>。它的限制不是我们写的：MusicFree 源码里 <code>axios.defaults.timeout = 2000</code>，每个插件文件必须在 2 秒内下完，慢一点就直接报 timeout。所以网络不稳时，用上面的离线包更省事。</p>
+  </div>
+
+  <div class="foot">
+    插件版本与线上订阅一致，由 <code>plugins.json</code> 自动生成<br>
+    <a href="./">← 返回订阅站首页</a> · <a href="https://github.com/hebijunge/musicfree-plugins">GitHub 仓库</a>
+  </div>
+</div>
+
+<script>
+var FAST = 'https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/';
+var PAGE = 'https://hebijunge.github.io/musicfree-plugins/plugins/';
+var items = [];
+
+function fmt(b){ return b > 1048576 ? (b/1048576).toFixed(1)+' MB' : Math.round(b/1024)+' KB'; }
+
+function render(){
+  var q = (document.getElementById('search').value || '').trim().toLowerCase();
+  var list = items.filter(function(p){
+    return !q || (p.name + ' ' + p.version + ' ' + p.file).toLowerCase().indexOf(q) > -1;
+  });
+  var box = document.getElementById('plist');
+  if (!list.length){ box.innerHTML = '<div class="empty">没有匹配的插件</div>'; return; }
+  box.innerHTML = list.map(function(p){
+    return '<div class="pitem">'
+      + '<div class="nm">' + p.name + '<small>v' + p.version + '</small></div>'
+      + '<div class="sz">' + fmt(p.size || 0) + '</div>'
+      + '<button class="mini" data-file="' + p.file + '" data-name="' + p.name + '">下载</button>'
+      + '</div>';
+  }).join('');
+}
+
+function saveBlob(blob, filename){
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 4000);
+}
+
+document.addEventListener('click', function(e){
+  var btn = e.target.closest('.mini');
+  if (!btn || btn.disabled) return;
+  var file = btn.getAttribute('data-file');
+  var old = btn.textContent;
+  btn.disabled = true; btn.textContent = '下载中';
+  fetch(FAST + file, { cache: 'no-store' })
+    .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); })
+    .then(function(b){
+      saveBlob(new Blob([b], { type: 'application/javascript' }), file);
+      btn.textContent = '已下载';
+      setTimeout(function(){ btn.disabled = false; btn.textContent = old; }, 2200);
+    })
+    .catch(function(err){
+      // 加速线路失败时退到官方 Pages
+      fetch(PAGE + file, { cache: 'no-store' })
+        .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); })
+        .then(function(b){
+          saveBlob(new Blob([b], { type: 'application/javascript' }), file);
+          btn.textContent = '已下载';
+          setTimeout(function(){ btn.disabled = false; btn.textContent = old; }, 2200);
+        })
+        .catch(function(){
+          btn.textContent = '失败';
+          btn.disabled = false;
+          setTimeout(function(){ btn.textContent = old; }, 2200);
+        });
+    });
+});
+
+document.getElementById('search').addEventListener('input', render);
+
+Promise.all([
+  fetch('sub/padao/all.json', { cache: 'no-store' }).then(function(r){ return r.json(); }),
+  fetch('dl/sizes.json', { cache: 'no-store' }).then(function(r){ return r.json(); }).catch(function(){ return {}; })
+]).then(function(res){
+  var d = res[0], sizes = res[1] || {};
+  items = (d.plugins || []).map(function(p){
+    var f = p.url.split('/').pop();
+    return { name: p.name, version: p.version, file: f, size: sizes[f] || 0 };
+  });
+  render();
+}).catch(function(){
+  document.getElementById('plist').innerHTML = '<div class="empty">列表加载失败，请直接用上面的分类压缩包</div>';
+});
+</script>
+</body>
+</html>
