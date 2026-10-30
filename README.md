@@ -13,34 +13,36 @@ MusicFree 插件订阅仓库（57 个插件）+ 洛雪（LX Music）自定义源
 
 插件按用途拆成 5 份清单，**用哪个类别就只装哪份**，不必一次拉 57 个（全量 8.2 MB，分类后常用平台只有 2.9 MB）。
 
-| 类别 | 条目 | 体积 | 订阅地址（主线路 · gh.padao.fun） |
+主地址统一走 **GitHub Pages 官方直出**（最稳，不依赖第三方加速服务）：
+
+| 类别 | 条目 | 体积 | 订阅地址 |
 |---|---|---|---|
-| ① 常用六平台 | 6 | 2.9 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json` |
-| ② DJ / 舞曲 / 电音 | 30 | 0.96 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json` |
-| ③ 听书 / 电台 / 播客 | 10 | 0.62 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/radio.json` |
-| ④ 其它音乐平台 | 11 | 3.7 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/music.json` |
-| ⑤ 全部插件 | 57 | 8.2 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json` |
+| ① 常用六平台 | 6 | 2.9 MB | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/main.json` |
+| ② DJ / 舞曲 / 电音 | 30 | 0.96 MB | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/dj.json` |
+| ③ 听书 / 电台 / 播客 | 10 | 0.62 MB | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/radio.json` |
+| ④ 其它音乐平台 | 11 | 3.7 MB | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/music.json` |
+| ⑤ 全部插件 | 57 | 8.2 MB | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/all.json` |
 
 - ① 常用六平台 = QQ音乐 / 酷我 / 酷狗 / 咪咕 / 网易云 / 汽水
 - ④ 其它音乐平台 = B站 / 5sing / 千千 / 一听 / 街声 / Apple Music / 华为 / Jamendo / 聚合 / JOOX / 好听轻音乐
 - 分类清单随 `plugins.json` 同步生成：`node scripts/gen-subscriptions.js`
 
-**换线路只需换前缀**（同一类别文件在所有线路下内容一一对应）：
+**Pages 直连慢或超时时换前缀**（同一类别文件在所有线路下内容一一对应，只换路径）：
 
 | 线路 | 前缀写法 | 说明 |
 |---|---|---|
-| gh.padao.fun | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/` | 最快，主推 |
-| fastly | `https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/sub/fastly/` | jsDelivr 节点，较稳 |
-| GitHub Pages | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/` | 官方直出，最稳但最慢 |
+| GitHub Pages | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/` | 主用，官方直出 |
+| gh.padao.fun | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/` | 国内加速，实测最快（1.9s / 643 KB） |
+| fastly | `https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/sub/fastly/` | jsDelivr 节点 |
 
-例：常用六平台的 fastly 版 = `https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/sub/fastly/main.json`
+例：常用六平台的加速版 = `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json`
 
 ## 全部插件（57 个）· 备用线路
 
 内容完全一致，只是插件下载源不同：
 
-- 主线路 gh.padao.fun：`https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins.json`
-- GitHub Pages 直出：`https://hebijunge.github.io/musicfree-plugins/plugins.json`
+- 主线路 GitHub Pages：`https://hebijunge.github.io/musicfree-plugins/plugins.json`
+- 加速线路 gh.padao.fun：`https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins.json`
 - fastly：`https://hebijunge.github.io/musicfree-plugins/plugins-fastly.json`
 - gcore：`https://hebijunge.github.io/musicfree-plugins/plugins-gcore.json`
 - 其它 20 条：`plugins-proxy-01.json` ~ `plugins-proxy-20.json`（见首页「全部插件 · 备用线路」折叠区）
