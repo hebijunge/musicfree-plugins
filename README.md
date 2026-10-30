@@ -60,6 +60,28 @@ MusicFree 插件订阅仓库（57 个插件）+ 洛雪（LX Music）自定义源
 - MusicFree 源码 `axios.defaults.timeout = 2000` 是硬上限，超时即报 `timeout of 2000ms exceeded`，因此慢线路表现为「导入失败」而不是「慢」。
 - 测试为本机直连结果，手机运营商不同会有差异；主线路若在你的网络下也超时，换下表任一前缀即可。
 
+## 离线安装包（在线导入失败时用）
+
+在线订阅对每个插件文件有 2 秒下载超时（MusicFree 源码 `axios.defaults.timeout = 2000`），网络一慢就报失败。离线包下载到本地再安装，完全不走这个超时。
+
+**下载页**：https://hebijunge.github.io/musicfree-plugins/download.html
+
+| 包 | 内容 | 大小 | 直链（加速） |
+|---|---|---|---|
+| mf-common-6.zip | 常用六平台 6 个 | 1.06 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-common-6.zip` |
+| mf-all.zip | 全部 57 个 | 2.99 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-all.zip` |
+| mf-dj.zip | DJ / 舞曲 / 电音 30 个 | 0.38 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-dj.zip` |
+| mf-radio.zip | 听书 / 电台 10 个 | 0.24 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-radio.zip` |
+| mf-music.zip | 其它音乐平台 11 个 | 1.31 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-music.zip` |
+
+官方 Pages 直链把前缀换成 `https://hebijunge.github.io/musicfree-plugins/dl/` 即可（较慢，但一定在）。
+
+**安装步骤**：下载 zip → 系统文件管理器解压出 `.js` → MusicFree「插件设置」→ 右下角 `+` →「从本地安装插件」→ 多选 `.js` 文件。
+
+选文件时若看不到 `.js`，把文件选择器的类型筛选切到「所有文件」。
+
+重新打包：`node scripts/pack-zips.js`。
+
 ### 2026-10-30 线路实测（本机直连，基准文件 qq-source 643 KB，超时 12s）
 
 | 线路 | 结果 |
