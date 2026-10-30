@@ -13,39 +13,52 @@ MusicFree 插件订阅仓库（57 个插件）+ 洛雪（LX Music）自定义源
 
 插件按用途拆成 5 份清单，**用哪个类别就只装哪份**，不必一次拉 57 个（全量 8.2 MB，分类后常用平台只有 2.9 MB）。
 
-主地址统一走 **GitHub Pages 官方直出**（最稳，不依赖第三方加速服务）：
+主地址走 **gh.padao.fun 加速**：实测「常用六平台」6 并发下载 0.31~1.59 秒，全部落在 MusicFree 的 2 秒超时内。GitHub Pages 官方直出在同一测试下要 17~33 秒，会被 App 判超时，已降为备用线路。
 
-| 类别 | 条目 | 体积 | 订阅地址 |
+| 类别 | 条目 | 体积 | 订阅地址（主 · gh.padao.fun） |
 |---|---|---|---|
-| ① 常用六平台 | 6 | 2.9 MB | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/main.json` |
-| ② DJ / 舞曲 / 电音 | 30 | 0.96 MB | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/dj.json` |
-| ③ 听书 / 电台 / 播客 | 10 | 0.62 MB | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/radio.json` |
-| ④ 其它音乐平台 | 11 | 3.7 MB | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/music.json` |
-| ⑤ 全部插件 | 57 | 8.2 MB | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/all.json` |
+| ① 常用六平台 | 6 | 2.9 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json` |
+| ② DJ / 舞曲 / 电音 | 30 | 0.96 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json` |
+| ③ 听书 / 电台 / 播客 | 10 | 0.62 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/radio.json` |
+| ④ 其它音乐平台 | 11 | 3.7 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/music.json` |
+| ⑤ 全部插件 | 57 | 8.2 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json` |
 
 - ① 常用六平台 = QQ音乐 / 酷我 / 酷狗 / 咪咕 / 网易云 / 汽水
 - ④ 其它音乐平台 = B站 / 5sing / 千千 / 一听 / 街声 / Apple Music / 华为 / Jamendo / 聚合 / JOOX / 好听轻音乐
 - 分类清单随 `plugins.json` 同步生成：`node scripts/gen-subscriptions.js`
 
-**Pages 直连慢或超时时换前缀**（同一类别文件在所有线路下内容一一对应，只换路径）：
+**换线路只需换前缀**（同一类别文件在所有线路下内容一一对应）：
 
 | 线路 | 前缀写法 | 说明 |
 |---|---|---|
-| GitHub Pages | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/` | 主用，官方直出 |
-| gh.padao.fun | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/` | 国内加速，实测最快（1.9s / 643 KB） |
-| fastly | `https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/sub/fastly/` | jsDelivr 节点 |
+| gh.padao.fun | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/` | 主用，实测最快 |
+| GitHub Pages | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/` | 最稳，但下载慢，易触发 2 秒超时 |
+| fastly | `https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/sub/fastly/` | jsDelivr 节点，速度同样偏慢 |
 
-例：常用六平台的加速版 = `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json`
+例：常用六平台的 Pages 版 = `https://hebijunge.github.io/musicfree-plugins/sub/githubio/main.json`
 
 ## 全部插件（57 个）· 备用线路
 
 内容完全一致，只是插件下载源不同：
 
-- 主线路 GitHub Pages：`https://hebijunge.github.io/musicfree-plugins/plugins.json`
-- 加速线路 gh.padao.fun：`https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins.json`
+- 主线路 gh.padao.fun：`https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins.json`
+- GitHub Pages 直出：`https://hebijunge.github.io/musicfree-plugins/plugins.json`
 - fastly：`https://hebijunge.github.io/musicfree-plugins/plugins-fastly.json`
 - gcore：`https://hebijunge.github.io/musicfree-plugins/plugins-gcore.json`
 - 其它 20 条：`plugins-proxy-01.json` ~ `plugins-proxy-20.json`（见首页「全部插件 · 备用线路」折叠区）
+
+### 2026-10-30 导入速度实测（常用六平台，模拟 App 流程：拉清单 + 6 并发，连测 3 轮）
+
+| 线路 | 拉清单 | 6 并发总耗时 | 最慢单文件 | 超 2s 条数 |
+|---|---|---|---|---|
+| gh.padao.fun | 170~598 ms | 0.31 / 0.34 / 0.35 / 0.37 / 0.54 / 1.59 s | 1.59 s（冷启动） | **0** |
+| GitHub Pages | 122~604 ms | 17.0 / 17.8 / 20.8 / 21.4 / 25.5 / 32.9 s | 32.9 s | 6 / 6 |
+| fastly | 92~286 ms | 14.4 / 16.0 / 16.1 / 17.0 / 17.6 / 18.3 s | 17.6 s | 6 / 6 |
+
+- 三种线路下载到的文件 sha256 均与源文件一致，差别只在速度。
+- GitHub Pages 并发下载实际速率约 24 KB/s（628 KB 的 QQ 插件 25.7 s），单文件串行时约 96 KB/s，说明它对并发有限速。
+- MusicFree 源码 `axios.defaults.timeout = 2000` 是硬上限，超时即报 `timeout of 2000ms exceeded`，因此慢线路表现为「导入失败」而不是「慢」。
+- 测试为本机直连结果，手机运营商不同会有差异；主线路若在你的网络下也超时，换下表任一前缀即可。
 
 ### 2026-10-30 线路实测（本机直连，基准文件 qq-source 643 KB，超时 12s）
 
