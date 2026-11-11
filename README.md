@@ -123,15 +123,21 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 - 手动/半自动：jihulab 网页建空项目后，本地克隆本仓库运行 `JITOKEN=<PAT> JIPATH=<命名空间>/<项目> ./scripts/sync-jihulab.sh`（token 只走环境变量）。
 - 镜像建成后的兜底订阅地址：`https://jihulab.com/<命名空间>/<项目>/-/raw/main/plugins.json`
 
-## 洛雪（LX Music）自定义源
+## 洛雪（LX）自定义源 · 多播放器通用
 
-五源合一自定义源脚本，**仅适用于洛雪音乐 App**，与 MusicFree 插件不通用（2026-10-19 起已从本仓库全部 20 份 MusicFree 订阅清单中移除，请勿在 MusicFree 中使用）。
+五源合一 LX 格式自定义源脚本（v1.6.0，混淆发布），适用于**所有支持洛雪(LX)插件协议的播放器**，已验证可用：洛雪 Music、澜音(CeruMusic)，以及其它兼容 LX 协议的客户端。
 
-- 脚本文件（v1.6.0）：[plugins/five-source-lx.plugin.v1.6.0.js](plugins/five-source-lx.plugin.v1.6.0.js)
-- 在线导入链接（洛雪 App 内粘贴）：
+> 说明：这是 LX（洛雪）格式脚本，**不是** MusicFree 原生插件格式，无法在 MusicFree 的「插件订阅」里直接安装；请在对应播放器的自定义源 / LX 导入入口使用（见下方各播放器导入方法）。
+
+- 脚本文件（混淆发布版 v1.6.0）：[plugins/five-source-lx.plugin.v1.6.0.js](plugins/five-source-lx.plugin.v1.6.0.js)
+- 在线导入链接（在支持 LX 的播放器内粘贴）：
   `https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.6.0.js`
-- 导入方法：洛雪 App → 设置 → 自定义源管理 → 导入（选「在线链接」粘贴上方地址，或下载 .js 后选「本地文件」导入）
-- 说明：洛雪自定义源为非订阅机制，一次导入一个脚本，导入后不会随清单自动更新；版本升级需重新导入
+
+**导入方法（按播放器）：**
+- **洛雪 Music**：设置 → 自定义源管理 → 导入（选「在线链接」粘贴上方地址，或下载 .js 后选「本地文件」导入）
+- **澜音 CeruMusic**：插件管理 → 添加插件 → 粘贴上方「在线导入链接」，或选择本地 `.js` 导入；首次启用授予 network（网络）权限即可
+
+- 说明：LX 自定义源为非订阅机制，一次导入一个脚本，导入后不会随清单自动更新；版本升级需重新导入。
 
 ## 插件清单
 
