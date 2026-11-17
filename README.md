@@ -170,7 +170,7 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | 网易云电台 | 1.1.3 | [neteaseradio-source.plugin.v1.1.3.js](plugins/neteaseradio-source.plugin.v1.1.3.js) |
 | CCTV听音 | 1.0.2 | [cctv-source.plugin.v1.0.2.js](plugins/cctv-source.plugin.v1.0.2.js) |
 | Jamendo | 1.0.2 | [jamendo-source.plugin.v1.0.2.js](plugins/jamendo-source.plugin.v1.0.2.js) |
-| 聚合 | 1.9.18 | [agg-source.plugin.v1.9.18.js](plugins/agg-source.plugin.v1.9.18.js) |
+| 聚合 | 1.9.19 | [agg-source.plugin.v1.9.19.js](plugins/agg-source.plugin.v1.9.19.js) |
 | JOOX音乐 | 1.1.3 | [joox-source.plugin.v1.1.3.js](plugins/joox-source.plugin.v1.1.3.js) |
 | djuu DJ | 1.1.2 | [djuu-source.plugin.v1.1.2.js](plugins/djuu-source.plugin.v1.1.2.js) |
 | 相声评书 | 1.0.3 | [xiangsheng-pingshu-source.plugin.v1.0.3.js](plugins/xiangsheng-pingshu-source.plugin.v1.0.3.js) |
