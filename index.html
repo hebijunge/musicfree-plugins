@@ -409,8 +409,12 @@
     <p class="tip" style="margin:10px 0 0">导入失败先看两点：① 订阅地址是否以 <code>.json</code> 结尾；② 换一条更快的线路。MusicFree 对单个文件下载有超时限制，8.2 MB 的全量清单在慢线路上容易中途报错，只装常用平台会稳得多。</p>
   </div>
 
-  <div class="sec-title" id="sec-plugins">MusicFree 插件明细（57 个）· 点击直链下载</div>
+  <div class="sec-title" id="sec-plugins">MusicFree 插件明细（57 个）</div>
 
+  <div class="search-box">
+    <input id="plugin-search" type="search" placeholder="搜索插件：名称 / 版本 / 关键词…" autocomplete="off">
+    <button type="button" class="search-clear" aria-label="清空搜索">×</button>
+  </div>
   <div class="ceru-cats mf-cats" id="mf-cats">
     <button type="button" class="ceru-cat active" data-mfcat="common">🎧 常用音乐</button>
     <button type="button" class="ceru-cat" data-mfcat="music">🎵 其它音乐</button>
@@ -421,11 +425,7 @@
   </div>
   <div class="mf-hint" id="mf-count-hint"></div>
 
-  <div class="search-box">
-    <input id="plugin-search" type="search" placeholder="搜索插件：名称 / 版本 / 关键词…" autocomplete="off">
-    <button type="button" class="search-clear" aria-label="清空搜索">×</button>
-  </div>
-  <div class="grid" id="grid"><div class="pcard" style="grid-column:1/-1;text-align:center;color:var(--sub)">加载中…</div></div>
+  <div class="ceru-list mf-list" id="grid"><div class="ceru-loading">加载中…</div></div>
   </div><!-- /pane-mf -->
 
   <div class="eco-pane" id="pane-ceru">
@@ -465,7 +465,7 @@
       <div class="lx-item-wrap" data-name="五源合一 LX 自定义源" data-desc="QQ 酷我 酷狗 网易云 咪咕 五源合一">
       <div class="sub-row lx-item">
         <span class="label">五源合一(LX) · 导入链接 · v1.6.0</span>
-        <a id="url-lx" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.6.0.js" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.6.0.js</a>
+        <a id="url-lx" class="code-link" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/five-source-lx.plugin.v1.6.0.js" target="_blank" rel="noopener">https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/five-source-lx.plugin.v1.6.0.js</a>
         <button class="btn" data-copy="url-lx">复制</button>
       </div>
       <p class="lx-steps"><b>导入方法：</b><br>
@@ -545,19 +545,16 @@ var FALLBACK = [
   {name:"DJ娱乐",version:"1.2.1",file:"djyule-source.plugin.v1.2.1.js"},
   {name:"小熊电音",version:"1.0.2",file:"xxedm-source.plugin.v1.0.2.js"}
 ];
-function linksOf(file){
-  return '<a class="lnk main" href="/musicfree-plugins/plugins/' + encodeURIComponent(file) + '">⚡ Pages 直链</a>'
-    + '<a class="lnk" href="https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/'
-    + encodeURIComponent(file) + '">fastly</a>'
-    + '<a class="lnk" href="https://gcore.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/plugins/'
-    + encodeURIComponent(file) + '">gcore</a>'
-    + '<a class="lnk" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/'
-    + encodeURIComponent(file) + '">加速</a>';
-}
 function cardHTML(p){
   var file=(p.url||'').split('/plugins/').pop()||p.file;
-  return '<div class="pcard"><div class="top"><span class="name">'+p.name+'</span>'
-    +'<span class="ver">v'+p.version+'</span></div><div class="links">'+linksOf(file)+'</div></div>';
+  var q=mfCatMap[file];
+  var topQ=(q&&q.topQuality)?(' · '+q.topQuality):'';
+  return '<div class="ceru-item"><span class="cname" title="'+esc(p.name)+'">'+esc(p.name)+'</span>'
+    +'<span class="cver">v'+esc(p.version||'')+'</span>'
+    +'<span class="mq">'+topQ+'</span>'
+    +'<a class="cbtn" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/'+encodeURIComponent(file)+'">下载</a>'
+    +'<a class="cbtn" href="/musicfree-plugins/plugins/'+encodeURIComponent(file)+'">备用</a>'
+    +'</div>';
 }
 function esc(s){return (s+'').replace(/[&<>"']/g,function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -565,11 +562,12 @@ function isLx(p){return ((p.url||p.file||'')+'').indexOf('five-source-lx')>-1}
 var allPlugins=[];
 var MF_CAT_LABEL={common:'常用音乐',music:'其它音乐',radio:'听书电台',dj64:'DJ低音质',djhq:'DJ高音质',all:'全部'};
 var mfCatMap={},mfCat='common';
-function mfCatCount(c){return Object.keys(mfCatMap).filter(function(k){return c==='all'?true:mfCatMap[k]===c}).length}
+function mfCategoryOf(p){var q=mfCatMap[fileOf(p)];return (q&&q.category)||'music'}
+function mfCatCount(c){return Object.keys(mfCatMap).filter(function(k){var v=mfCatMap[k];return c==='all'?true:((v&&v.category)||'music')===c}).length}
 function fileOf(p){return ((p.url||p.file||'')+'').split('/').pop()||''}
 function mfFilter(p){
   if(mfCat==='all')return true;
-  return (mfCatMap[fileOf(p)]||'music')===mfCat;
+  return mfCategoryOf(p)===mfCat;
 }
 function mfHintText(){
   var h=document.getElementById('mf-count-hint');
@@ -600,7 +598,7 @@ function renderGrid(){
 }
 // 分类清单（音质档位来自本地源码仓，Actions 上缺源码仓时沿用已提交的版本）
 fetch('mf-cats.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():Promise.reject()})
-  .then(function(d){var ps=(d&&d.plugins)||[];for(var i=0;i<ps.length;i++)mfCatMap[fileOf(ps[i])]=ps[i].category;renderGrid()})
+  .then(function(d){var ps=(d&&d.plugins)||[];for(var i=0;i<ps.length;i++)mfCatMap[fileOf(ps[i])]={category:ps[i].category,topQuality:ps[i].topQuality||''};renderGrid()})
   .catch(function(){mfHintText()});
 fetch('plugins.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():Promise.reject()})
   .then(function(d){allPlugins=(d.plugins||FALLBACK).filter(function(p){return !isLx(p)});renderGrid()})
@@ -676,7 +674,7 @@ document.getElementById('eco-nav').addEventListener('click',function(e){
 })();
 
 /* ---------- 澜音 Ceru 生态：加载清单 + 分类 + 渲染 + 复制 ---------- */
-var CERU_BASE='https://hebijunge.github.io/musicfree-plugins/ceru-plugins/';
+var CERU_BASE='https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/ceru-plugins/';
 var ceruPlugins=[],ceruCat='common';
 var CERU_CAT_LABEL={common:'常用音乐',music:'其它音乐',radio:'听书电台',dj64:'DJ低音质',djhq:'DJ高音质',all:'全部'};
 function ceruUrl(f){return CERU_BASE+encodeURIComponent(f)}

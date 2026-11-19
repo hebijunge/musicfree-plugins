@@ -95,10 +95,10 @@ https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugi
 > 这是澜音**原生**插件格式（`.ceru.js`），**不是** MusicFree 插件格式，无法在 MusicFree「插件订阅」里安装；也无法用洛雪 LX 导入入口导入（LX 只认 `exports.manifest` 的洛雪协议）。
 
 - 清单：`ceru-list.json`（50 个，含 name/version/id，由 `scripts/gen-ceru-list.js` 生成）
-- 在线导入链接示例：`https://hebijunge.github.io/musicfree-plugins/ceru-plugins/qq.ceru.js`（每个插件一个文件，逐个导入）
-- 一键复制全部：订阅站首页「澜音 Ceru」区点「一键复制全部 50 个链接」
+- 在线导入链接示例：`https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/ceru-plugins/qq.ceru.js`（每个插件一个文件，逐个导入）
+- 一键复制全部：订阅站首页「澜音 Ceru」区点「一键复制全部导入链接」（按名称去重后 48 个，同站重复文件只保留一个）
 
-**导入方法：** 澜音 CeruMusic → 插件管理 → 添加插件 → 粘贴任一 `https://hebijunge.github.io/musicfree-plugins/ceru-plugins/xxx.ceru.js` 在线链接导入，或下载 `.ceru.js` 本地导入；首次启用授予 network（网络）权限即可。
+**导入方法：** 澜音 CeruMusic → 插件管理 → 添加插件 → 粘贴任一 `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/ceru-plugins/xxx.ceru.js` 在线链接导入，或下载 `.ceru.js` 本地导入；首次启用授予 network（网络）权限即可。
 
 > 澜音也能装下面「洛雪 LX 五源合一」脚本（走 LX 导入入口），两者不冲突，可都装。
 
@@ -109,7 +109,7 @@ https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugi
 > 这是 LX（洛雪）格式脚本，**不是** MusicFree 原生插件格式，无法在 MusicFree「插件订阅」里直接安装；请在对应播放器的自定义源 / LX 导入入口使用。
 
 - 脚本文件：[plugins/five-source-lx.plugin.v1.6.0.js](plugins/five-source-lx.plugin.v1.6.0.js)
-- 在线导入链接：`https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.6.0.js`
+- 在线导入链接：`https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/five-source-lx.plugin.v1.6.0.js`
 
 **导入方法：**
 - **洛雪 Music**：设置 → 自定义源管理 → 导入（在线链接粘贴，或下载 .js 本地导入）

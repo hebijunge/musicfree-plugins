@@ -274,7 +274,8 @@ document.getElementById('eco-nav').addEventListener('click', function(e){
 });
 
 /* ---------- 澜音 Ceru：加载清单 + 分类 + 渲染 ---------- */
-var CERU_PAGE = 'https://hebijunge.github.io/musicfree-plugins/ceru-plugins/';
+var CERU_PAGE = 'https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/ceru-plugins/';
+var CERU_PAGE_ALT = 'https://hebijunge.github.io/musicfree-plugins/ceru-plugins/';
 var ceruItems = [], ceruCat = 'common';
 function ceruDedup(list){
   var best={};
@@ -320,9 +321,15 @@ fetch('ceru-list.json', { cache: 'no-store' })
   });
 
 /* ---------- 下载处理（MusicFree 插件 + 澜音 ceru + 洛雪 LX） ---------- */
-function doDownload(file, pageBase){
-  return fetch(pageBase + encodeURIComponent(file), { cache: 'no-store' })
-    .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); })
+// bases 传一条或多条线路，按顺序试：加速代理在前，官方 Pages 兜底
+function doDownload(file, bases){
+  if (!Array.isArray(bases)) bases = [bases];
+  return bases.reduce(function(p, base){
+    return p['catch'](function(){
+      return fetch(base + encodeURIComponent(file), { cache: 'no-store' })
+        .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); });
+    });
+  }, Promise.reject(new Error('no base')))
     .then(function(b){ saveBlob(new Blob([b], { type: 'application/javascript' }), file); });
 }
 document.addEventListener('click', function(e){
@@ -331,7 +338,7 @@ document.addEventListener('click', function(e){
     var f = cbtn.getAttribute('data-ceru-file');
     var o = cbtn.textContent;
     cbtn.disabled = true; cbtn.textContent = '下载中';
-    doDownload(f, CERU_PAGE)
+    doDownload(f, [CERU_PAGE, CERU_PAGE_ALT])
       .then(function(){ cbtn.textContent = '已下载'; })
       .catch(function(){ cbtn.textContent = '失败'; })
       .then(function(){ setTimeout(function(){ cbtn.disabled = false; cbtn.textContent = o; }, 2200); });
@@ -340,7 +347,7 @@ document.addEventListener('click', function(e){
   if (e.target.id === 'lx-dl'){
     var b = e.target, o = b.textContent;
     b.disabled = true; b.textContent = '下载中';
-    doDownload('five-source-lx.plugin.v1.6.0.js', 'https://hebijunge.github.io/musicfree-plugins/plugins/')
+    doDownload('five-source-lx.plugin.v1.6.0.js', [FAST, PAGE])
       .then(function(){ b.textContent = '已下载'; })
       .catch(function(){ b.textContent = '失败'; })
       .then(function(){ setTimeout(function(){ b.disabled = false; b.textContent = o; }, 2200); });
