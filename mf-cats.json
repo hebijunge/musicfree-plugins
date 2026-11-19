@@ -1,0 +1,405 @@
+{
+  "generatedAt": "2026-11-19T13:37:49.214Z",
+  "count": 57,
+  "plugins": [
+    {
+      "name": "QQ音乐",
+      "version": "1.9.26",
+      "file": "qq-source.plugin.v1.9.26.js",
+      "category": "common",
+      "topQuality": "master"
+    },
+    {
+      "name": "酷我音乐",
+      "version": "1.9.24",
+      "file": "kuwo-source.plugin.v1.9.24.js",
+      "category": "common",
+      "topQuality": "master"
+    },
+    {
+      "name": "酷狗音乐",
+      "version": "1.9.24",
+      "file": "kugou-source.plugin.v1.9.24.js",
+      "category": "common",
+      "topQuality": "master"
+    },
+    {
+      "name": "咪咕音乐",
+      "version": "1.9.20",
+      "file": "migu-source.plugin.v1.9.20.js",
+      "category": "common",
+      "topQuality": "flac24bit"
+    },
+    {
+      "name": "网易云音乐",
+      "version": "1.9.27",
+      "file": "netease-source.plugin.v1.9.27.js",
+      "category": "common",
+      "topQuality": "master"
+    },
+    {
+      "name": "汽水音乐",
+      "version": "1.9.23",
+      "file": "qishui-source.plugin.v1.9.23.js",
+      "category": "common",
+      "topQuality": "flac"
+    },
+    {
+      "name": "B站",
+      "version": "1.1.4",
+      "file": "bilibili-source.plugin.v1.1.4.js",
+      "category": "common",
+      "topQuality": ""
+    },
+    {
+      "name": "番茄畅听",
+      "version": "1.3.1",
+      "file": "fanqie-source.plugin.v1.3.1.js",
+      "category": "radio",
+      "topQuality": "flac"
+    },
+    {
+      "name": "DJ多多",
+      "version": "1.0.2",
+      "file": "djduoduo-source.plugin.v1.0.2.js",
+      "category": "djhq",
+      "topQuality": "flac"
+    },
+    {
+      "name": "5sing",
+      "version": "1.0.2",
+      "file": "5sing-source.plugin.v1.0.2.js",
+      "category": "music",
+      "topQuality": "320k"
+    },
+    {
+      "name": "千千音乐",
+      "version": "1.0.4",
+      "file": "qianqian-source.plugin.v1.0.4.js",
+      "category": "music",
+      "topQuality": "flac"
+    },
+    {
+      "name": "Y2002电音",
+      "version": "1.0.2",
+      "file": "y2002-source.plugin.v1.0.2.js",
+      "category": "edm",
+      "topQuality": "flac"
+    },
+    {
+      "name": "一听音乐",
+      "version": "1.0.2",
+      "file": "1ting-source.plugin.v1.0.2.js",
+      "category": "music",
+      "topQuality": "128k"
+    },
+    {
+      "name": "懒人听书",
+      "version": "1.0.3",
+      "file": "lrts-source.plugin.v1.0.3.js",
+      "category": "radio",
+      "topQuality": "64k"
+    },
+    {
+      "name": "博看听书",
+      "version": "1.0.2",
+      "file": "bokantingshu-source.plugin.v1.0.2.js",
+      "category": "radio",
+      "topQuality": "64k"
+    },
+    {
+      "name": "街声",
+      "version": "1.0.1",
+      "file": "streetvoice-source.plugin.v1.0.1.js",
+      "category": "music",
+      "topQuality": "96k"
+    },
+    {
+      "name": "火龙DJ",
+      "version": "1.0.4",
+      "file": "huolongdj-source.plugin.v1.0.4.js",
+      "category": "djhq",
+      "topQuality": "flac"
+    },
+    {
+      "name": "快音",
+      "version": "1.0.2",
+      "file": "kuaiyin-source.plugin.v1.0.2.js",
+      "category": "music",
+      "topQuality": "128k"
+    },
+    {
+      "name": "猫耳FM",
+      "version": "1.0.3",
+      "file": "missevan-source.plugin.v1.0.3.js",
+      "category": "radio",
+      "topQuality": "192k"
+    },
+    {
+      "name": "DJ串烧集",
+      "version": "1.0.1",
+      "file": "djcsj-source.plugin.v1.0.1.js",
+      "category": "djhq",
+      "topQuality": "320k"
+    },
+    {
+      "name": "DJ秀",
+      "version": "1.0.4",
+      "file": "djshow.plugin.v1.0.4.js",
+      "category": "djhq",
+      "topQuality": "flac"
+    },
+    {
+      "name": "Apple Music",
+      "version": "1.0.2",
+      "file": "apple-music-v1.0.2.js",
+      "category": "music",
+      "topQuality": "flac"
+    },
+    {
+      "name": "华为音乐",
+      "version": "1.0.3",
+      "file": "hwmusic-source.plugin.v1.0.3.js",
+      "category": "music",
+      "topQuality": "flac"
+    },
+    {
+      "name": "蜻蜓FM",
+      "version": "1.0.3",
+      "file": "qingting-source.plugin.v1.0.3.js",
+      "category": "radio",
+      "topQuality": "128k"
+    },
+    {
+      "name": "喜马拉雅",
+      "version": "1.2.1",
+      "file": "ximalaya-source.plugin.v1.2.1.js",
+      "category": "radio",
+      "topQuality": "64k"
+    },
+    {
+      "name": "荔枝FM",
+      "version": "1.0.2",
+      "file": "lizhi-source.plugin.v1.0.2.js",
+      "category": "radio",
+      "topQuality": "128k"
+    },
+    {
+      "name": "网易云电台",
+      "version": "1.1.3",
+      "file": "neteaseradio-source.plugin.v1.1.3.js",
+      "category": "radio",
+      "topQuality": "128k"
+    },
+    {
+      "name": "CCTV听音",
+      "version": "1.0.2",
+      "file": "cctv-source.plugin.v1.0.2.js",
+      "category": "radio",
+      "topQuality": "128k"
+    },
+    {
+      "name": "Jamendo",
+      "version": "1.0.2",
+      "file": "jamendo-source.plugin.v1.0.2.js",
+      "category": "music",
+      "topQuality": ""
+    },
+    {
+      "name": "聚合",
+      "version": "1.9.19",
+      "file": "agg-source.plugin.v1.9.19.js",
+      "category": "music",
+      "topQuality": "master"
+    },
+    {
+      "name": "JOOX音乐",
+      "version": "1.1.3",
+      "file": "joox-source.plugin.v1.1.3.js",
+      "category": "music",
+      "topQuality": "master"
+    },
+    {
+      "name": "djuu DJ",
+      "version": "1.1.2",
+      "file": "djuu-source.plugin.v1.1.2.js",
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "相声评书",
+      "version": "1.0.3",
+      "file": "xiangsheng-pingshu-source.plugin.v1.0.3.js",
+      "category": "radio",
+      "topQuality": "64k"
+    },
+    {
+      "name": "皮狗DJ",
+      "version": "1.1.2",
+      "file": "pgdjz-source.plugin.v1.1.2.js",
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "DJKK",
+      "version": "1.1.2",
+      "file": "djkk-source.plugin.v1.1.2.js",
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "水晶舞曲",
+      "version": "1.2.2",
+      "file": "dj14-source.plugin.v1.2.2.js",
+      "category": "edm",
+      "topQuality": "128k"
+    },
+    {
+      "name": "清风DJ",
+      "version": "1.2.2",
+      "file": "ddddj-source.plugin.v1.2.2.js",
+      "category": "edm",
+      "topQuality": "320k"
+    },
+    {
+      "name": "DJ766",
+      "version": "1.4.1",
+      "file": "dj766-source.plugin.v1.4.1.js",
+      "category": "djhq",
+      "topQuality": "320k"
+    },
+    {
+      "name": "82DJ",
+      "version": "1.2.1",
+      "file": "82dj-source.plugin.v1.2.1.js",
+      "category": "edm",
+      "topQuality": "320k"
+    },
+    {
+      "name": "QQDJ",
+      "version": "1.2.2",
+      "file": "qqdjs-source.plugin.v1.2.2.js",
+      "category": "djhq",
+      "topQuality": "320k"
+    },
+    {
+      "name": "36DJ",
+      "version": "1.2.2",
+      "file": "36dj-source.plugin.v1.2.2.js",
+      "category": "edm",
+      "topQuality": "64k"
+    },
+    {
+      "name": "宝贝DJ",
+      "version": "1.2.1",
+      "file": "bibdj-source.plugin.v1.2.1.js",
+      "category": "djhq",
+      "topQuality": "320k"
+    },
+    {
+      "name": "172Mix",
+      "version": "1.2.1",
+      "file": "172mix-source.plugin.v1.2.1.js",
+      "category": "edm",
+      "topQuality": "64k"
+    },
+    {
+      "name": "DJ耶耶耶",
+      "version": "1.1.2",
+      "file": "djyyy-source.plugin.v1.1.2.js",
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "黑色音频",
+      "version": "1.1.2",
+      "file": "hy57-source.plugin.v1.1.2.js",
+      "category": "edm",
+      "topQuality": "64k"
+    },
+    {
+      "name": "好听轻音乐",
+      "version": "1.2.3",
+      "file": "htqyy-source.plugin.v1.2.3.js",
+      "category": "music",
+      "topQuality": "128k"
+    },
+    {
+      "name": "我是DJ",
+      "version": "1.1.2",
+      "file": "54dj-source.plugin.v1.1.2.js",
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "电音阁",
+      "version": "1.1.2",
+      "file": "dianyinge-source.plugin.v1.1.2.js",
+      "category": "edm",
+      "topQuality": "64k"
+    },
+    {
+      "name": "SpaceDJ",
+      "version": "1.1.2",
+      "file": "spacedj-source.plugin.v1.1.2.js",
+      "category": "edm",
+      "topQuality": "96k"
+    },
+    {
+      "name": "DJ6",
+      "version": "1.0.2",
+      "file": "dj6-source.plugin.v1.0.2.js",
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "73DJ",
+      "version": "1.0.1",
+      "file": "73dj-source.plugin.v1.0.1.js",
+      "category": "dj64",
+      "topQuality": ""
+    },
+    {
+      "name": "先上DJ",
+      "version": "1.1.1",
+      "file": "xsdj123-source.plugin.v1.1.1.js",
+      "category": "dj64",
+      "topQuality": ""
+    },
+    {
+      "name": "MixDJ",
+      "version": "1.0.2",
+      "file": "mixdj-source.plugin.v1.0.2.js",
+      "category": "edm",
+      "topQuality": ""
+    },
+    {
+      "name": "波比DJ",
+      "version": "1.0.1",
+      "file": "bobidj-source.plugin.v1.0.1.js",
+      "category": "dj64",
+      "topQuality": ""
+    },
+    {
+      "name": "魅力DJ",
+      "version": "1.0.1",
+      "file": "djmei-source.plugin.v1.0.1.js",
+      "category": "dj64",
+      "topQuality": ""
+    },
+    {
+      "name": "DJ娱乐",
+      "version": "1.2.1",
+      "file": "djyule-source.plugin.v1.2.1.js",
+      "category": "dj64",
+      "topQuality": ""
+    },
+    {
+      "name": "小熊电音",
+      "version": "1.0.2",
+      "file": "xxedm-source.plugin.v1.0.2.js",
+      "category": "edm",
+      "topQuality": ""
+    }
+  ]
+}

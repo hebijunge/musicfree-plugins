@@ -4,8 +4,9 @@ name: gen-site
 # 触发条件：
 #   - push 到 plugins/ 或 ceru-plugins/（插件本体变更）
 #   - workflow_dispatch 手动触发（本地跑完 gen-site 忘了提交产物时用）
-# 防循环：本工作流只提交派生文件（sub/、plugins*.json、ceru-list.json、README.md、dl/），
+# 防循环：本工作流只提交派生文件（sub/、plugins*.json、ceru-list.json、mf-cats.json、README.md、dl/），
 #         这些路径不在上方 push 过滤内，不会二次触发。
+# mf-cats.json（MusicFree 分类）在 CI 上从已提交版本沿用音质档位重算分类，不依赖私有源码仓。
 on:
   push:
     branches: [master]
@@ -39,7 +40,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A sub/ 'plugins*.json' ceru-list.json README.md dl/ scripts/
+          git add -A sub/ 'plugins*.json' ceru-list.json mf-cats.json README.md dl/ scripts/
           if git diff --cached --quiet; then
             echo "派生产物无变化，跳过提交"
             echo "changed=false" >> "$GITHUB_OUTPUT"

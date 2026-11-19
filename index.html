@@ -99,16 +99,23 @@
   details.more-sub summary::before{content:'▸ '}
   details.more-sub[open] summary::before{content:'▾ '}
   details.more-sub .inner{padding:2px 12px 10px}
-  /* 三生态导航 */
-  .eco-nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:-8px 0 26px}
-  .eco-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;background:var(--card);
-    border:1px solid var(--line);border-radius:14px;padding:12px 22px;text-decoration:none;
-    color:var(--txt);font-size:15px;font-weight:600;transition:all .15s;min-width:150px}
-  .eco-nav a .nav-sub{font-size:11px;color:var(--sub);font-weight:400}
-  .eco-nav a:hover{border-color:rgba(124,92,255,.6);transform:translateY(-2px)}
-  .eco-nav a:nth-child(1):hover{border-color:rgba(255,92,138,.6)}
-  .eco-nav a:nth-child(2):hover{border-color:rgba(56,189,248,.6)}
-  .eco-nav a:nth-child(3):hover{border-color:rgba(62,207,142,.6)}
+  /* 三生态胶囊 tab（点击切换，不滚动；可左右滑动） */
+  .eco-nav{display:flex;gap:8px;margin:-8px 0 26px;background:var(--card);
+    border:1px solid var(--line);border-radius:16px;padding:6px;position:sticky;top:8px;z-index:20;
+    box-shadow:0 6px 20px rgba(0,0,0,.3)}
+  .eco-tab{flex:1;border:0;background:transparent;color:var(--sub);font-size:15px;font-weight:600;
+    padding:11px 10px;border-radius:12px;cursor:pointer;transition:all .18s;white-space:nowrap;
+    display:flex;align-items:center;justify-content:center;gap:6px}
+  .eco-tab:hover{color:var(--txt)}
+  .eco-tab.active{background:linear-gradient(90deg,var(--acc1),var(--acc2));color:#fff;
+    box-shadow:0 4px 14px rgba(124,92,255,.35)}
+  .eco-tab[data-eco="ceru"].active{background:linear-gradient(90deg,#38bdf8,#2563eb);
+    box-shadow:0 4px 14px rgba(56,189,248,.35)}
+  .eco-tab[data-eco="lx"].active{background:linear-gradient(90deg,#1abc9c,#2ecc71);
+    box-shadow:0 4px 14px rgba(26,188,156,.35)}
+  .eco-pane{display:none}
+  .eco-pane.active{display:block;animation:fadeIn .22s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   /* 生态标签 */
   .eco-tag{font-size:11px;font-weight:600;border-radius:12px;padding:2px 10px;vertical-align:2px;margin-left:4px}
   .eco-tag.mf{color:#ffd7e4;background:rgba(255,92,138,.15);border:1px solid rgba(255,92,138,.4)}
@@ -121,6 +128,19 @@
   .ceru-card p.tip{color:var(--sub);font-size:13px;margin-bottom:14px;line-height:1.7}
   .ceru-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
   .ceru-actions .btn{background:linear-gradient(90deg,#38bdf8,#2563eb)}
+  .ceru-cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .ceru-cat{border:1px solid var(--line);background:rgba(0,0,0,.3);color:var(--sub);border-radius:20px;
+    padding:6px 14px;font-size:13px;cursor:pointer;transition:all .15s;font-weight:600}
+  .ceru-cat .cn{font-size:11px;font-family:var(--mono);opacity:.8;margin-left:3px}
+  .ceru-cat:hover{color:var(--txt);border-color:rgba(56,189,248,.5)}
+  .ceru-cat.active{background:linear-gradient(90deg,#38bdf8,#2563eb);color:#fff;border-color:transparent}
+  .ceru-cat.active .cn{opacity:.9}
+  /* MusicFree 区分类胶囊：同构，配色跟 MusicFree 紫粉主题 */
+  .mf-cats .ceru-cat{margin-bottom:0}
+  .mf-cats .ceru-cat:hover{border-color:rgba(255,92,138,.5)}
+  .mf-cats .ceru-cat.active{background:linear-gradient(90deg,var(--acc1),var(--acc2));
+    box-shadow:0 4px 14px rgba(124,92,255,.3)}
+  .mf-hint{font-size:12px;color:var(--sub);margin:2px 0 10px;font-family:var(--mono)}
   .ceru-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
   .ceru-item{background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px}
   .ceru-item .cname{font-size:13px;font-weight:600;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
@@ -161,9 +181,8 @@
     footer{font-size:12px;margin-top:32px}
     .empty-state{padding:30px 14px}
     details.more-sub summary{padding:9px 12px;font-size:12.5px}
-    .eco-nav{gap:8px;margin:0 0 20px}
-    .eco-nav a{flex-direction:row;gap:8px;padding:10px 14px;font-size:14px;min-width:0;flex:1;justify-content:center}
-    .eco-nav a .nav-sub{font-size:11px}
+    .eco-nav{gap:6px;margin:0 0 18px;padding:5px;border-radius:13px}
+    .eco-tab{font-size:13px;padding:9px 6px;border-radius:10px}
     .ceru-card,.lx-card{padding:16px 14px;border-radius:12px}
     .ceru-card h2{font-size:15px}
     .ceru-card p.tip{font-size:12px;line-height:1.7}
@@ -195,10 +214,10 @@
     </div>
   </header>
 
-  <nav class="eco-nav">
-    <a href="#sec-mf">🎵 MusicFree <span class="nav-sub">57 插件 · 订阅</span></a>
-    <a href="#sec-ceru">🌊 澜音 Ceru <span class="nav-sub">50 插件 · 原生 v2</span></a>
-    <a href="#sec-lx">🎧 洛雪 LX <span class="nav-sub">五源合一</span></a>
+  <nav class="eco-nav" id="eco-nav">
+    <button type="button" class="eco-tab active" data-eco="mf">🎵 MusicFree</button>
+    <button type="button" class="eco-tab" data-eco="ceru">🌊 澜音 Ceru</button>
+    <button type="button" class="eco-tab" data-eco="lx">🎧 洛雪 LX</button>
   </nav>
 
   <a class="dl-entry" href="download.html">
@@ -210,6 +229,7 @@
   </a>
 
 
+  <div class="eco-pane active" id="pane-mf">
   <div class="sub-card" id="sec-mf">
     <h2>🎵 生态一 · MusicFree 插件订阅 <span class="eco-tag mf">57 个</span></h2>
     <p class="tip">适用于 <b>MusicFree（歌单助手）</b>：插件设置 → 订阅，粘贴清单地址一键装。插件已拆成 5 份，<b>按需只装一类</b>，不必一次装 57 个。</p>
@@ -389,42 +409,76 @@
     <p class="tip" style="margin:10px 0 0">导入失败先看两点：① 订阅地址是否以 <code>.json</code> 结尾；② 换一条更快的线路。MusicFree 对单个文件下载有超时限制，8.2 MB 的全量清单在慢线路上容易中途报错，只装常用平台会稳得多。</p>
   </div>
 
-  <div class="ceru-card" id="sec-ceru">
-    <h2>🌊 生态二 · 澜音 Ceru 原生插件 <span class="eco-tag ceru">50 个</span></h2>
-    <p class="tip">适用于 <b>澜音 CeruMusic</b>（手机 v2 / 桌面端）：插件管理 → 添加插件 → 粘贴下方任一 <code>.ceru.js</code> 在线链接导入，或下载后本地导入。原生 Ceru v2 插件内核（<code>manifestVersion: 2</code>），非订阅机制、逐条导入。</p>
-    <p class="tip" style="margin:0 0 10px">与生态一、三完全独立：<b>澜音也能装上面的洛雪 LX 五源合一脚本</b>（走 LX 导入入口），两者不冲突，可都装。首次启用任一插件会请求 <code>network</code> 权限，允许即可。</p>
-    <div class="ceru-actions">
-      <button class="btn ceru-btn" data-copy-ceru="all">一键复制全部 50 个链接</button>
-      <button class="btn ghost" id="ceru-filter-toggle">只看常用</button>
-      <span class="spd" id="ceru-count-hint"></span>
-    </div>
-    <div class="ceru-list" id="ceru-list"><div class="ceru-loading">加载澜音插件清单…</div></div>
-  </div>
+  <div class="sec-title" id="sec-plugins">MusicFree 插件明细（57 个）· 点击直链下载</div>
 
-  <div class="lx-card" id="sec-lx">
-    <h2>🎧 生态三 · 洛雪（LX）自定义源 · 多播放器通用 <span class="ver">v1.6.0</span> <span class="eco-tag lx">五源合一</span></h2>
-    <p class="tip">五源合一 LX 格式自定义源脚本（混淆发布），适用于所有支持洛雪(LX)插件协议的播放器（洛雪、澜音 CeruMusic 等）。非订阅机制、一次导入一个脚本，导入后不会随清单自动更新。</p>
-    <div id="lx-list">
-      <div class="sub-row lx-item">
-        <span class="label">五源合一(LX) · 导入链接 · v1.6.0</span>
-        <a id="url-lx" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.6.0.js" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.6.0.js</a>
-        <button class="btn" data-copy="url-lx">复制</button>
-      </div>
-    </div>
-    <p class="lx-steps"><b>导入方法：</b><br>
-    · <b>洛雪 Music</b>：设置 → 自定义源管理 → 导入，选「在线链接」粘贴上方地址，或下载 .js 后选「本地文件」导入；<br>
-    · <b>澜音 CeruMusic</b>：插件管理 → 添加插件 → 粘贴上方「在线导入链接」或选择本地 <code>.js</code> 导入，首次启用授予 network（网络）权限即可。<br>
-    导入成功后在对应播放器音源处切换即可。</p>
-    <p class="lx-warn">⚠️ 这是 LX（洛雪）格式脚本，不是 MusicFree 原生插件，无法在 MusicFree「插件订阅」里直接安装；请在对应播放器的自定义源 / LX 导入入口使用。</p>
+  <div class="ceru-cats mf-cats" id="mf-cats">
+    <button type="button" class="ceru-cat active" data-mfcat="common">🎧 常用音乐</button>
+    <button type="button" class="ceru-cat" data-mfcat="music">🎵 其它音乐</button>
+    <button type="button" class="ceru-cat" data-mfcat="radio">📚 听书 / 电台</button>
+    <button type="button" class="ceru-cat" data-mfcat="dj64">🔥 DJ 低音质</button>
+    <button type="button" class="ceru-cat" data-mfcat="djhq">💎 DJ 高音质</button>
+    <button type="button" class="ceru-cat" data-mfcat="edm">⚡ 电音 / 舞曲</button>
+    <button type="button" class="ceru-cat" data-mfcat="all">全部</button>
   </div>
+  <div class="mf-hint" id="mf-count-hint"></div>
 
   <div class="search-box">
     <input id="plugin-search" type="search" placeholder="搜索插件：名称 / 版本 / 关键词…" autocomplete="off">
     <button type="button" class="search-clear" aria-label="清空搜索">×</button>
   </div>
-
-  <div class="sec-title" id="sec-plugins">MusicFree 插件明细（57 个）· 点击直链下载</div>
   <div class="grid" id="grid"><div class="pcard" style="grid-column:1/-1;text-align:center;color:var(--sub)">加载中…</div></div>
+  </div><!-- /pane-mf -->
+
+  <div class="eco-pane" id="pane-ceru">
+  <div class="ceru-card" id="sec-ceru">
+    <h2>🌊 生态二 · 澜音 Ceru 原生插件 <span class="eco-tag ceru">50 个</span></h2>
+    <p class="tip">适用于 <b>澜音 CeruMusic</b>（手机 v2 / 桌面端）：插件管理 → 添加插件 → 粘贴下方任一 <code>.ceru.js</code> 在线链接导入，或下载后本地导入。原生 Ceru v2 插件内核（<code>manifestVersion: 2</code>），非订阅机制、逐条导入。</p>
+    <p class="tip" style="margin:0 0 10px">与生态一、三完全独立：<b>澜音也能装上面的洛雪 LX 五源合一脚本</b>（走 LX 导入入口），两者不冲突，可都装。首次启用任一插件会请求 <code>network</code> 权限，允许即可。</p>
+    <div class="search-box ceru-search-box">
+      <input id="ceru-search" type="search" placeholder="搜索澜音插件：名称 / 版本 / 描述…" autocomplete="off">
+      <button type="button" class="search-clear" aria-label="清空搜索">×</button>
+    </div>
+    <div class="ceru-cats" id="ceru-cats">
+      <button type="button" class="ceru-cat active" data-cat="common">🎧 常用音乐</button>
+      <button type="button" class="ceru-cat" data-cat="music">🎵 其它音乐</button>
+      <button type="button" class="ceru-cat" data-cat="radio">📚 听书 / 电台</button>
+      <button type="button" class="ceru-cat" data-cat="dj64">🔥 DJ 低音质</button>
+      <button type="button" class="ceru-cat" data-cat="djhq">💎 DJ 高音质</button>
+      <button type="button" class="ceru-cat" data-cat="edm">⚡ 电音 / 舞曲</button>
+      <button type="button" class="ceru-cat" data-cat="all">全部</button>
+    </div>
+    <div class="ceru-actions">
+      <button class="btn ceru-btn" id="ceru-copy-cat">一键复制全部导入链接</button>
+      <span class="spd" id="ceru-count-hint"></span>
+    </div>
+    <div class="ceru-list" id="ceru-list"><div class="ceru-loading">加载澜音插件清单…</div></div>
+  </div>
+  </div><!-- /pane-ceru -->
+
+  <div class="eco-pane" id="pane-lx">
+  <div class="lx-card" id="sec-lx">
+    <h2>🎧 生态三 · 洛雪（LX）自定义源 · 多播放器通用 <span class="ver">v1.6.0</span> <span class="eco-tag lx">五源合一</span></h2>
+    <p class="tip">五源合一 LX 格式自定义源脚本（混淆发布），适用于所有支持洛雪(LX)插件协议的播放器（洛雪、澜音 CeruMusic 等）。非订阅机制、一次导入一个脚本，导入后不会随清单自动更新。</p>
+    <div class="search-box lx-search-box">
+      <input id="lx-search" type="search" placeholder="搜索洛雪脚本：名称 / 描述…" autocomplete="off">
+      <button type="button" class="search-clear" aria-label="清空搜索">×</button>
+    </div>
+    <div id="lx-list" class="lx-items">
+      <div class="lx-item-wrap" data-name="五源合一 LX 自定义源" data-desc="QQ 酷我 酷狗 网易云 咪咕 五源合一">
+      <div class="sub-row lx-item">
+        <span class="label">五源合一(LX) · 导入链接 · v1.6.0</span>
+        <a id="url-lx" class="code-link" href="https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.6.0.js" target="_blank" rel="noopener">https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.6.0.js</a>
+        <button class="btn" data-copy="url-lx">复制</button>
+      </div>
+      <p class="lx-steps"><b>导入方法：</b><br>
+      · <b>洛雪 Music</b>：设置 → 自定义源管理 → 导入，选「在线链接」粘贴上方地址，或下载 .js 后选「本地文件」导入；<br>
+      · <b>澜音 CeruMusic</b>：插件管理 → 添加插件 → 粘贴上方「在线导入链接」或选择本地 <code>.js</code> 导入，首次启用授予 network（网络）权限即可。<br>
+      导入成功后在对应播放器音源处切换即可。</p>
+      <p class="lx-warn">⚠️ 这是 LX（洛雪）格式脚本，不是 MusicFree 原生插件，无法在 MusicFree「插件订阅」里直接安装；请在对应播放器的自定义源 / LX 导入入口使用。</p>
+      </div>
+    </div>
+  </div>
+  </div><!-- /pane-lx -->
 
   <footer>
     插件 js 均由沙箱构建并逐项自测后发布 · 三生态相互独立：MusicFree 订阅清单 / 澜音 Ceru 原生插件 / 洛雪 LX 自定义源<br>
@@ -511,10 +565,30 @@ function esc(s){return (s+'').replace(/[&<>"']/g,function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function isLx(p){return ((p.url||p.file||'')+'').indexOf('five-source-lx')>-1}
 var allPlugins=[];
+var MF_CAT_LABEL={common:'常用音乐',music:'其它音乐',radio:'听书电台',dj64:'DJ低音质',djhq:'DJ高音质',edm:'电音舞曲',all:'全部'};
+var mfCatMap={},mfCat='common';
+function mfCatCount(c){return Object.keys(mfCatMap).filter(function(k){return c==='all'?true:mfCatMap[k]===c}).length}
+function fileOf(p){return ((p.url||p.file||'')+'').split('/').pop()||''}
+function mfFilter(p){
+  if(mfCat==='all')return true;
+  return (mfCatMap[fileOf(p)]||'music')===mfCat;
+}
+function mfHintText(){
+  var h=document.getElementById('mf-count-hint');
+  if(!h)return;
+  h.textContent='当前「'+MF_CAT_LABEL[mfCat]+'」'+mfCatCount(mfCat)+' 个 · 全部分类：'
+    +'常用 '+mfCatCount('common')+' / 其它音乐 '+mfCatCount('music')+' / 听书电台 '+mfCatCount('radio')
+    +' / DJ低音质 '+mfCatCount('dj64')+' / DJ高音质 '+mfCatCount('djhq')+' / 电音舞曲 '+mfCatCount('edm');
+}
 function renderGrid(){
   var q=(document.getElementById('plugin-search').value||'').trim().toLowerCase();
-  var list=allPlugins.filter(function(p){return !q||
-    ((p.name+' '+(p.version||'')+' '+((p.url||p.file||'')+'')).toLowerCase().indexOf(q)>-1)});
+  // mf-cats.json 尚未到达时先不过滤，避免首屏被「常用」类过滤成空
+  var byCat=Object.keys(mfCatMap).length>0;
+  var list=allPlugins.filter(function(p){
+    if(byCat&&!mfFilter(p))return false;
+    if(!q)return true;
+    return ((p.name+' '+(p.version||'')+' '+fileOf(p)).toLowerCase().indexOf(q)>-1);
+  });
   var g=document.getElementById('grid');
   if(!list.length){
     g.innerHTML='<div class="empty-state">未找到与「<b>'+esc(q)+'</b>」匹配的插件<br>'
@@ -522,28 +596,42 @@ function renderGrid(){
   }else{
     g.innerHTML=list.map(cardHTML).join('');
   }
+  mfHintText();
   document.getElementById('stat-count').textContent=q?(list.length+' / '+allPlugins.length):allPlugins.length;
   document.getElementById('update-time').textContent='数据更新于 '+new Date().toLocaleString('zh-CN');
 }
+// 分类清单（音质档位来自本地源码仓，Actions 上缺源码仓时沿用已提交的版本）
+fetch('mf-cats.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():Promise.reject()})
+  .then(function(d){var ps=(d&&d.plugins)||[];for(var i=0;i<ps.length;i++)mfCatMap[fileOf(ps[i])]=ps[i].category;renderGrid()})
+  .catch(function(){mfHintText()});
 fetch('plugins.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():Promise.reject()})
   .then(function(d){allPlugins=(d.plugins||FALLBACK).filter(function(p){return !isLx(p)});renderGrid()})
   .catch(function(){allPlugins=FALLBACK.filter(function(p){return !isLx(p)});renderGrid()});
 
+document.addEventListener('click',function(e){
+  var mfBtn=e.target.closest('[data-mfcat]');
+  if(mfBtn){mfCat=mfBtn.getAttribute('data-mfcat');
+    document.querySelectorAll('#mf-cats .ceru-cat').forEach(function(b){b.classList.toggle('active',b===mfBtn)});
+    renderGrid();return}
+});
+
 document.addEventListener('input',function(e){
   if(!e.target||!e.target.id)return;
-  if(e.target.id==='plugin-search'){
-    var box=e.target.closest('.search-box');
-    if(box)box.classList.toggle('has-text',!!e.target.value);
-    renderGrid();
-  }
+  var box=e.target.closest('.search-box');
+  if(box)box.classList.toggle('has-text',!!e.target.value);
+  if(e.target.id==='plugin-search')renderGrid();
+  else if(e.target.id==='ceru-search')renderCeru();
+  else if(e.target.id==='lx-search')renderLx();
 });
 document.addEventListener('click',function(e){
   var clr=e.target.closest('.search-clear')||e.target.closest('#clear-search');
   if(clr){
-    var box=clr.closest('.search-box')||document.querySelector('#plugin-search').closest('.search-box');
-    var inp=box.querySelector('input');
-    inp.value='';box.classList.remove('has-text');
+    var box=clr.closest('.search-box');
+    var inp=box?box.querySelector('input'):document.querySelector('#plugin-search').closest('.search-box').querySelector('input');
+    inp.value='';if(box)box.classList.remove('has-text');
     if(inp.id==='plugin-search')renderGrid();
+    else if(inp.id==='ceru-search')renderCeru();
+    else if(inp.id==='lx-search')renderLx();
     inp.focus();return;
   }
   var b=e.target.closest('[data-copy]');if(!b)return;
@@ -555,31 +643,88 @@ document.addEventListener('click',function(e){
     try{document.execCommand('copy')}catch(x){}document.body.removeChild(ta);done()}
 });
 
-/* ---------- 澜音 Ceru 生态：加载清单 + 渲染 + 复制 ---------- */
+/* ---------- 三生态胶囊 tab 切换（点击不滚动，可左右滑动） ---------- */
+var ECO_KEYS=['mf','ceru','lx'];
+function switchEco(key){
+  document.querySelectorAll('.eco-tab').forEach(function(t){
+    t.classList.toggle('active', t.getAttribute('data-eco')===key);
+  });
+  document.querySelectorAll('.eco-pane').forEach(function(p){
+    p.classList.toggle('active', p.id==='pane-'+key);
+  });
+}
+document.getElementById('eco-nav').addEventListener('click',function(e){
+  var t=e.target.closest('.eco-tab');
+  if(t)switchEco(t.getAttribute('data-eco'));
+});
+// 触屏左右滑动切换生态
+(function(){
+  var startX=null, startY=null;
+  var wrap=document.querySelector('.wrap');
+  wrap.addEventListener('touchstart',function(e){
+    var t=e.touches[0]; startX=t.clientX; startY=t.clientY;
+  },{passive:true});
+  wrap.addEventListener('touchend',function(e){
+    if(startX==null)return;
+    var t=e.changedTouches[0];
+    var dx=t.clientX-startX, dy=t.clientY-startY;
+    startX=null; startY=null;
+    if(Math.abs(dx)<60||Math.abs(dy)>Math.abs(dx))return; // 水平位移不足或近垂直，忽略
+    var cur=document.querySelector('.eco-tab.active');
+    var i=cur?ECO_KEYS.indexOf(cur.getAttribute('data-eco')):0;
+    var ni=dx<0?i+1:i-1; // 左滑→下一个，右滑→上一个
+    if(ni>=0&&ni<ECO_KEYS.length)switchEco(ECO_KEYS[ni]);
+  },{passive:true});
+})();
+
+/* ---------- 澜音 Ceru 生态：加载清单 + 分类 + 渲染 + 复制 ---------- */
 var CERU_BASE='https://hebijunge.github.io/musicfree-plugins/ceru-plugins/';
-var CERU_DJ_RE=/DJ|电音|舞曲|串烧|Mix|黑色音频|串烧/i;
-var ceruPlugins=[],ceruShowAll=true;
+var ceruPlugins=[],ceruCat='common';
+var CERU_CAT_LABEL={common:'常用音乐',music:'其它音乐',radio:'听书电台',dj64:'DJ低音质',djhq:'DJ高音质',edm:'电音舞曲',dj:'DJ站',all:'全部'};
 function ceruUrl(f){return CERU_BASE+encodeURIComponent(f)}
 function ceruFilter(p){
-  if(ceruShowAll)return true;
-  // 只看常用 = 排除 DJ / 电音 / 舞曲 / 串烧 类子平台，保留音乐 + 听书/电台主类
-  return !CERU_DJ_RE.test(p.name||'');
+  if(ceruCat==='all')return true;
+  return (p.category||'music')===ceruCat;
+}
+// 同名去重：同站可能有旧/新两个文件（如 54dj/dj54），保留 description 更完整者
+function ceruDedup(list){
+  var best={};
+  list.forEach(function(p){
+    var n=p.name;
+    if(!best[n]||(p.description||'').length>(best[n].description||'').length)best[n]=p;
+  });
+  return Object.keys(best).map(function(k){return best[k]});
+}
+function ceruCatCount(c){
+  return ceruDedup(ceruPlugins).filter(function(p){return c==='all'?true:(p.category||'music')===c}).length;
 }
 function ceruItemHTML(p){
   return '<div class="ceru-item"><span class="cname" title="'+esc(p.name)+' · '+esc(p.description||'')+'">'+esc(p.name)+'</span>'
     +'<span class="cver">v'+esc(p.version)+'</span>'
     +'<button class="cbtn" data-ceru-copy="'+esc(p.file)+'">复制</button></div>';
 }
+function ceruSearchQ(){
+  var el=document.getElementById('ceru-search');
+  return el?(el.value||'').trim().toLowerCase():'';
+}
 function renderCeru(){
-  var list=ceruPlugins.filter(ceruFilter);
-  document.getElementById('ceru-list').innerHTML=list.length
-    ?list.map(ceruItemHTML).join('')
-    :'<div class="ceru-loading">暂无澜音插件</div>';
-  document.getElementById('stat-ceru').textContent=ceruPlugins.length?ceruPlugins.length:'-';
+  var q=ceruSearchQ();
+  var dedup=ceruDedup(ceruPlugins);
+  var list=dedup.filter(function(p){
+    if(!ceruFilter(p))return false;
+    if(!q)return true;
+    return (p.name+' '+(p.version||'')+' '+(p.description||'')+' '+p.id).toLowerCase().indexOf(q)>-1;
+  });
+  var box=document.getElementById('ceru-list');
+  box.innerHTML=list.length?list.map(ceruItemHTML).join('')
+    :'<div class="ceru-loading">'+(q?'未找到匹配的澜音插件':'暂无澜音插件')+'</div>';
+  document.getElementById('stat-ceru').textContent=dedup.length?dedup.length:'-';
   var hint=document.getElementById('ceru-count-hint');
-  if(hint)hint.textContent=ceruShowAll?('共 '+ceruPlugins.length+' 个'):('常用筛选 · '+list.length+' / '+ceruPlugins.length);
-  var tg=document.getElementById('ceru-filter-toggle');
-  if(tg)tg.textContent=ceruShowAll?'只看常用':'显示全部';
+  if(hint)hint.textContent=(q?'搜索「'+q+'」命中 ':'当前「'+CERU_CAT_LABEL[ceruCat]+'」')+list.length+' 个 · 全部分类：常用 '
+    +ceruCatCount('common')+' / 其它音乐 '+ceruCatCount('music')+' / 听书电台 '+ceruCatCount('radio')
+    +' / DJ低音质 '+ceruCatCount('dj64')+' / DJ高音质 '+ceruCatCount('djhq')+' / 电音舞曲 '+ceruCatCount('edm');
+  var btn=document.getElementById('ceru-copy-cat');
+  if(btn)btn.textContent='一键复制'+(q?'筛选':'')+(q?'':' '+CERU_CAT_LABEL[ceruCat])+' '+list.length+' 个导入链接';
 }
 function copyText(text,btn){
   function done(){var o=btn.textContent;btn.textContent='✓';btn.classList.add('copied');
@@ -588,15 +733,40 @@ function copyText(text,btn){
   else{var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();
     try{document.execCommand('copy')}catch(x){}document.body.removeChild(ta);done()}
 }
+/* ---------- 洛雪 LX 生态：搜索过滤 ---------- */
+function renderLx(){
+  var el=document.getElementById('lx-search');
+  var q=el?(el.value||'').trim().toLowerCase():'';
+  var wraps=document.querySelectorAll('#lx-list .lx-item-wrap');
+  var shown=0;
+  wraps.forEach(function(w){
+    var hit=!q||((w.getAttribute('data-name')||'')+' '+(w.getAttribute('data-desc')||'')).toLowerCase().indexOf(q)>-1;
+    w.style.display=hit?'':'none';
+    if(hit)shown++;
+  });
+  var lxList=document.getElementById('lx-list');
+  if(!shown&&wraps.length){
+    var empty=lxList.querySelector('.lx-empty');
+    if(!empty){empty=document.createElement('div');empty.className='lx-empty';lxList.appendChild(empty);}
+    empty.textContent='未找到匹配的洛雪脚本';
+  }else{
+    var e=lxList.querySelector('.lx-empty');if(e)e.remove();
+  }
+}
 document.addEventListener('click',function(e){
   var cb=e.target.closest('[data-ceru-copy]');
   if(cb){copyText(ceruUrl(cb.getAttribute('data-ceru-copy')),cb);return}
-  if(e.target.id==='ceru-filter-toggle'){ceruShowAll=!ceruShowAll;renderCeru();return}
-  if(e.target.closest('#ceru-copy-all')||e.target.closest('[data-copy-ceru="all"]')){
-    var urls=ceruPlugins.filter(ceruFilter).map(function(p){return ceruUrl(p.file)}).join('\n');
-    copyText(urls,e.target.closest('.btn')||e.target);
-    var b=e.target.closest('.btn');if(b){var o=b.textContent;b.textContent='✓ 已复制 '+ceruPlugins.filter(ceruFilter).length+' 个';
-      setTimeout(function(){b.textContent=o},1800)}
+  // 限定在澜音区：MusicFree 区胶囊复用 .ceru-cat 样式类，别让它污染 ceruCat
+  var catBtn=e.target.closest('#ceru-cats .ceru-cat');
+  if(catBtn){ceruCat=catBtn.getAttribute('data-cat');
+    document.querySelectorAll('#ceru-cats .ceru-cat').forEach(function(b){b.classList.toggle('active',b===catBtn)});
+    renderCeru();return}
+  if(e.target.closest('#ceru-copy-cat')){
+    var list=ceruDedup(ceruPlugins).filter(ceruFilter);
+    var urls=list.map(function(p){return ceruUrl(p.file)}).join('\n');
+    copyText(urls,e.target);
+    var b=e.target;var o=b.textContent;b.textContent='✓ 已复制 '+list.length+' 个';
+    setTimeout(function(){b.textContent=o},1800);
     return;
   }
 });
