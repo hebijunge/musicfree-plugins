@@ -1,146 +1,127 @@
-# musicfree-plugins
+# MusicFree 插件订阅站
 
-MusicFree 插件订阅仓库（57 个插件）+ 洛雪（LX Music）自定义源发布仓库，两个生态相互独立。
+MusicFree 插件订阅仓库（57 个插件）+ 澜音 Ceru 原生插件（50 个）+ 洛雪（LX Music）自定义源，三个生态相互独立。
 
-- **MusicFree 插件**：通过「订阅」机制安装/更新，订阅清单不含任何洛雪内容
-- **洛雪自定义源**：五源合一脚本，仅适用于洛雪 App，单独下载导入，与 MusicFree 插件不通用（详见下方专节）
+- **MusicFree 插件**：通过「订阅」机制安装/更新，订阅清单不含洛雪/澜音内容
+- **澜音 Ceru 原生插件**：`ceru-plugins/` 下 50 个 `.ceru.js`（`manifestVersion: 2`），逐条在线导入，非订阅机制
+- **洛雪自定义源**：五源合一脚本，仅适用于洛雪/澜音等 LX 协议播放器，单独下载导入
 
-**订阅站首页**（插件列表、全部订阅地址一键复制）：https://hebijunge.github.io/musicfree-plugins/
+## 订阅站首页
 
-在 MusicFree「插件设置 → 订阅」中填入下面的订阅地址即可一键安装/更新全部插件。
+👉 **打开订阅站首页**：https://hebijunge.github.io/musicfree-plugins/
+
+首页含插件列表、全部订阅地址一键复制、插件搜索、离线包下载入口。
+
+## 快速上手（30 秒装好）
+
+在 MusicFree「**插件设置 → 订阅**」填入下面的订阅地址即可一键安装/更新。
+
+**最省事**：直接装常用六平台（体积小、速度快）——
+
+```
+https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json
+```
+
+> 若主线路在你网络下超时，把前缀换成任一可用线路（见下方「换线路」）。
 
 ## 按类别订阅（推荐）
 
-插件按用途拆成 5 份清单，**用哪个类别就只装哪份**，不必一次拉 57 个（全量 8.2 MB，分类后常用平台只有 2.9 MB）。
+插件按用途拆成 5 份清单，**用哪个类别就只装哪份**，不必一次拉 57 个。
 
-主地址走 **gh.padao.fun 加速**：实测「常用六平台」6 并发下载 0.31~1.59 秒，全部落在 MusicFree 的 2 秒超时内。GitHub Pages 官方直出在同一测试下要 17~33 秒，会被 App 判超时，已降为备用线路。
-
-| 类别 | 条目 | 体积 | 订阅地址（主 · gh.padao.fun） |
+<!-- README:cat-stats -->
+| 类别 | 条目 | 体积 | 订阅地址 |
 |---|---|---|---|
-| ① 常用六平台 | 6 | 2.9 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json` |
-| ② DJ / 舞曲 / 电音 | 30 | 0.96 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json` |
-| ③ 听书 / 电台 / 播客 | 10 | 0.62 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/radio.json` |
-| ④ 其它音乐平台 | 11 | 3.7 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/music.json` |
-| ⑤ 全部插件 | 57 | 8.2 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json` |
+| ① 常用六平台 | 6 | 2.84 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json` |
+| ② DJ / 舞曲 / 电音 | 30 | 0.78 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json` |
+| ③ 听书 / 电台 / 播客 | 10 | 0.59 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/radio.json` |
+| ④ 其它音乐平台 | 11 | 3.49 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/music.json` |
+| ⑤ 全部插件 | 57 | 7.71 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json` |
+<!-- /README:cat-stats -->
 
-- ① 常用六平台 = QQ音乐 / 酷我 / 酷狗 / 咪咕 / 网易云 / 汽水
-- ④ 其它音乐平台 = B站 / 5sing / 千千 / 一听 / 街声 / Apple Music / 华为 / Jamendo / 聚合 / JOOX / 好听轻音乐
-- 分类清单随 `plugins.json` 同步生成：`node scripts/gen-subscriptions.js`
+<!-- README:cat-desc -->
+- ① 常用六平台 = QQ音乐 / 酷我音乐 / 酷狗音乐 / 咪咕音乐 / 网易云音乐 / 汽水音乐
+- ③ 听书 / 电台 / 播客 = 番茄畅听 / 懒人听书 / 博看听书 / 猫耳FM / 蜻蜓FM / 喜马拉雅 / 荔枝FM / 网易云电台 / CCTV听音 / 相声评书
+- ④ 其它音乐平台 = B站 / 5sing / 千千音乐 / 一听音乐 / 街声 / Apple Music / 华为音乐 / Jamendo / 聚合 / JOOX音乐 / 好听轻音乐
+<!-- /README:cat-desc -->
 
-**换线路只需换前缀**（同一类别文件在所有线路下内容一一对应）：
+分类清单随 `plugins.json` 同步生成：`node scripts/gen-subscriptions.js`
+
+## 换线路（主线路超时就用这个）
+
+同一类别文件在所有线路下内容一一对应，**只需换前缀**：
 
 | 线路 | 前缀写法 | 说明 |
 |---|---|---|
-| gh.padao.fun | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/` | 主用，实测最快 |
-| GitHub Pages | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/` | 最稳，但下载慢，易触发 2 秒超时 |
-| fastly | `https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/sub/fastly/` | jsDelivr 节点，速度同样偏慢 |
+| gh.padao.fun | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/` | 主用，实测最快（6 并发 0.31~1.59s） |
+| GitHub Pages | `https://hebijunge.github.io/musicfree-plugins/sub/githubio/` | 最稳，但下载慢，易触发 2s 超时 |
+| fastly | `https://fastly.jsdelivr.net/gh/hebijunge/musicfree-plugins@master/sub/fastly/` | jsDelivr 节点，速度偏慢 |
 
 例：常用六平台的 Pages 版 = `https://hebijunge.github.io/musicfree-plugins/sub/githubio/main.json`
 
 ## 全部插件（57 个）· 备用线路
 
-内容完全一致，只是插件下载源不同：
+想一次装全就用这里；**只装常用平台建议用上面的分类订阅**，体积从 7.70 MB 降到 2.84 MB。下面各条清单内容完全一致，只是插件下载源不同：
 
 - 主线路 gh.padao.fun：`https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins.json`
 - GitHub Pages 直出：`https://hebijunge.github.io/musicfree-plugins/plugins.json`
 - fastly：`https://hebijunge.github.io/musicfree-plugins/plugins-fastly.json`
 - gcore：`https://hebijunge.github.io/musicfree-plugins/plugins-gcore.json`
-- 其它 20 条：`plugins-proxy-01.json` ~ `plugins-proxy-20.json`（见首页「全部插件 · 备用线路」折叠区）
-
-### 2026-10-30 导入速度实测（常用六平台，模拟 App 流程：拉清单 + 6 并发，连测 3 轮）
-
-| 线路 | 拉清单 | 6 并发总耗时 | 最慢单文件 | 超 2s 条数 |
-|---|---|---|---|---|
-| gh.padao.fun | 170~598 ms | 0.31 / 0.34 / 0.35 / 0.37 / 0.54 / 1.59 s | 1.59 s（冷启动） | **0** |
-| GitHub Pages | 122~604 ms | 17.0 / 17.8 / 20.8 / 21.4 / 25.5 / 32.9 s | 32.9 s | 6 / 6 |
-| fastly | 92~286 ms | 14.4 / 16.0 / 16.1 / 17.0 / 17.6 / 18.3 s | 17.6 s | 6 / 6 |
-
-- 三种线路下载到的文件 sha256 均与源文件一致，差别只在速度。
-- GitHub Pages 并发下载实际速率约 24 KB/s（628 KB 的 QQ 插件 25.7 s），单文件串行时约 96 KB/s，说明它对并发有限速。
-- MusicFree 源码 `axios.defaults.timeout = 2000` 是硬上限，超时即报 `timeout of 2000ms exceeded`，因此慢线路表现为「导入失败」而不是「慢」。
-- 测试为本机直连结果，手机运营商不同会有差异；主线路若在你的网络下也超时，换下表任一前缀即可。
+- 其它 20 条：`plugins-proxy-01.json` ~ `plugins-proxy-20.json`（见订阅站首页「全部插件 · 备用线路」折叠区）
 
 ## 离线安装包（在线导入失败时用）
 
-在线订阅对每个插件文件有 2 秒下载超时（MusicFree 源码 `axios.defaults.timeout = 2000`），网络一慢就报失败。离线包下载到本地再安装，完全不走这个超时。
+在线订阅对单个文件有 2 秒下载超时（MusicFree 源码 `axios.defaults.timeout = 2000`），网络一慢就报失败。**离线包下载到本地再安装，完全不走这个超时。**
 
 **下载页**：https://hebijunge.github.io/musicfree-plugins/download.html
 
 | 包 | 内容 | 大小 | 直链（加速） |
 |---|---|---|---|
-| mf-common-6.zip | 常用六平台 6 个 | 1.06 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-common-6.zip` |
-| mf-all.zip | 全部 57 个 | 2.99 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-all.zip` |
-| mf-dj.zip | DJ / 舞曲 / 电音 30 个 | 0.38 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-dj.zip` |
-| mf-radio.zip | 听书 / 电台 10 个 | 0.24 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-radio.zip` |
-| mf-music.zip | 其它音乐平台 11 个 | 1.31 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-music.zip` |
+| mf-common-6.zip | 常用六平台 6 个 | 1.02 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-common-6.zip` |
+| mf-all.zip | 全部 57 个 | 2.74 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-all.zip` |
+| mf-dj.zip | DJ / 舞曲 / 电音 30 个 | 0.30 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-dj.zip` |
+| mf-radio.zip | 听书 / 电台 10 个 | 0.21 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-radio.zip` |
+| mf-music.zip | 其它音乐平台 11 个 | 1.22 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-music.zip` |
 
 官方 Pages 直链把前缀换成 `https://hebijunge.github.io/musicfree-plugins/dl/` 即可（较慢，但一定在）。
 
-**安装步骤**：下载 zip → 系统文件管理器解压出 `.js` → MusicFree「插件设置」→ 右下角 `+` →「从本地安装插件」→ 多选 `.js` 文件。
-
-选文件时若看不到 `.js`，把文件选择器的类型筛选切到「所有文件」。
+**安装步骤**：下载 zip → 解压出 `.js` → MusicFree「插件设置」→ 右下角 `+` →「从本地安装插件」→ 多选 `.js`。选文件时若看不到 `.js`，把类型筛选切到「所有文件」。
 
 重新打包：`node scripts/pack-zips.js`。
 
-### 2026-10-30 线路实测（本机直连，基准文件 qq-source 643 KB，超时 12s）
+## 澜音（CeruMusic）原生插件 · Ceru v2
 
-| 线路 | 结果 |
-|---|---|
-| gh.padao.fun | ✓ 1.9s / 643 KB 完整 |
-| down.mxw.xx.kg | ✓ 3.0s |
-| 30006000.xyz | ✓ 3.6s |
-| wget.la | ✓ 3.7s |
-| fastly.jsdelivr.net | ✓ 3.7s |
-| github.cnxiaobai.com | ✓ 3.8s |
-| cdn.akaere.online | ✓ 4.0s |
-| xsadwsd.kdns.fr | ✓ 4.3s |
-| ghpxy.hwinzniej.top | ✓ 4.5s |
-| gh.acmsz.top | ✓ 5.1s |
-| ghproxy.053000.xyz | ✓ 5.2s |
-| gcore.jsdelivr.net | ✓ 5.6s |
-| git.yylx.win | ✓ 5.8s |
-| hebijunge.github.io | ✓ 6.7s |
-| **cdn.jsdelivr.net / raw.githubusercontent.com / ghproxy.net / gh.927223.xyz / gh.halonice.com / js.jiangss.shop** | ✗ 连不通（000） |
-| **gh-proxy.com（302 KB）/ ghm.078465.xyz（490 KB）** | ✗ 内容被截断（正常 643 KB），插件必解析失败 |
-| **gh.felicity.ac.cn / gh.idayer.com** | ✗ 429 限流 |
-| **github.xxlab.tech** | ✗ 302 跳转异常 |
+50 个澜音 Ceru v2 原生插件（`ceru-plugins/*.ceru.js`，`manifestVersion: 2`），适用于澜音 CeruMusic 手机 v2 / 桌面端。搜索、取链、歌词由插件内建逻辑完成（与 MusicFree 插件生态完全独立）。
 
-本次已把 `plugins-cdn.json` 等旧文件的内容重排到上面 14 条可用线路，文件名保持不变以兼容历史链接；不可用线路不再生成订阅。
+> 这是澜音**原生**插件格式（`.ceru.js`），**不是** MusicFree 插件格式，无法在 MusicFree「插件订阅」里安装；也无法用洛雪 LX 导入入口导入（LX 只认 `exports.manifest` 的洛雪协议）。
 
-### 说明
+- 清单：`ceru-list.json`（50 个，含 name/version/id，由 `scripts/gen-ceru-list.js` 生成）
+- 在线导入链接示例：`https://hebijunge.github.io/musicfree-plugins/ceru-plugins/qq.ceru.js`（每个插件一个文件，逐个导入）
+- 一键复制全部：订阅站首页「澜音 Ceru」区点「一键复制全部 50 个链接」
 
-- 清单文件均托管在本仓库（GitHub Pages 直出，实时同步）；区别仅在清单内插件文件的下载源。
-- **导入失败先查两点**：① 订阅地址是否以 `.json` 结尾（MusicFree 的硬性校验，否则直接提示"订阅地址需以 .js/.json 结尾"）；② 换一条更快的线路。MusicFree 对单个文件下载有超时限制（源码 `axios.defaults.timeout = 2000`），慢线路上全量 8.2 MB 容易中途报错，只装常用平台稳得多。
-- 已失效通道对应的旧文件（`plugins-proxy-06/07/13.json` 等）保留在仓库中但已重排到可用线路，不再单独推荐。
-- 单个插件备用直链：fastly / gcore 可用；raw 直连不可用，需加代理前缀。
-- 校验脚本：`node scripts/verify-subscriptions.js padao` — 逐条下载比对字节数与 sha256。
+**导入方法：** 澜音 CeruMusic → 插件管理 → 添加插件 → 粘贴任一 `https://hebijunge.github.io/musicfree-plugins/ceru-plugins/xxx.ceru.js` 在线链接导入，或下载 `.ceru.js` 本地导入；首次启用授予 network（网络）权限即可。
 
-### jihulab 兜底（待配置，方案已就绪）
-
-jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源：仓库不依赖 GitHub 存活，且无 jsdelivr 的 12h 缓存问题（raw 直出最新 main）。接入需要 jihulab 账号与 Personal Access Token（本机无凭据，尚未建镜像仓库），方案二选一：
-
-- 全自动：在 GitHub 仓库 Settings → Secrets 配置 `JIHULAB_TOKEN`（jihulab PAT，write_repository 权限）与 `JIHULAB_PATH`（jihulab 命名空间/项目路径），`.github/workflows/mirror-jihulab.yml` 会在每次 master 推送后自动镜像（触发分支已修正为 `master`）；未配置 Secrets 时该工作流自动跳过、不报错。
-- 手动/半自动：jihulab 网页建空项目后，本地克隆本仓库运行 `JITOKEN=<PAT> JIPATH=<命名空间>/<项目> ./scripts/sync-jihulab.sh`（token 只走环境变量）。
-- 镜像建成后的兜底订阅地址：`https://jihulab.com/<命名空间>/<项目>/-/raw/main/plugins.json`
+> 澜音也能装下面「洛雪 LX 五源合一」脚本（走 LX 导入入口），两者不冲突，可都装。
 
 ## 洛雪（LX）自定义源 · 多播放器通用
 
-五源合一 LX 格式自定义源脚本（v1.6.0，混淆发布），适用于**所有支持洛雪(LX)插件协议的播放器**，已验证可用：洛雪 Music、澜音(CeruMusic)，以及其它兼容 LX 协议的客户端。
+五源合一 LX 格式自定义源脚本（v1.6.0，混淆发布），适用于所有支持洛雪(LX)插件协议的播放器：洛雪 Music、澜音(CeruMusic) 等。
 
-> 说明：这是 LX（洛雪）格式脚本，**不是** MusicFree 原生插件格式，无法在 MusicFree 的「插件订阅」里直接安装；请在对应播放器的自定义源 / LX 导入入口使用（见下方各播放器导入方法）。
+> 这是 LX（洛雪）格式脚本，**不是** MusicFree 原生插件格式，无法在 MusicFree「插件订阅」里直接安装；请在对应播放器的自定义源 / LX 导入入口使用。
 
-- 脚本文件（混淆发布版 v1.6.0）：[plugins/five-source-lx.plugin.v1.6.0.js](plugins/five-source-lx.plugin.v1.6.0.js)
-- 在线导入链接（在支持 LX 的播放器内粘贴）：
-  `https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.6.0.js`
+- 脚本文件：[plugins/five-source-lx.plugin.v1.6.0.js](plugins/five-source-lx.plugin.v1.6.0.js)
+- 在线导入链接：`https://hebijunge.github.io/musicfree-plugins/plugins/five-source-lx.plugin.v1.6.0.js`
 
-**导入方法（按播放器）：**
-- **洛雪 Music**：设置 → 自定义源管理 → 导入（选「在线链接」粘贴上方地址，或下载 .js 后选「本地文件」导入）
-- **澜音 CeruMusic**：插件管理 → 添加插件 → 粘贴上方「在线导入链接」，或选择本地 `.js` 导入；首次启用授予 network（网络）权限即可
+**导入方法：**
+- **洛雪 Music**：设置 → 自定义源管理 → 导入（在线链接粘贴，或下载 .js 本地导入）
+- **澜音 CeruMusic**：插件管理 → 添加插件 → 粘贴在线导入链接或选本地 `.js`；首次启用授予 network 权限
 
-- 说明：LX 自定义源为非订阅机制，一次导入一个脚本，导入后不会随清单自动更新；版本升级需重新导入。
+LX 自定义源为非订阅机制，一次导入一个脚本，升级需重新导入。
 
-## 插件清单
+## 插件清单（57 个）
 
+<!-- README:plugins-table -->
+| 插件 | 版本 | 文件 |
+|---|---|---|
 | QQ音乐 | 1.9.26 | [qq-source.plugin.v1.9.26.js](plugins/qq-source.plugin.v1.9.26.js) |
 | 酷我音乐 | 1.9.24 | [kuwo-source.plugin.v1.9.24.js](plugins/kuwo-source.plugin.v1.9.24.js) |
 | 酷狗音乐 | 1.9.24 | [kugou-source.plugin.v1.9.24.js](plugins/kugou-source.plugin.v1.9.24.js) |
@@ -198,20 +179,28 @@ jihulab.com（GitLab 国内镜像）可作为 jsdelivr 之外的独立兜底源�
 | 魅力DJ | 1.0.1 | [djmei-source.plugin.v1.0.1.js](plugins/djmei-source.plugin.v1.0.1.js) |
 | DJ娱乐 | 1.2.1 | [djyule-source.plugin.v1.2.1.js](plugins/djyule-source.plugin.v1.2.1.js) |
 | 小熊电音 | 1.0.2 | [xxedm-source.plugin.v1.0.2.js](plugins/xxedm-source.plugin.v1.0.2.js) |
+<!-- /README:plugins-table -->
 
 ## 目录结构
 
-- `index.html` — 订阅站首页（数据自动跟随 `plugins.json`，含洛雪专区分区展示与插件搜索）
-- `plugins.json` — MusicFree 订阅清单（结构对齐 musicfreepluginshub：`desc` + `plugins[]`，每项 `name/url/version`；**不含洛雪脚本**）
+- `index.html` — 订阅站首页（三生态分区：MusicFree / 澜音 Ceru / 洛雪 LX；数据自动跟随 `plugins.json` + `ceru-list.json`）
+- `download.html` — 离线安装包下载页
+- `plugins.json` — MusicFree 订阅清单（`desc` + `plugins[]`，每项 `name/url/version`；不含洛雪脚本）
+- `sub/<line>/<cat>.json` — 分类订阅清单（main / dj / radio / music / all），按线路分组
+- `ceru-list.json` — 澜音 Ceru 插件清单（50 个，由 `ceru-plugins/` 生成）
+- `ceru-plugins/*.ceru.js` — 澜音 Ceru v2 原生插件（50 个，与 MusicFree 插件严格分离）
 - `plugins/five-source-lx.plugin.v1.6.0.js` — 洛雪自定义源脚本（仅洛雪专区入口分发，不进任何 `plugins*.json`）
-- `plugins-fastly.json` / `plugins-gcore.json` / `plugins-cdn.json` / `plugins-ghproxy.json` / `plugins-proxy-01..20.json` — 备用通道订阅清单（结构与 `plugins.json` 完全一致，仅插件 url 前缀不同）
-- `scripts/sync-jihulab.sh` — jihulab 镜像手动同步脚本（token 走环境变量，不落盘）
-- `.github/workflows/mirror-jihulab.yml` — master 推送后自动镜像到 jihulab（需 Secrets，未配置自动跳过；触发分支配置当前仍为 `main`，启用前需改为 `master`）
-- `plugins/` — 插件 js 直链文件，文件名含版本号；更新插件时新增带新版本号的文件，并在 `plugins.json` 中把该项 `url` 与 `version` 指向新文件
+- `scripts/gen-site.js` — **统一生成入口**：串行跑 subscriptions + ceru-list + readme（改完插件跑这一个命令）
+- `scripts/gen-subscriptions.js` — 生成分类 + 线路订阅清单
+- `scripts/gen-ceru-list.js` — 从 ceru-plugins 提取 manifest 生成 ceru-list.json
+- `scripts/gen-readme.js` — 从 plugins.json / sub / sizes 自动更新 README 插件清单表与分类统计
+- `scripts/pack-zips.js` — 打包离线安装 zip
+- `scripts/verify-subscriptions.js` — 逐条下载比对字节数与 sha256
 
 ## 维护约定
 
-- 新插件完成后：将 js 按命名规范放入 `plugins/`，在 `plugins.json` 追加一条（name/url/version 与插件内部声明一致）即可，订阅端自动生效
-- 插件升级：远端 `plugins/` 每个源只保留最新版本文件，旧版本不保留（需要回看历史走 git 记录），`plugins.json` 中 url/version 更新到新文件
+- 新插件完成后：把 js 按命名规范放入 `plugins/`（MusicFree）或 `ceru-plugins/`（澜音），在 `plugins.json` 追加一条（name/url/version 与插件内部声明一致）
+- **改完自动同步**：跑 `node scripts/gen-site.js` 一键重生成订阅清单 + 澜音清单 + README；GitHub Actions（`.github/workflows/gen-site.yml`）在 push 到 `plugins/` 或 `ceru-plugins/` 时自动执行并提交派生产物，无需手动跑
+- 插件升级：远端 `plugins/` 每个源只保留最新版本文件，旧版本不保留（回看历史走 git 记录），`plugins.json` 中 url/version 更新到新文件
 - 版本号以各插件 js 内部 `version` 字段为权威依据
-- 洛雪自定义源脚本与 MusicFree 插件严格分离：只放 `plugins/` 目录与订阅站洛雪专区，**禁止**写入 `plugins.json` 及任何镜像清单
+- 洛雪自定义源脚本与 MusicFree 插件严格分离：只放 `plugins/` 目录与订阅站洛雪专区，禁止写入 `plugins.json` 及任何镜像清单

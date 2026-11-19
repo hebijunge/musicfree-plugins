@@ -1,0 +1,406 @@
+{
+  "generatedAt": "2026-11-19T07:26:56.614Z",
+  "count": 50,
+  "plugins": [
+    {
+      "name": "172Mix",
+      "version": "1.0.0",
+      "file": "172mix.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.172mix"
+    },
+    {
+      "name": "一听音乐",
+      "version": "1.0.0",
+      "file": "1ting.ceru.js",
+      "description": "支持音质：128k",
+      "author": "hebijunge",
+      "id": "ceru.1ting"
+    },
+    {
+      "name": "36DJ",
+      "version": "1.0.0",
+      "file": "36dj.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.36dj"
+    },
+    {
+      "name": "我是DJ",
+      "version": "1.0.0",
+      "file": "54dj.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.54dj"
+    },
+    {
+      "name": "5sing",
+      "version": "1.0.0",
+      "file": "5sing.ceru.js",
+      "description": "支持音质：128k/192k/320k",
+      "author": "hebijunge",
+      "id": "ceru.5sing"
+    },
+    {
+      "name": "73DJ",
+      "version": "1.0.0",
+      "file": "73dj.ceru.js",
+      "description": "73DJ",
+      "author": "hebijunge",
+      "id": "ceru.73dj"
+    },
+    {
+      "name": "82DJ舞曲网",
+      "version": "1.0.0",
+      "file": "82dj.ceru.js",
+      "description": "支持音质：64k/320k",
+      "author": "hebijunge",
+      "id": "ceru.82dj"
+    },
+    {
+      "name": "Apple Music",
+      "version": "1.0.0",
+      "file": "applemusic.ceru.js",
+      "description": "Apple Music 搜索 + 酷我兜底取链，音质 128k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.applemusic"
+    },
+    {
+      "name": "宝贝DJ",
+      "version": "1.0.0",
+      "file": "bibdj.ceru.js",
+      "description": "支持音质：128k/320k",
+      "author": "hebijunge",
+      "id": "ceru.bibdj"
+    },
+    {
+      "name": "波比DJ",
+      "version": "1.0.0",
+      "file": "bobidj.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.bobidj"
+    },
+    {
+      "name": "博看听书",
+      "version": "1.0.0",
+      "file": "bokantingshu.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.bokantingshu"
+    },
+    {
+      "name": "CCTV听音",
+      "version": "1.0.0",
+      "file": "cctv.ceru.js",
+      "description": "央视听音，AAC over HLS，音质 128k/64k",
+      "author": "hebijunge",
+      "id": "ceru.cctv"
+    },
+    {
+      "name": "清风DJ",
+      "version": "1.0.0",
+      "file": "ddddj.ceru.js",
+      "description": "支持音质：96k/320k",
+      "author": "hebijunge",
+      "id": "ceru.ddddj"
+    },
+    {
+      "name": "电音阁",
+      "version": "1.0.0",
+      "file": "dianyinge.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.dianyinge"
+    },
+    {
+      "name": "我是DJ",
+      "version": "1.1.2",
+      "file": "dj54.ceru.js",
+      "description": "54dj DJ 音源（搜索 / 取链 / 榜单，64k m4a）",
+      "author": "hebijunge",
+      "id": "ceru.dj54"
+    },
+    {
+      "name": "DJ6",
+      "version": "1.0.0",
+      "file": "dj6.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.dj6"
+    },
+    {
+      "name": "DJ766",
+      "version": "1.0.0",
+      "file": "dj766.ceru.js",
+      "description": "支持音质：96k/320k",
+      "author": "hebijunge",
+      "id": "ceru.dj766"
+    },
+    {
+      "name": "DJ串烧集",
+      "version": "1.0.0",
+      "file": "djcsj.ceru.js",
+      "description": "支持音质：64k/320k",
+      "author": "hebijunge",
+      "id": "ceru.djcsj"
+    },
+    {
+      "name": "DJ多多",
+      "version": "1.0.0",
+      "file": "djduoduo.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.djduoduo"
+    },
+    {
+      "name": "DJKK",
+      "version": "1.0.0",
+      "file": "djkk.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.djkk"
+    },
+    {
+      "name": "魅力DJ",
+      "version": "1.0.0",
+      "file": "djmei.ceru.js",
+      "description": "支持音质：128k",
+      "author": "hebijunge",
+      "id": "ceru.djmei"
+    },
+    {
+      "name": "djuu DJ",
+      "version": "1.1.2",
+      "file": "djuu.ceru.js",
+      "description": "djuu DJ 音源（搜索 / 取链 / 榜单 / 歌单，64k m4a）",
+      "author": "hebijunge",
+      "id": "ceru.djdjuu"
+    },
+    {
+      "name": "DJ娱乐",
+      "version": "1.0.0",
+      "file": "djyule.ceru.js",
+      "description": "支持音质：64k/320k",
+      "author": "hebijunge",
+      "id": "ceru.djyule"
+    },
+    {
+      "name": "DJ耶耶耶",
+      "version": "1.0.0",
+      "file": "djyyy.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.djyyy"
+    },
+    {
+      "name": "好听轻音乐",
+      "version": "1.0.0",
+      "file": "htqyy.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.htqyy"
+    },
+    {
+      "name": "火龙DJ",
+      "version": "1.0.0",
+      "file": "huole.ceru.js",
+      "description": "支持音质：64k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.huole"
+    },
+    {
+      "name": "火龙DJ",
+      "version": "1.0.0",
+      "file": "huolongdj.ceru.js",
+      "description": "支持音质：64k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.huolongdj"
+    },
+    {
+      "name": "华为音乐",
+      "version": "1.0.0",
+      "file": "hwmusic.ceru.js",
+      "description": "支持音质：128k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.hwmusic"
+    },
+    {
+      "name": "黑色音频",
+      "version": "1.0.0",
+      "file": "hy57.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.hy57"
+    },
+    {
+      "name": "JOOX音乐",
+      "version": "1.0.0",
+      "file": "joox.ceru.js",
+      "description": "支持音质：128k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.joox"
+    },
+    {
+      "name": "快音",
+      "version": "1.0.0",
+      "file": "kuaiyin.ceru.js",
+      "description": "支持音质：128k",
+      "author": "hebijunge",
+      "id": "ceru.kuaiyin"
+    },
+    {
+      "name": "酷狗音乐",
+      "version": "2.0.1",
+      "file": "kugou.ceru.js",
+      "description": "酷狗音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单；320k/无损走酷狗 Cookie 或酷我换源兜底）",
+      "author": "hebijunge",
+      "id": "ceru.kugou"
+    },
+    {
+      "name": "酷我音乐",
+      "version": "2.0.1",
+      "file": "kuwo.ceru.js",
+      "description": "酷我音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
+      "author": "hebijunge",
+      "id": "ceru.kuwo"
+    },
+    {
+      "name": "荔枝FM",
+      "version": "1.0.0",
+      "file": "lizhi.ceru.js",
+      "description": "支持音质：64k/128k",
+      "author": "hebijunge",
+      "id": "ceru.lizhi"
+    },
+    {
+      "name": "咪咕音乐",
+      "version": "2.0.0",
+      "file": "migu.ceru.js",
+      "description": "咪咕音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
+      "author": "hebijunge",
+      "id": "ceru.migu"
+    },
+    {
+      "name": "猫耳FM",
+      "version": "1.0.0",
+      "file": "missevan.ceru.js",
+      "description": "支持音质：128k",
+      "author": "hebijunge",
+      "id": "ceru.missevan"
+    },
+    {
+      "name": "MixDJ",
+      "version": "1.0.0",
+      "file": "mixdj.ceru.js",
+      "description": "支持音质：128k",
+      "author": "hebijunge",
+      "id": "ceru.mixdj"
+    },
+    {
+      "name": "网易云音乐",
+      "version": "2.0.0",
+      "file": "netease.ceru.js",
+      "description": "网易云音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
+      "author": "hebijunge",
+      "id": "ceru.netease"
+    },
+    {
+      "name": "网易电台",
+      "version": "1.0.0",
+      "file": "neteaseradio.ceru.js",
+      "description": "支持音质：128k",
+      "author": "hebijunge",
+      "id": "ceru.neteaseradio"
+    },
+    {
+      "name": "皮狗DJ",
+      "version": "1.0.0",
+      "file": "pgdjz.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.pgdjz"
+    },
+    {
+      "name": "千千音乐",
+      "version": "1.0.0",
+      "file": "qianqian.ceru.js",
+      "description": "支持音质：128k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.qianqian"
+    },
+    {
+      "name": "蜻蜓FM",
+      "version": "1.0.0",
+      "file": "qingting.ceru.js",
+      "description": "支持音质：128k/64k/24k",
+      "author": "hebijunge",
+      "id": "ceru.qingting"
+    },
+    {
+      "name": "汽水音乐",
+      "version": "2.0.0",
+      "file": "qishui.ceru.js",
+      "description": "汽水音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
+      "author": "hebijunge",
+      "id": "ceru.qishui"
+    },
+    {
+      "name": "QQ音乐",
+      "version": "2.0.0",
+      "file": "qq.ceru.js",
+      "description": "QQ音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
+      "author": "hebijunge",
+      "id": "ceru.qq"
+    },
+    {
+      "name": "QQDJ",
+      "version": "1.0.0",
+      "file": "qqdjs.ceru.js",
+      "description": "支持音质：96k/320k",
+      "author": "hebijunge",
+      "id": "ceru.qqdj"
+    },
+    {
+      "name": "SpaceDJ",
+      "version": "1.0.0",
+      "file": "spacedj.ceru.js",
+      "description": "支持音质：96k",
+      "author": "hebijunge",
+      "id": "ceru.spacedj"
+    },
+    {
+      "name": "街声",
+      "version": "1.0.0",
+      "file": "streetvoice.ceru.js",
+      "description": "街声独立音乐，96k HLS 单档",
+      "author": "hebijunge",
+      "id": "ceru.streetvoice"
+    },
+    {
+      "name": "喜马拉雅",
+      "version": "1.0.0",
+      "file": "ximalaya.ceru.js",
+      "description": "支持音质：64k（免费声音）",
+      "author": "hebijunge",
+      "id": "ceru.ximalaya"
+    },
+    {
+      "name": "小熊电音",
+      "version": "1.0.0",
+      "file": "xxedm.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.xxedm"
+    },
+    {
+      "name": "Y2002电音",
+      "version": "1.0.0",
+      "file": "y2002.ceru.js",
+      "description": "支持音质：64k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.y2002"
+    }
+  ]
+}

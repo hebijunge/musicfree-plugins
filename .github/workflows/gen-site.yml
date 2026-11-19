@@ -1,0 +1,53 @@
+name: gen-site
+
+# 插件更新/新增后自动重新生成订阅清单、澜音生态清单、README，并提交派生产物。
+# 触发条件：
+#   - push 到 plugins/ 或 ceru-plugins/（插件本体变更）
+#   - workflow_dispatch 手动触发（本地跑完 gen-site 忘了提交产物时用）
+# 防循环：本工作流只提交派生文件（sub/、plugins*.json、ceru-list.json、README.md、dl/），
+#         这些路径不在上方 push 过滤内，不会二次触发。
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'plugins/**'
+      - 'ceru-plugins/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  gen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate site data
+        run: node scripts/gen-site.js
+
+      - name: Commit derived artifacts
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A sub/ 'plugins*.json' ceru-list.json README.md dl/ scripts/
+          if git diff --cached --quiet; then
+            echo "派生产物无变化，跳过提交"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "update plugins: regenerate site data"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Push
+        if: steps.commit.outputs.changed == 'true'
+        run: git push
