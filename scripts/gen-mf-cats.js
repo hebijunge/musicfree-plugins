@@ -1,11 +1,10 @@
 // 生成 mf-cats.json（供 index.html MusicFree 生态区按分类展示）。
-// 分类逻辑与澜音 gen-ceru-list.js 一致：
+// 分类逻辑与澜音 gen-ceru-list.js 完全一致：
 //   common = 常用音乐（QQ/酷我/酷狗/咪咕/网易云/汽水/哔哩哔哩）
 //   music  = 其它音乐平台
 //   radio  = 听书 / 电台 / 播客
-//   dj64   = DJ 站（低品质，仅 64k/96k 在线流）
-//   djhq   = DJ 站（中高品质，128k/320k/flac）
-//   edm    = 电音 / 电子 / 舞曲 / Mix
+//   djhq   = DJ / 电音 / 舞曲（中高品质，128k/320k/flac）
+//   dj64   = DJ / 电音 / 舞曲（低品质，仅 64k/96k 在线流）
 //
 // 音质档位只在未混淆的源码仓 musicfree-plugins-src/plugins/*.js 里（supportedQualities 明文），
 // 混淆后的公开仓产物读不到，所以：
@@ -72,9 +71,9 @@ for (const p of manifest) {
   const src = byFile[file] || {};
   const key = file.replace(/-source\.plugin.*|\.plugin.*/, '').replace(/-v\d+(\.\d+)*$/, '');
   let category;
-  if (CAT_EDM.test(key)) category = 'edm';
-  else if (CAT_DJ.test(key)) {
+  if (CAT_EDM.test(key) || CAT_DJ.test(key)) {
     const top = src.topQuality || '';
+    // DJ 与电音舞曲同属 DJ 大类，按最高音质拆：≥128k 归 djhq，否则 dj64
     category = (top === '320k' || top === 'flac' || top === '192k' || top === '128k' || top === 'flac24bit' || top === 'hires' || top === 'master') ? 'djhq' : 'dj64';
   }
   else if (CAT_COMMON.test(key)) category = 'common';

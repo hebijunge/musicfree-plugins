@@ -10,9 +10,8 @@ const OUT = path.join(__dirname, '..', 'ceru-list.json');
 //   common = 常用音乐（QQ/酷我/酷狗/咪咕/网易云/汽水；澜音暂无哔哩哔哩）
 //   music  = 其它音乐平台
 //   radio  = 听书 / 电台 / 播客
-//   dj     = DJ 站（64k 在线试听流为主）
-//   djhq   = DJ 站（128k/320k/flac 高质量）
-//   edm    = 电音 / 电子 / 舞曲 / Mix
+//   djhq   = DJ / 电音 / 舞曲（中高品质，128k/320k/flac）
+//   dj64   = DJ / 电音 / 舞曲（低品质，64k/96k 在线试听流）
 const CAT_EDM = /电音|舞曲|Mix|黑色音频|172|36dj|dianyinge|hy57|mixdj|spacedj|xxedm|y2002|82dj/i;
 const CAT_DJ = /DJ|54dj|73dj|dj6|dj766|djcsj|djkk|djmei|djdjuu|djyule|djyyy|huole|huolongdj|pgdjz|qqdj|bibdj|bobidj|ddddj|djduoduo/i;
 const CAT_COMMON = /^ceru\.(qq|kuwo|kugou|migu|netease|qishui)$/;
@@ -56,9 +55,8 @@ for (const f of files) {
   const qualities = qualitiesOf(block);
   const top = topQuality(qualities);
   let category;
-  if (CAT_EDM.test(id) || CAT_EDM.test(name)) category = 'edm';
-  else if (CAT_DJ.test(id) || CAT_DJ.test(name)) {
-    // DJ 按最高音质拆：≥128k（或 96k+320k 组合）归 djhq，否则 dj64
+  if (CAT_EDM.test(id) || CAT_EDM.test(name) || CAT_DJ.test(id) || CAT_DJ.test(name)) {
+    // DJ 与电音舞曲同属 DJ 大类，按最高音质拆：≥128k 归 djhq，否则 dj64
     category = (top === '320k' || top === 'flac' || top === '192k' || top === '128k') ? 'djhq' : 'dj64';
   }
   else if (CAT_COMMON.test(id)) category = 'common';

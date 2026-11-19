@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T13:37:49.091Z",
+  "generatedAt": "2026-11-19T13:51:05.602Z",
   "count": 50,
   "plugins": [
     {
@@ -9,7 +9,7 @@
       "description": "支持音质：64k",
       "author": "hebijunge",
       "id": "ceru.172mix",
-      "category": "edm",
+      "category": "dj64",
       "qualities": [
         "64k"
       ],
@@ -35,7 +35,7 @@
       "description": "支持音质：64k",
       "author": "hebijunge",
       "id": "ceru.36dj",
-      "category": "edm",
+      "category": "dj64",
       "qualities": [
         "64k"
       ],
@@ -89,7 +89,7 @@
       "description": "支持音质：64k/320k",
       "author": "hebijunge",
       "id": "ceru.82dj",
-      "category": "edm",
+      "category": "djhq",
       "qualities": [
         "64k",
         "320k"
@@ -186,7 +186,7 @@
       "description": "支持音质：64k",
       "author": "hebijunge",
       "id": "ceru.dianyinge",
-      "category": "edm",
+      "category": "dj64",
       "qualities": [
         "64k"
       ],
@@ -390,7 +390,7 @@
       "description": "支持音质：64k",
       "author": "hebijunge",
       "id": "ceru.hy57",
-      "category": "edm",
+      "category": "dj64",
       "qualities": [
         "64k"
       ],
@@ -504,7 +504,7 @@
       "description": "支持音质：128k",
       "author": "hebijunge",
       "id": "ceru.mixdj",
-      "category": "edm",
+      "category": "djhq",
       "qualities": [
         "128k"
       ],
@@ -634,7 +634,7 @@
       "description": "支持音质：96k",
       "author": "hebijunge",
       "id": "ceru.spacedj",
-      "category": "edm",
+      "category": "dj64",
       "qualities": [
         "96k"
       ],
@@ -673,7 +673,7 @@
       "description": "支持音质：64k",
       "author": "hebijunge",
       "id": "ceru.xxedm",
-      "category": "edm",
+      "category": "dj64",
       "qualities": [
         "64k"
       ],
@@ -686,7 +686,7 @@
       "description": "支持音质：64k/320k/flac",
       "author": "hebijunge",
       "id": "ceru.y2002",
-      "category": "edm",
+      "category": "djhq",
       "qualities": [
         "64k",
         "320k",

@@ -415,9 +415,8 @@
     <button type="button" class="ceru-cat active" data-mfcat="common">🎧 常用音乐</button>
     <button type="button" class="ceru-cat" data-mfcat="music">🎵 其它音乐</button>
     <button type="button" class="ceru-cat" data-mfcat="radio">📚 听书 / 电台</button>
-    <button type="button" class="ceru-cat" data-mfcat="dj64">🔥 DJ 低音质</button>
     <button type="button" class="ceru-cat" data-mfcat="djhq">💎 DJ 高音质</button>
-    <button type="button" class="ceru-cat" data-mfcat="edm">⚡ 电音 / 舞曲</button>
+    <button type="button" class="ceru-cat" data-mfcat="dj64">🔥 DJ 低音质</button>
     <button type="button" class="ceru-cat" data-mfcat="all">全部</button>
   </div>
   <div class="mf-hint" id="mf-count-hint"></div>
@@ -442,9 +441,8 @@
       <button type="button" class="ceru-cat active" data-cat="common">🎧 常用音乐</button>
       <button type="button" class="ceru-cat" data-cat="music">🎵 其它音乐</button>
       <button type="button" class="ceru-cat" data-cat="radio">📚 听书 / 电台</button>
-      <button type="button" class="ceru-cat" data-cat="dj64">🔥 DJ 低音质</button>
       <button type="button" class="ceru-cat" data-cat="djhq">💎 DJ 高音质</button>
-      <button type="button" class="ceru-cat" data-cat="edm">⚡ 电音 / 舞曲</button>
+      <button type="button" class="ceru-cat" data-cat="dj64">🔥 DJ 低音质</button>
       <button type="button" class="ceru-cat" data-cat="all">全部</button>
     </div>
     <div class="ceru-actions">
@@ -565,7 +563,7 @@ function esc(s){return (s+'').replace(/[&<>"']/g,function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function isLx(p){return ((p.url||p.file||'')+'').indexOf('five-source-lx')>-1}
 var allPlugins=[];
-var MF_CAT_LABEL={common:'常用音乐',music:'其它音乐',radio:'听书电台',dj64:'DJ低音质',djhq:'DJ高音质',edm:'电音舞曲',all:'全部'};
+var MF_CAT_LABEL={common:'常用音乐',music:'其它音乐',radio:'听书电台',dj64:'DJ低音质',djhq:'DJ高音质',all:'全部'};
 var mfCatMap={},mfCat='common';
 function mfCatCount(c){return Object.keys(mfCatMap).filter(function(k){return c==='all'?true:mfCatMap[k]===c}).length}
 function fileOf(p){return ((p.url||p.file||'')+'').split('/').pop()||''}
@@ -578,7 +576,7 @@ function mfHintText(){
   if(!h)return;
   h.textContent='当前「'+MF_CAT_LABEL[mfCat]+'」'+mfCatCount(mfCat)+' 个 · 全部分类：'
     +'常用 '+mfCatCount('common')+' / 其它音乐 '+mfCatCount('music')+' / 听书电台 '+mfCatCount('radio')
-    +' / DJ低音质 '+mfCatCount('dj64')+' / DJ高音质 '+mfCatCount('djhq')+' / 电音舞曲 '+mfCatCount('edm');
+    +' / DJ高音质 '+mfCatCount('djhq')+' / DJ低音质 '+mfCatCount('dj64')+'（DJ 两类含电音舞曲）';
 }
 function renderGrid(){
   var q=(document.getElementById('plugin-search').value||'').trim().toLowerCase();
@@ -680,7 +678,7 @@ document.getElementById('eco-nav').addEventListener('click',function(e){
 /* ---------- 澜音 Ceru 生态：加载清单 + 分类 + 渲染 + 复制 ---------- */
 var CERU_BASE='https://hebijunge.github.io/musicfree-plugins/ceru-plugins/';
 var ceruPlugins=[],ceruCat='common';
-var CERU_CAT_LABEL={common:'常用音乐',music:'其它音乐',radio:'听书电台',dj64:'DJ低音质',djhq:'DJ高音质',edm:'电音舞曲',dj:'DJ站',all:'全部'};
+var CERU_CAT_LABEL={common:'常用音乐',music:'其它音乐',radio:'听书电台',dj64:'DJ低音质',djhq:'DJ高音质',all:'全部'};
 function ceruUrl(f){return CERU_BASE+encodeURIComponent(f)}
 function ceruFilter(p){
   if(ceruCat==='all')return true;
@@ -722,7 +720,7 @@ function renderCeru(){
   var hint=document.getElementById('ceru-count-hint');
   if(hint)hint.textContent=(q?'搜索「'+q+'」命中 ':'当前「'+CERU_CAT_LABEL[ceruCat]+'」')+list.length+' 个 · 全部分类：常用 '
     +ceruCatCount('common')+' / 其它音乐 '+ceruCatCount('music')+' / 听书电台 '+ceruCatCount('radio')
-    +' / DJ低音质 '+ceruCatCount('dj64')+' / DJ高音质 '+ceruCatCount('djhq')+' / 电音舞曲 '+ceruCatCount('edm');
+    +' / DJ高音质 '+ceruCatCount('djhq')+' / DJ低音质 '+ceruCatCount('dj64')+'（DJ 两类含电音舞曲）';
   var btn=document.getElementById('ceru-copy-cat');
   if(btn)btn.textContent='一键复制'+(q?'筛选':'')+(q?'':' '+CERU_CAT_LABEL[ceruCat])+' '+list.length+' 个导入链接';
 }
