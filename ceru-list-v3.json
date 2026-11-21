@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-21T14:47:45.671Z",
+  "generatedAt": "2026-11-21T22:26:19.546Z",
   "manifestVersion": 3,
   "count": 50,
   "plugins": [
@@ -159,7 +159,7 @@
     },
     {
       "name": "宝贝DJ",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "file": "v3/bibdj.ceru.js",
       "description": "支持音质：128k/320k",
       "author": "hebijunge",
@@ -303,7 +303,7 @@
     },
     {
       "name": "DJ6",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "file": "v3/dj6.ceru.js",
       "description": "支持音质：64k",
       "author": "hebijunge",
@@ -567,7 +567,7 @@
     },
     {
       "name": "华为音乐",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "file": "v3/hwmusic.ceru.js",
       "description": "支持音质：128k/320k/flac",
       "author": "hebijunge",
@@ -605,7 +605,7 @@
     },
     {
       "name": "JOOX音乐",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "file": "v3/joox.ceru.js",
       "description": "支持音质：128k/320k/flac",
       "author": "hebijunge",
@@ -825,7 +825,7 @@
     },
     {
       "name": "千千音乐",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "file": "v3/qianqian.ceru.js",
       "description": "支持音质：128k/320k/flac",
       "author": "hebijunge",
@@ -842,7 +842,7 @@
     },
     {
       "name": "蜻蜓FM",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "file": "v3/qingting.ceru.js",
       "description": "支持音质：128k/64k/24k",
       "author": "hebijunge",
@@ -859,9 +859,9 @@
     },
     {
       "name": "汽水音乐",
-      "version": "2.1.0",
+      "version": "2.1.2",
       "file": "v3/qishui.ceru.js",
-      "description": "汽水音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
+      "description": "汽水音乐音源（取链 / 歌词 / 榜单 / 歌单；搜索因上游签名服务授权到期暂不可用）",
       "author": "hebijunge",
       "id": "ceru.qishui",
       "category": "common",
@@ -928,7 +928,7 @@
     },
     {
       "name": "SpaceDJ",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "file": "v3/spacedj.ceru.js",
       "description": "支持音质：96k",
       "author": "hebijunge",
