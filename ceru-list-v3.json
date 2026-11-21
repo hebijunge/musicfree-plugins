@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-21T13:54:51.890Z",
+  "generatedAt": "2026-11-21T14:47:45.671Z",
   "manifestVersion": 3,
   "count": 50,
   "plugins": [
@@ -666,7 +666,7 @@
     },
     {
       "name": "酷我音乐",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "file": "v3/kuwo.ceru.js",
       "description": "酷我音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
       "author": "hebijunge",
