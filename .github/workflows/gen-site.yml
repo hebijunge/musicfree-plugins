@@ -18,6 +18,12 @@ on:
 permissions:
   contents: write
 
+# 同一时刻只允许一份 gen-site 运行：push 与 dispatch 同时触发、或连续快速 push 时
+# 两实例并发提交派生产物会导致后者 push 被 reject (fetch first)。
+concurrency:
+  group: gen-site
+  cancel-in-progress: true
+
 jobs:
   gen:
     runs-on: ubuntu-latest
@@ -51,4 +57,7 @@ jobs:
 
       - name: Push
         if: steps.commit.outputs.changed == 'true'
-        run: git push
+        run: |
+          # 竞态兜底：即使 concurrency 也可能接到取消前已 push 的远端，先变基再推
+          git pull --rebase origin master
+          git push
