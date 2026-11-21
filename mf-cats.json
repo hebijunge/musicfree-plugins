@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T14:28:42.532Z",
+  "generatedAt": "2026-11-21T00:49:07.711Z",
   "count": 57,
   "plugins": [
     {
@@ -270,10 +270,10 @@
     },
     {
       "name": "82DJ",
-      "version": "1.2.1",
-      "file": "82dj-source.plugin.v1.2.1.js",
-      "category": "djhq",
-      "topQuality": "320k"
+      "version": "1.2.2",
+      "file": "82dj-source.plugin.v1.2.2.js",
+      "category": "dj64",
+      "topQuality": ""
     },
     {
       "name": "QQDJ",

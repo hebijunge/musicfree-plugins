@@ -32,10 +32,10 @@ https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugi
 | 类别 | 条目 | 体积 | 订阅地址 |
 |---|---|---|---|
 | ① 常用六平台 | 6 | 2.84 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json` |
-| ② DJ / 舞曲 / 电音 | 30 | 0.78 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json` |
+| ② DJ / 舞曲 / 电音 | 30 | 0.79 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json` |
 | ③ 听书 / 电台 / 播客 | 10 | 0.59 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/radio.json` |
 | ④ 其它音乐平台 | 11 | 3.49 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/music.json` |
-| ⑤ 全部插件 | 57 | 7.71 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json` |
+| ⑤ 全部插件 | 57 | 7.72 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json` |
 <!-- /README:cat-stats -->
 
 <!-- README:cat-desc -->
@@ -160,7 +160,7 @@ LX 自定义源为非订阅机制，一次导入一个脚本，升级需重新�
 | 水晶舞曲 | 1.2.2 | [dj14-source.plugin.v1.2.2.js](plugins/dj14-source.plugin.v1.2.2.js) |
 | 清风DJ | 1.2.2 | [ddddj-source.plugin.v1.2.2.js](plugins/ddddj-source.plugin.v1.2.2.js) |
 | DJ766 | 1.4.1 | [dj766-source.plugin.v1.4.1.js](plugins/dj766-source.plugin.v1.4.1.js) |
-| 82DJ | 1.2.1 | [82dj-source.plugin.v1.2.1.js](plugins/82dj-source.plugin.v1.2.1.js) |
+| 82DJ | 1.2.2 | [82dj-source.plugin.v1.2.2.js](plugins/82dj-source.plugin.v1.2.2.js) |
 | QQDJ | 1.2.2 | [qqdjs-source.plugin.v1.2.2.js](plugins/qqdjs-source.plugin.v1.2.2.js) |
 | 36DJ | 1.2.2 | [36dj-source.plugin.v1.2.2.js](plugins/36dj-source.plugin.v1.2.2.js) |
 | 宝贝DJ | 1.2.1 | [bibdj-source.plugin.v1.2.1.js](plugins/bibdj-source.plugin.v1.2.1.js) |

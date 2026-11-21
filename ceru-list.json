@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T14:28:42.509Z",
+  "generatedAt": "2026-11-21T00:49:07.574Z",
   "count": 50,
   "plugins": [
     {
@@ -84,7 +84,7 @@
     },
     {
       "name": "82DJ舞曲网",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "file": "82dj.ceru.js",
       "description": "支持音质：64k/320k",
       "author": "hebijunge",
