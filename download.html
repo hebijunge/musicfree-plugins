@@ -162,6 +162,10 @@
   <div class="card">
     <h2>🌊 澜音 Ceru 原生插件 · 离线导入</h2>
     <p class="lead" style="margin:0 0 10px">在线导入链接在<a href="./">首页</a>「澜音 Ceru」区。这里提供每个 <code>.ceru.js</code> 原文件下载，可存到本地再进澜音插件管理导入。共 <b id="ceru-total">-</b> 个。</p>
+    <div class="ceru-cats ceru-mv" id="ceru-mv">
+      <button type="button" class="ceru-cat active" data-mv="2">v2 规范 · 全平台通用</button>
+      <button type="button" class="ceru-cat" data-mv="3">v3 规范 · 桌面 2.5.0+</button>
+    </div>
     <div class="ceru-cats" id="ceru-cats">
       <button type="button" class="ceru-cat active" data-cat="common">🎧 常用音乐</button>
       <button type="button" class="ceru-cat" data-cat="music">🎵 其它音乐</button>
@@ -276,7 +280,8 @@ document.getElementById('eco-nav').addEventListener('click', function(e){
 /* ---------- 澜音 Ceru：加载清单 + 分类 + 渲染 ---------- */
 var CERU_PAGE = 'https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/ceru-plugins/';
 var CERU_PAGE_ALT = 'https://hebijunge.github.io/musicfree-plugins/ceru-plugins/';
-var ceruItems = [], ceruCat = 'common';
+var ceruItems = [], ceruItemsV3 = [], ceruCat = 'common', ceruMv = 2;
+function ceruActive(){ return ceruMv === 3 ? ceruItemsV3 : ceruItems; }
 function ceruDedup(list){
   var best={};
   list.forEach(function(p){
@@ -287,7 +292,9 @@ function ceruDedup(list){
 }
 function renderCeru(){
   var q = (document.getElementById('ceru-search').value || '').trim().toLowerCase();
-  var dedup = ceruDedup(ceruItems);
+  var dedup = ceruDedup(ceruActive());
+  var total = document.getElementById('ceru-total');
+  if (total) total.textContent = dedup.length;
   var list = dedup.filter(function(p){
     var okCat = ceruCat==='all' ? true : (p.category||'music')===ceruCat;
     return okCat && (!q || (p.name + ' ' + p.version + ' ' + p.id).toLowerCase().indexOf(q) > -1);
@@ -295,8 +302,9 @@ function renderCeru(){
   var box = document.getElementById('ceru-plist');
   if (!list.length){ box.innerHTML = '<div class="empty">没有匹配的澜音插件</div>'; return; }
   box.innerHTML = list.map(function(p){
+    var mv3 = p.manifestVersion === 3 ? ' <small style="color:#16a34a">v3</small>' : '';
     return '<div class="pitem">'
-      + '<div class="nm">' + p.name + '<small>v' + p.version + '</small></div>'
+      + '<div class="nm">' + p.name + mv3 + '<small>v' + p.version + '</small></div>'
       + '<button class="mini" data-ceru-file="' + p.file + '" data-name="' + p.name + '">下载</button>'
       + '</div>';
   }).join('');
@@ -306,19 +314,34 @@ document.getElementById('ceru-cats').addEventListener('click', function(e){
   var b = e.target.closest('.ceru-cat');
   if (!b) return;
   ceruCat = b.getAttribute('data-cat');
-  document.querySelectorAll('.ceru-cat').forEach(function(x){ x.classList.toggle('active', x===b); });
+  document.querySelectorAll('#ceru-cats .ceru-cat').forEach(function(x){ x.classList.toggle('active', x===b); });
+  renderCeru();
+});
+document.getElementById('ceru-mv').addEventListener('click', function(e){
+  var b = e.target.closest('.ceru-cat');
+  if (!b) return;
+  ceruMv = Number(b.getAttribute('data-mv')) || 2;
+  document.querySelectorAll('#ceru-mv .ceru-cat').forEach(function(x){ x.classList.toggle('active', x===b); });
   renderCeru();
 });
 fetch('ceru-list.json', { cache: 'no-store' })
   .then(function(r){ return r.json(); })
   .then(function(d){
     ceruItems = (d && d.plugins) || [];
-    document.getElementById('ceru-total').textContent = ceruDedup(ceruItems).length;
+    if (ceruMv === 2) document.getElementById('ceru-total').textContent = ceruDedup(ceruItems).length;
     renderCeru();
   })
   .catch(function(){
     document.getElementById('ceru-plist').innerHTML = '<div class="empty">澜音清单加载失败</div>';
   });
+fetch('ceru-list-v3.json', { cache: 'no-store' })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    ceruItemsV3 = ((d && d.plugins) || []).map(function(p){ p.manifestVersion = 3; return p; });
+    if (ceruMv === 3) document.getElementById('ceru-total').textContent = ceruDedup(ceruItemsV3).length;
+    renderCeru();
+  })
+  .catch(function(){ ceruItemsV3 = []; renderCeru(); });
 
 /* ---------- 下载处理（MusicFree 插件 + 澜音 ceru + 洛雪 LX） ---------- */
 // bases 传一条或多条线路，按顺序试：加速代理在前，官方 Pages 兜底
@@ -326,7 +349,7 @@ function doDownload(file, bases){
   if (!Array.isArray(bases)) bases = [bases];
   return bases.reduce(function(p, base){
     return p['catch'](function(){
-      return fetch(base + encodeURIComponent(file), { cache: 'no-store' })
+      return fetch(base + encodeURIComponent(file).replace(/%2F/gi, '/'), { cache: 'no-store' })
         .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); });
     });
   }, Promise.reject(new Error('no base')))

@@ -1,0 +1,1031 @@
+{
+  "generatedAt": "2026-11-21T11:42:02.149Z",
+  "manifestVersion": 3,
+  "count": 50,
+  "plugins": [
+    {
+      "name": "172Mix",
+      "version": "1.0.0",
+      "file": "v3/172mix.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.172mix",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.172mix.charts",
+          "title": "172Mix榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "一听音乐",
+      "version": "1.0.0",
+      "file": "v3/1ting.ceru.js",
+      "description": "支持音质：128k",
+      "author": "hebijunge",
+      "id": "ceru.1ting",
+      "category": "music",
+      "qualities": [
+        "128k"
+      ],
+      "topQuality": "128k",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "36DJ",
+      "version": "1.0.0",
+      "file": "v3/36dj.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.36dj",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.36dj.charts",
+          "title": "36DJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "我是DJ",
+      "version": "1.0.0",
+      "file": "v3/54dj.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.54dj",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.54dj.charts",
+          "title": "我是DJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "5sing",
+      "version": "1.0.0",
+      "file": "v3/5sing.ceru.js",
+      "description": "支持音质：128k/192k/320k",
+      "author": "hebijunge",
+      "id": "ceru.5sing",
+      "category": "music",
+      "qualities": [
+        "128k",
+        "192k",
+        "320k"
+      ],
+      "topQuality": "320k",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "73DJ",
+      "version": "1.0.0",
+      "file": "v3/73dj.ceru.js",
+      "description": "73DJ",
+      "author": "hebijunge",
+      "id": "ceru.73dj",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "82DJ舞曲网",
+      "version": "1.0.1",
+      "file": "v3/82dj.ceru.js",
+      "description": "支持音质：64k/320k",
+      "author": "hebijunge",
+      "id": "ceru.82dj",
+      "category": "djhq",
+      "qualities": [
+        "64k",
+        "320k"
+      ],
+      "topQuality": "320k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.82dj.charts",
+          "title": "82DJ舞曲网榜单",
+          "kind": "charts"
+        },
+        {
+          "id": "ceru.82dj.playlists",
+          "title": "82DJ舞曲网歌单",
+          "kind": "playlists"
+        }
+      ]
+    },
+    {
+      "name": "Apple Music",
+      "version": "1.0.0",
+      "file": "v3/applemusic.ceru.js",
+      "description": "Apple Music 搜索 + 酷我兜底取链，音质 128k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.applemusic",
+      "category": "music",
+      "qualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "宝贝DJ",
+      "version": "1.0.0",
+      "file": "v3/bibdj.ceru.js",
+      "description": "支持音质：128k/320k",
+      "author": "hebijunge",
+      "id": "ceru.bibdj",
+      "category": "djhq",
+      "qualities": [
+        "128k",
+        "320k"
+      ],
+      "topQuality": "320k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.bibdj.charts",
+          "title": "宝贝DJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "波比DJ",
+      "version": "1.0.0",
+      "file": "v3/bobidj.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.bobidj",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.bobidj.charts",
+          "title": "波比DJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "博看听书",
+      "version": "1.0.0",
+      "file": "v3/bokantingshu.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.bokantingshu",
+      "category": "radio",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "CCTV听音",
+      "version": "1.0.0",
+      "file": "v3/cctv.ceru.js",
+      "description": "央视听音，AAC over HLS，音质 128k/64k",
+      "author": "hebijunge",
+      "id": "ceru.cctv",
+      "category": "radio",
+      "qualities": [
+        "128k",
+        "64k"
+      ],
+      "topQuality": "128k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.cctv.charts",
+          "title": "CCTV听音榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "清风DJ",
+      "version": "1.0.0",
+      "file": "v3/ddddj.ceru.js",
+      "description": "支持音质：96k/320k",
+      "author": "hebijunge",
+      "id": "ceru.ddddj",
+      "category": "djhq",
+      "qualities": [
+        "96k",
+        "320k"
+      ],
+      "topQuality": "320k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.ddddj.charts",
+          "title": "清风DJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "电音阁",
+      "version": "1.0.0",
+      "file": "v3/dianyinge.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.dianyinge",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.dianyinge.charts",
+          "title": "电音阁榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "我是DJ",
+      "version": "1.1.2",
+      "file": "v3/dj54.ceru.js",
+      "description": "54dj DJ 音源（搜索 / 取链 / 榜单，64k m4a）",
+      "author": "hebijunge",
+      "id": "ceru.dj54",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "dj54-charts",
+          "title": "我是DJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "DJ6",
+      "version": "1.0.0",
+      "file": "v3/dj6.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.dj6",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.dj6.charts",
+          "title": "DJ6榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "DJ766",
+      "version": "1.0.0",
+      "file": "v3/dj766.ceru.js",
+      "description": "支持音质：96k/320k",
+      "author": "hebijunge",
+      "id": "ceru.dj766",
+      "category": "djhq",
+      "qualities": [
+        "96k",
+        "320k"
+      ],
+      "topQuality": "320k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.dj766.charts",
+          "title": "DJ766榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "DJ串烧集",
+      "version": "1.0.0",
+      "file": "v3/djcsj.ceru.js",
+      "description": "支持音质：64k/320k",
+      "author": "hebijunge",
+      "id": "ceru.djcsj",
+      "category": "djhq",
+      "qualities": [
+        "64k",
+        "320k"
+      ],
+      "topQuality": "320k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.djcsj.charts",
+          "title": "DJ串烧集榜单",
+          "kind": "charts"
+        },
+        {
+          "id": "ceru.djcsj.playlists",
+          "title": "DJ串烧集歌单",
+          "kind": "playlists"
+        }
+      ]
+    },
+    {
+      "name": "DJ多多",
+      "version": "1.0.0",
+      "file": "v3/djduoduo.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.djduoduo",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.djduoduo.charts",
+          "title": "DJ多多榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "DJKK",
+      "version": "1.0.0",
+      "file": "v3/djkk.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.djkk",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.djkk.charts",
+          "title": "DJKK榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "魅力DJ",
+      "version": "1.0.0",
+      "file": "v3/djmei.ceru.js",
+      "description": "支持音质：128k",
+      "author": "hebijunge",
+      "id": "ceru.djmei",
+      "category": "djhq",
+      "qualities": [
+        "128k"
+      ],
+      "topQuality": "128k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.djmei.charts",
+          "title": "魅力DJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "djuu DJ",
+      "version": "1.1.2",
+      "file": "v3/djuu.ceru.js",
+      "description": "djuu DJ 音源（搜索 / 取链 / 榜单 / 歌单，64k m4a）",
+      "author": "hebijunge",
+      "id": "ceru.djdjuu",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "djuu-charts",
+          "title": "djuu DJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "DJ娱乐",
+      "version": "1.0.0",
+      "file": "v3/djyule.ceru.js",
+      "description": "支持音质：64k/320k",
+      "author": "hebijunge",
+      "id": "ceru.djyule",
+      "category": "djhq",
+      "qualities": [
+        "64k",
+        "320k"
+      ],
+      "topQuality": "320k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.djyule.charts",
+          "title": "DJ娱乐榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "DJ耶耶耶",
+      "version": "1.0.0",
+      "file": "v3/djyyy.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.djyyy",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.djyyy.charts",
+          "title": "DJ耶耶耶榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "好听轻音乐",
+      "version": "1.0.0",
+      "file": "v3/htqyy.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.htqyy",
+      "category": "music",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.htqyy.charts",
+          "title": "好听轻音乐榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "火龙DJ",
+      "version": "1.0.0",
+      "file": "v3/huole.ceru.js",
+      "description": "支持音质：64k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.huole",
+      "category": "djhq",
+      "qualities": [
+        "64k",
+        "320k",
+        "flac"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.huole.charts",
+          "title": "火龙DJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "火龙DJ",
+      "version": "1.0.0",
+      "file": "v3/huolongdj.ceru.js",
+      "description": "支持音质：64k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.huolongdj",
+      "category": "djhq",
+      "qualities": [
+        "64k",
+        "320k",
+        "flac"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.huolongdj.charts",
+          "title": "火龙DJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "华为音乐",
+      "version": "1.0.0",
+      "file": "v3/hwmusic.ceru.js",
+      "description": "支持音质：128k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.hwmusic",
+      "category": "music",
+      "qualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "黑色音频",
+      "version": "1.0.0",
+      "file": "v3/hy57.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.hy57",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.hy57.charts",
+          "title": "黑色音频榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "JOOX音乐",
+      "version": "1.0.0",
+      "file": "v3/joox.ceru.js",
+      "description": "支持音质：128k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.joox",
+      "category": "music",
+      "qualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "快音",
+      "version": "1.0.0",
+      "file": "v3/kuaiyin.ceru.js",
+      "description": "支持音质：128k",
+      "author": "hebijunge",
+      "id": "ceru.kuaiyin",
+      "category": "music",
+      "qualities": [
+        "128k"
+      ],
+      "topQuality": "128k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.kuaiyin.charts",
+          "title": "快音榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "酷狗音乐",
+      "version": "2.0.1",
+      "file": "v3/kugou.ceru.js",
+      "description": "酷狗音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单；320k/无损走酷狗 Cookie 或酷我换源兜底）",
+      "author": "hebijunge",
+      "id": "ceru.kugou",
+      "category": "common",
+      "qualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "kugou-charts",
+          "title": "酷狗榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "酷我音乐",
+      "version": "2.0.1",
+      "file": "v3/kuwo.ceru.js",
+      "description": "酷我音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
+      "author": "hebijunge",
+      "id": "ceru.kuwo",
+      "category": "common",
+      "qualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "kuwo-charts",
+          "title": "酷我榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "荔枝FM",
+      "version": "1.0.0",
+      "file": "v3/lizhi.ceru.js",
+      "description": "支持音质：64k/128k",
+      "author": "hebijunge",
+      "id": "ceru.lizhi",
+      "category": "radio",
+      "qualities": [
+        "64k",
+        "128k"
+      ],
+      "topQuality": "128k",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "咪咕音乐",
+      "version": "2.0.0",
+      "file": "v3/migu.ceru.js",
+      "description": "咪咕音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
+      "author": "hebijunge",
+      "id": "ceru.migu",
+      "category": "common",
+      "qualities": [
+        "128k",
+        "320k",
+        "flac",
+        "flac24bit"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "migu-charts",
+          "title": "咪咕榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "猫耳FM",
+      "version": "1.0.0",
+      "file": "v3/missevan.ceru.js",
+      "description": "支持音质：128k",
+      "author": "hebijunge",
+      "id": "ceru.missevan",
+      "category": "radio",
+      "qualities": [
+        "128k"
+      ],
+      "topQuality": "128k",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "MixDJ",
+      "version": "1.0.0",
+      "file": "v3/mixdj.ceru.js",
+      "description": "支持音质：128k",
+      "author": "hebijunge",
+      "id": "ceru.mixdj",
+      "category": "djhq",
+      "qualities": [
+        "128k"
+      ],
+      "topQuality": "128k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.mixdj.charts",
+          "title": "MixDJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "网易云音乐",
+      "version": "2.0.0",
+      "file": "v3/netease.ceru.js",
+      "description": "网易云音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
+      "author": "hebijunge",
+      "id": "ceru.netease",
+      "category": "common",
+      "qualities": [
+        "128k",
+        "320k",
+        "flac",
+        "flac24bit"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "netease-charts",
+          "title": "网易云榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "网易电台",
+      "version": "1.0.0",
+      "file": "v3/neteaseradio.ceru.js",
+      "description": "支持音质：128k",
+      "author": "hebijunge",
+      "id": "ceru.neteaseradio",
+      "category": "radio",
+      "qualities": [
+        "128k"
+      ],
+      "topQuality": "128k",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "皮狗DJ",
+      "version": "1.0.0",
+      "file": "v3/pgdjz.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.pgdjz",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.pgdjz.charts",
+          "title": "皮狗DJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "千千音乐",
+      "version": "1.0.0",
+      "file": "v3/qianqian.ceru.js",
+      "description": "支持音质：128k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.qianqian",
+      "category": "music",
+      "qualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "蜻蜓FM",
+      "version": "1.0.0",
+      "file": "v3/qingting.ceru.js",
+      "description": "支持音质：128k/64k/24k",
+      "author": "hebijunge",
+      "id": "ceru.qingting",
+      "category": "radio",
+      "qualities": [
+        "128k",
+        "64k",
+        "24k"
+      ],
+      "topQuality": "128k",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "汽水音乐",
+      "version": "2.0.0",
+      "file": "v3/qishui.ceru.js",
+      "description": "汽水音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
+      "author": "hebijunge",
+      "id": "ceru.qishui",
+      "category": "common",
+      "qualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "qishui-charts",
+          "title": "汽水榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "QQ音乐",
+      "version": "2.0.0",
+      "file": "v3/qq.ceru.js",
+      "description": "QQ音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
+      "author": "hebijunge",
+      "id": "ceru.qq",
+      "category": "common",
+      "qualities": [
+        "128k",
+        "320k",
+        "flac",
+        "flac24bit"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "qq-charts",
+          "title": "QQ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "QQDJ",
+      "version": "1.0.0",
+      "file": "v3/qqdjs.ceru.js",
+      "description": "支持音质：96k/320k",
+      "author": "hebijunge",
+      "id": "ceru.qqdj",
+      "category": "djhq",
+      "qualities": [
+        "96k",
+        "320k"
+      ],
+      "topQuality": "320k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.qqdj.charts",
+          "title": "QQDJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "SpaceDJ",
+      "version": "1.0.0",
+      "file": "v3/spacedj.ceru.js",
+      "description": "支持音质：96k",
+      "author": "hebijunge",
+      "id": "ceru.spacedj",
+      "category": "dj64",
+      "qualities": [
+        "96k"
+      ],
+      "topQuality": "96k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.spacedj.charts",
+          "title": "SpaceDJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "街声",
+      "version": "1.0.0",
+      "file": "v3/streetvoice.ceru.js",
+      "description": "街声独立音乐，96k HLS 单档",
+      "author": "hebijunge",
+      "id": "ceru.streetvoice",
+      "category": "music",
+      "qualities": [
+        "96k"
+      ],
+      "topQuality": "96k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.streetvoice.charts",
+          "title": "街声榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "喜马拉雅",
+      "version": "1.0.0",
+      "file": "v3/ximalaya.ceru.js",
+      "description": "支持音质：64k（免费声音）",
+      "author": "hebijunge",
+      "id": "ceru.ximalaya",
+      "category": "radio",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.ximalaya.charts",
+          "title": "喜马拉雅榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "小熊电音",
+      "version": "1.0.0",
+      "file": "v3/xxedm.ceru.js",
+      "description": "支持音质：64k",
+      "author": "hebijunge",
+      "id": "ceru.xxedm",
+      "category": "dj64",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
+      "name": "Y2002电音",
+      "version": "1.0.0",
+      "file": "v3/y2002.ceru.js",
+      "description": "支持音质：64k/320k/flac",
+      "author": "hebijunge",
+      "id": "ceru.y2002",
+      "category": "djhq",
+      "qualities": [
+        "64k",
+        "320k",
+        "flac"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.y2002.charts",
+          "title": "Y2002电音榜单",
+          "kind": "charts"
+        }
+      ]
+    }
+  ]
+}

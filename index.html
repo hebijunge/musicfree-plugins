@@ -145,6 +145,7 @@
   .ceru-item{background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px}
   .ceru-item .cname{font-size:13px;font-weight:600;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
   .ceru-item .cver{font-size:10px;font-family:var(--mono);color:#b5e4ff;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3);border-radius:10px;padding:1px 7px;white-space:nowrap}
+  .ceru-item .cver.cver-v3{color:#86efac;background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.35)}
   .ceru-item .cbtn{border:none;background:rgba(56,189,248,.15);color:#b5e4ff;border:1px solid rgba(56,189,248,.35);border-radius:7px;padding:5px 10px;font-size:12px;cursor:pointer;white-space:nowrap;transition:all .15s}
   .ceru-item .cbtn:hover{background:rgba(56,189,248,.28);color:#fff}
   .ceru-item .cbtn.copied{background:var(--ok)!important;border-color:var(--ok)!important;color:#fff!important}
@@ -437,6 +438,10 @@
       <input id="ceru-search" type="search" placeholder="搜索澜音插件：名称 / 版本 / 描述…" autocomplete="off">
       <button type="button" class="search-clear" aria-label="清空搜索">×</button>
     </div>
+    <div class="ceru-cats ceru-mv" id="ceru-mv">
+      <button type="button" class="ceru-cat active" data-mv="2">v2 规范 · 全平台通用（含手机版）</button>
+      <button type="button" class="ceru-cat" data-mv="3">v3 规范 · 桌面 2.5.0+（新增首页榜单/歌单区块）</button>
+    </div>
     <div class="ceru-cats" id="ceru-cats">
       <button type="button" class="ceru-cat active" data-cat="common">🎧 常用音乐</button>
       <button type="button" class="ceru-cat" data-cat="music">🎵 其它音乐</button>
@@ -675,9 +680,10 @@ document.getElementById('eco-nav').addEventListener('click',function(e){
 
 /* ---------- 澜音 Ceru 生态：加载清单 + 分类 + 渲染 + 复制 ---------- */
 var CERU_BASE='https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/ceru-plugins/';
-var ceruPlugins=[],ceruCat='common';
+var ceruPlugins=[],ceruPluginsV3=[],ceruCat='common',ceruMv=2;
+function ceruActive(){return ceruMv===3?ceruPluginsV3:ceruPlugins}
 var CERU_CAT_LABEL={common:'常用音乐',music:'其它音乐',radio:'听书电台',dj64:'DJ低音质',djhq:'DJ高音质',all:'全部'};
-function ceruUrl(f){return CERU_BASE+encodeURIComponent(f)}
+function ceruUrl(f){return CERU_BASE+encodeURIComponent(f).replace(/%2F/gi,'/')}
 function ceruFilter(p){
   if(ceruCat==='all')return true;
   return (p.category||'music')===ceruCat;
@@ -692,10 +698,11 @@ function ceruDedup(list){
   return Object.keys(best).map(function(k){return best[k]});
 }
 function ceruCatCount(c){
-  return ceruDedup(ceruPlugins).filter(function(p){return c==='all'?true:(p.category||'music')===c}).length;
+  return ceruDedup(ceruActive()).filter(function(p){return c==='all'?true:(p.category||'music')===c}).length;
 }
 function ceruItemHTML(p){
-  return '<div class="ceru-item"><span class="cname" title="'+esc(p.name)+' · '+esc(p.description||'')+'">'+esc(p.name)+'</span>'
+  var mv3=p.manifestVersion===3?' <span class="cver cver-v3">v3</span>':'';
+  return '<div class="ceru-item"><span class="cname" title="'+esc(p.name)+' · '+esc(p.description||'')+'">'+esc(p.name)+mv3+'</span>'
     +'<span class="cver">v'+esc(p.version)+'</span>'
     +'<button class="cbtn" data-ceru-copy="'+esc(p.file)+'">复制</button></div>';
 }
@@ -705,7 +712,7 @@ function ceruSearchQ(){
 }
 function renderCeru(){
   var q=ceruSearchQ();
-  var dedup=ceruDedup(ceruPlugins);
+  var dedup=ceruDedup(ceruActive());
   var list=dedup.filter(function(p){
     if(!ceruFilter(p))return false;
     if(!q)return true;
@@ -716,7 +723,8 @@ function renderCeru(){
     :'<div class="ceru-loading">'+(q?'未找到匹配的澜音插件':'暂无澜音插件')+'</div>';
   document.getElementById('stat-ceru').textContent=dedup.length?dedup.length:'-';
   var hint=document.getElementById('ceru-count-hint');
-  if(hint)hint.textContent=(q?'搜索「'+q+'」命中 ':'当前「'+CERU_CAT_LABEL[ceruCat]+'」')+list.length+' 个 · 全部分类：常用 '
+  if(hint)hint.textContent=(ceruMv===3?'v3 规范 · 澜音桌面 2.5.0+ 专用，手机版请切回 v2 · ':'')
+    +(q?'搜索「'+q+'」命中 ':'当前「'+CERU_CAT_LABEL[ceruCat]+'」')+list.length+' 个 · 全部分类：常用 '
     +ceruCatCount('common')+' / 其它音乐 '+ceruCatCount('music')+' / 听书电台 '+ceruCatCount('radio')
     +' / DJ高音质 '+ceruCatCount('djhq')+' / DJ低音质 '+ceruCatCount('dj64')+'（DJ 两类含电音舞曲）';
   var btn=document.getElementById('ceru-copy-cat');
@@ -753,12 +761,16 @@ document.addEventListener('click',function(e){
   var cb=e.target.closest('[data-ceru-copy]');
   if(cb){copyText(ceruUrl(cb.getAttribute('data-ceru-copy')),cb);return}
   // 限定在澜音区：MusicFree 区胶囊复用 .ceru-cat 样式类，别让它污染 ceruCat
+  var mvBtn=e.target.closest('#ceru-mv .ceru-cat');
+  if(mvBtn){ceruMv=Number(mvBtn.getAttribute('data-mv'))||2;
+    document.querySelectorAll('#ceru-mv .ceru-cat').forEach(function(b){b.classList.toggle('active',b===mvBtn)});
+    renderCeru();return}
   var catBtn=e.target.closest('#ceru-cats .ceru-cat');
   if(catBtn){ceruCat=catBtn.getAttribute('data-cat');
     document.querySelectorAll('#ceru-cats .ceru-cat').forEach(function(b){b.classList.toggle('active',b===catBtn)});
     renderCeru();return}
   if(e.target.closest('#ceru-copy-cat')){
-    var list=ceruDedup(ceruPlugins).filter(ceruFilter);
+    var list=ceruDedup(ceruActive()).filter(ceruFilter);
     var urls=list.map(function(p){return ceruUrl(p.file)}).join('\n');
     copyText(urls,e.target);
     var b=e.target;var o=b.textContent;b.textContent='✓ 已复制 '+list.length+' 个';
@@ -769,6 +781,9 @@ document.addEventListener('click',function(e){
 fetch('ceru-list.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():Promise.reject()})
   .then(function(d){ceruPlugins=(d&&d.plugins)||[];renderCeru()})
   .catch(function(){ceruPlugins=[];renderCeru()});
+fetch('ceru-list-v3.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():Promise.reject()})
+  .then(function(d){ceruPluginsV3=((d&&d.plugins)||[]).map(function(p){p.manifestVersion=3;return p});renderCeru()})
+  .catch(function(){ceruPluginsV3=[];renderCeru()});
 </script>
 </body>
 </html>
