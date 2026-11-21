@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-21T03:52:47.085Z",
-  "count": 49,
+  "generatedAt": "2026-11-21T04:08:31.834Z",
+  "count": 50,
   "plugins": [
     {
       "name": "172Mix",
@@ -81,6 +81,20 @@
         "64k"
       ],
       "topQuality": "64k"
+    },
+    {
+      "name": "82DJ舞曲网",
+      "version": "1.0.1",
+      "file": "82dj.ceru.js",
+      "description": "支持音质：64k/320k",
+      "author": "hebijunge",
+      "id": "ceru.82dj",
+      "category": "djhq",
+      "qualities": [
+        "64k",
+        "320k"
+      ],
+      "topQuality": "320k"
     },
     {
       "name": "Apple Music",
