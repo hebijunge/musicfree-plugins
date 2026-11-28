@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-11-28T04:37:15.697Z",
+  "count": 1,
+  "plugins": [
+    {
+      "name": "汽水音乐",
+      "version": "1.0.0",
+      "file": "qishui.js",
+      "id": "org.hebijunge.qishui",
+      "sourceId": "qishui.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.get",
+        "collections.members",
+        "discovery.charts",
+        "discovery.playlistTags",
+        "discovery.playlists",
+        "media.resolve",
+        "lyrics.get",
+        "comments.list",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music",
+        "sheet",
+        "album",
+        "artist"
+      ],
+      "supportedQualities": [
+        "128k",
+        "320k"
+      ]
+    }
+  ]
+}

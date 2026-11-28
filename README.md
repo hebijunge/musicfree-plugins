@@ -31,11 +31,11 @@ https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugi
 <!-- README:cat-stats -->
 | 类别 | 条目 | 体积 | 订阅地址 |
 |---|---|---|---|
-| ① 常用六平台 | 6 | 2.84 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json` |
+| ① 常用六平台 | 6 | 2.88 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json` |
 | ② DJ / 舞曲 / 电音 | 30 | 0.79 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json` |
 | ③ 听书 / 电台 / 播客 | 10 | 0.59 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/radio.json` |
 | ④ 其它音乐平台 | 11 | 3.49 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/music.json` |
-| ⑤ 全部插件 | 57 | 7.72 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json` |
+| ⑤ 全部插件 | 57 | 7.76 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json` |
 <!-- /README:cat-stats -->
 
 <!-- README:cat-desc -->
@@ -127,7 +127,7 @@ LX 自定义源为非订阅机制，一次导入一个脚本，升级需重新�
 | 酷狗音乐 | 1.9.24 | [kugou-source.plugin.v1.9.24.js](plugins/kugou-source.plugin.v1.9.24.js) |
 | 咪咕音乐 | 1.9.20 | [migu-source.plugin.v1.9.20.js](plugins/migu-source.plugin.v1.9.20.js) |
 | 网易云音乐 | 1.9.27 | [netease-source.plugin.v1.9.27.js](plugins/netease-source.plugin.v1.9.27.js) |
-| 汽水音乐 | 1.9.23 | [qishui-source.plugin.v1.9.23.js](plugins/qishui-source.plugin.v1.9.23.js) |
+| 汽水音乐 | 1.9.24 | [qishui-source.plugin.js](plugins/qishui-source.plugin.js) |
 | B站 | 1.1.4 | [bilibili-source.plugin.v1.1.4.js](plugins/bilibili-source.plugin.v1.1.4.js) |
 | 番茄畅听 | 1.3.1 | [fanqie-source.plugin.v1.3.1.js](plugins/fanqie-source.plugin.v1.3.1.js) |
 | DJ多多 | 1.0.2 | [djduoduo-source.plugin.v1.0.2.js](plugins/djduoduo-source.plugin.v1.0.2.js) |
