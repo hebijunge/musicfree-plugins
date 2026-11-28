@@ -36,7 +36,14 @@ button,a{-webkit-tap-highlight-color:transparent}
 .top-links a{text-decoration:none;color:var(--muted);transition:color .2s}
 .top-links a:hover{color:var(--ink)}
 .issue{font:10px/1 var(--mono);color:var(--faint);letter-spacing:.08em}
-@media(max-width:640px){.issue{display:none}.top-links{gap:10px}}
+@media(max-width:640px){
+  .issue{display:none}
+  .top-links{gap:10px}
+  .top-links a{padding:6px 0}
+  .search input{font-size:16px}
+  .mini{padding:7px 12px}
+  .shell{padding:0 16px 48px}
+}
 .theme-toggle{width:32px;height:32px;flex:0 0 auto;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);display:grid;place-items:center;font:700 14px/1 var(--mono);transition:border-color .2s}
 .theme-toggle:hover{border-color:var(--line-strong)}
 

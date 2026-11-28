@@ -23,13 +23,8 @@
         <div class="eyebrow-row"><span class="dot"></span><span class="eyebrow">Four ecosystems · one archive</span><span class="rule"></span><span class="issue">VOL. 2026.11.28</span></div>
         <h1>把音乐，<br>装进<span class="mark">播放器</span>。</h1>
         <p class="lead">MusicFree、澜音 Ceru、Baka V2、洛雪 LX。同一批音源，一份目录，四种格式——选好播放器，复制链接即可。</p>
+        <div class="stat-pills" aria-label="插件统计"><span class="pill">MusicFree <b id="stat-mf">—</b></span><span class="pill">澜音 <b id="stat-ceru">—</b></span><span class="pill">DJ <b>30</b></span><span class="pill">听书 <b>10</b></span></div>
         <p class="quick-line">第一次用？先复制<strong>「常用六平台」</strong>订阅地址，体积小、更稳定。<a href="download.html">离线导入 ↗</a></p>
-      </div>
-      <div class="hero-stats" aria-label="插件统计">
-        <div class="stat"><b id="stat-mf">—</b><span>MusicFree 插件</span></div>
-        <div class="stat"><b id="stat-ceru">—</b><span>澜音插件（双版本）</span></div>
-        <div class="stat"><b>30</b><span>DJ / 舞曲音源</span></div>
-        <div class="stat"><b>1.6.0</b><span>洛雪五源脚本</span></div>
       </div>
     </section>
 
@@ -138,12 +133,12 @@ window.Site.ready(function(){
     var box=document.getElementById('dir-list');
     box.innerHTML=list.length?list.map(function(p){
       if(isMf){var f=encodeURIComponent(fileOf(p));
-        return '<div class="plugin-row"><span class="avatar">'+esc(initial(p.name))+'</span><div class="p-info"><div class="plugin-name">'+esc(p.name)+'</div><div class="plugin-file">'+esc(fileOf(p))+'</div></div><span class="tag">v'+esc(p.version)+'</span><span class="quality">'+esc(mfTop(p)||'—')+'</span><div class="row-actions"><a class="mini accent" href="'+FAST+'plugins/'+f+'" target="_blank" rel="noopener">下载</a><a class="mini" href="'+PAGE+'plugins/'+f+'" target="_blank" rel="noopener">备用</a></div></div>'}
+        return '<div class="plugin-row"><span class="avatar">'+esc(initial(p.name))+'</span><div class="p-info"><div class="plugin-name">'+esc(p.name)+'</div><div class="plugin-file">'+esc(fileOf(p))+'</div></div><span class="tag">v'+esc(p.version)+'</span>'+(mfTop(p)?'<span class="quality">'+esc(mfTop(p))+'</span>':'')+'<div class="row-actions"><a class="mini accent" href="'+FAST+'plugins/'+f+'" target="_blank" rel="noopener">下载</a><a class="mini" href="'+PAGE+'plugins/'+f+'" target="_blank" rel="noopener">备用</a></div></div>'}
       var cf=encodeURIComponent(p.file).replace(/%2F/gi,'/');
-      return '<div class="plugin-row"><span class="avatar">'+esc(initial(p.name))+'</span><div class="p-info"><div class="plugin-name">'+esc(p.name)+'</div><div class="plugin-file">'+esc(p.description||p.id||'')+'</div></div><span class="tag">v'+esc(p.version)+'</span><span class="quality">'+esc(p.topQuality||'—')+'</span><div class="row-actions"><button class="mini accent" data-ceru-file="'+esc(p.file)+'">复制链接</button><a class="mini" href="'+CERU_BASE+cf+'" target="_blank" rel="noopener">下载</a></div></div>'
+      return '<div class="plugin-row"><span class="avatar">'+esc(initial(p.name))+'</span><div class="p-info"><div class="plugin-name">'+esc(p.name)+'</div><div class="plugin-file">'+esc(p.description||p.id||'')+'</div></div><span class="tag">v'+esc(p.version)+'</span>'+(p.topQuality?'<span class="quality">'+esc(p.topQuality)+'</span>':'')+'<div class="row-actions"><button class="mini accent" data-ceru-file="'+esc(p.file)+'">复制链接</button><a class="mini" href="'+CERU_BASE+cf+'" target="_blank" rel="noopener">下载</a></div></div>'
     }).join(''):'<div class="empty">没有匹配的插件。</div>';
     var label=isMf?'MusicFree':(ceruMv===3?'澜音 v3 · 桌面 2.5.0+':'澜音 v2 · 全平台');
-    document.getElementById('dir-meta').textContent=label+' · 「'+CAT_LABEL[dirCat]+'」'+list.length+' 个 · 共 '+all.length+' 个';
+    document.getElementById('dir-meta').textContent=label+' · '+CAT_LABEL[dirCat]+' '+list.length+' / '+all.length;
     document.getElementById('stat-mf').textContent=mfItems.length;
     document.getElementById('stat-ceru').textContent=ceruCount()||'—';
   }
