@@ -32,10 +32,10 @@ https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugi
 | 类别 | 条目 | 体积 | 订阅地址 |
 |---|---|---|---|
 | ① 常用六平台 | 6 | 2.88 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json` |
-| ② DJ / 舞曲 / 电音 | 30 | 0.79 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json` |
+| ② DJ / 舞曲 / 电音 | 28 | 0.77 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json` |
 | ③ 听书 / 电台 / 播客 | 10 | 0.59 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/radio.json` |
 | ④ 其它音乐平台 | 11 | 3.49 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/music.json` |
-| ⑤ 全部插件 | 57 | 7.76 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json` |
+| ⑤ 全部插件 | 55 | 7.73 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json` |
 <!-- /README:cat-stats -->
 
 <!-- README:cat-desc -->
@@ -157,10 +157,9 @@ LX 自定义源为非订阅机制，一次导入一个脚本，升级需重新�
 | 相声评书 | 1.0.3 | [xiangsheng-pingshu-source.plugin.v1.0.3.js](plugins/xiangsheng-pingshu-source.plugin.v1.0.3.js) |
 | 皮狗DJ | 1.1.2 | [pgdjz-source.plugin.v1.1.2.js](plugins/pgdjz-source.plugin.v1.1.2.js) |
 | DJKK | 1.1.2 | [djkk-source.plugin.v1.1.2.js](plugins/djkk-source.plugin.v1.1.2.js) |
-| 水晶舞曲 | 1.2.2 | [dj14-source.plugin.v1.2.2.js](plugins/dj14-source.plugin.v1.2.2.js) |
 | 清风DJ | 1.2.2 | [ddddj-source.plugin.v1.2.2.js](plugins/ddddj-source.plugin.v1.2.2.js) |
 | DJ766 | 1.4.1 | [dj766-source.plugin.v1.4.1.js](plugins/dj766-source.plugin.v1.4.1.js) |
-| 82DJ | 1.2.2 | [82dj-source.plugin.v1.2.2.js](plugins/82dj-source.plugin.v1.2.2.js) |
+| 82DJ | 1.2.3 | [82dj-source.plugin.v1.2.3.js](plugins/82dj-source.plugin.v1.2.3.js) |
 | QQDJ | 1.2.2 | [qqdjs-source.plugin.v1.2.2.js](plugins/qqdjs-source.plugin.v1.2.2.js) |
 | 36DJ | 1.2.2 | [36dj-source.plugin.v1.2.2.js](plugins/36dj-source.plugin.v1.2.2.js) |
 | 宝贝DJ | 1.2.1 | [bibdj-source.plugin.v1.2.1.js](plugins/bibdj-source.plugin.v1.2.1.js) |
@@ -173,7 +172,6 @@ LX 自定义源为非订阅机制，一次导入一个脚本，升级需重新�
 | SpaceDJ | 1.1.2 | [spacedj-source.plugin.v1.1.2.js](plugins/spacedj-source.plugin.v1.1.2.js) |
 | DJ6 | 1.0.2 | [dj6-source.plugin.v1.0.2.js](plugins/dj6-source.plugin.v1.0.2.js) |
 | 73DJ | 1.0.1 | [73dj-source.plugin.v1.0.1.js](plugins/73dj-source.plugin.v1.0.1.js) |
-| 先上DJ | 1.1.1 | [xsdj123-source.plugin.v1.1.1.js](plugins/xsdj123-source.plugin.v1.1.1.js) |
 | MixDJ | 1.0.2 | [mixdj-source.plugin.v1.0.2.js](plugins/mixdj-source.plugin.v1.0.2.js) |
 | 波比DJ | 1.0.1 | [bobidj-source.plugin.v1.0.1.js](plugins/bobidj-source.plugin.v1.0.1.js) |
 | 魅力DJ | 1.0.1 | [djmei-source.plugin.v1.0.1.js](plugins/djmei-source.plugin.v1.0.1.js) |

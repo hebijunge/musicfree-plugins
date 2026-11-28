@@ -15,12 +15,12 @@
 const fs = require('fs');
 const path = require('path');
 
-const SRC_DIR = path.resolve(__dirname, '..', '..', 'musicfree-plugins-src', 'plugins');
+const SRC_DIR = process.env.MF_SRC_DIR || path.resolve(__dirname, '..', '..', 'musicfree-plugins-src', 'plugins');
 const OUT = path.join(__dirname, '..', 'mf-cats.json');
 
 // 分类规则（按文件名前缀识别，最可靠；与澜音 id 规则一致）
-const CAT_EDM = /^(172mix|36dj|dianyinge|hy57|mixdj|spacedj|xxedm|y2002|82dj|dj14|ddddj)/i;
-const CAT_DJ = /^(54dj|73dj|dj6|dj766|djcsj|djkk|djmei|djshow|djyule|djyyy|huolongdj|pgdjz|qqdjs|bibdj|bobidj|djduoduo|djuu|xsdj123)/i;
+const CAT_EDM = /^(172mix|36dj|dianyinge|hy57|mixdj|spacedj|xxedm|y2002|82dj|ddddj)/i;
+const CAT_DJ = /^(54dj|73dj|dj6|dj766|djcsj|djkk|djmei|djshow|djyule|djyyy|huolongdj|pgdjz|qqdjs|bibdj|bobidj|djduoduo|djuu)/i;
 const CAT_COMMON = /^(qq|kuwo|kugou|migu|netease|qishui|bilibili)$/;
 const CAT_RADIO = /^(fanqie|lrts|bokantingshu|missevan|qingting|ximalaya|lizhi|neteaseradio|cctv|xiangsheng-pingshu)$/;
 
@@ -45,17 +45,24 @@ function nameOf(text, file) {
 }
 
 // 音质档位来源：有源码仓用源码，否则沿用已提交产物
-let byFile = {};
+let bySlug = {};
+function slugOf(file) {
+  return file
+    .replace(/\.plugin\.v[\d.]+\.js$/, '')
+    .replace(/\.plugin\.js$/, '')
+    .replace(/-v\d+(\.\d+)*\.js$/, '')
+    .replace(/\.js$/, '');
+}
 if (fs.existsSync(SRC_DIR)) {
   for (const f of fs.readdirSync(SRC_DIR).filter(f => f.endsWith('.js'))) {
     const text = fs.readFileSync(path.join(SRC_DIR, f), 'utf8');
-    byFile[f] = { name: nameOf(text, f), topQuality: topQuality(qualitiesOf(text)) };
+    bySlug[slugOf(f)] = { name: nameOf(text, f), topQuality: topQuality(qualitiesOf(text)) };
   }
   console.log('音质来源: 源码仓 ' + SRC_DIR);
 } else {
   try {
     const old = JSON.parse(fs.readFileSync(OUT, 'utf8'));
-    for (const p of old.plugins || []) byFile[p.file] = { name: p.name, topQuality: p.topQuality || '' };
+    for (const p of old.plugins || []) bySlug[slugOf(p.file)] = { name: p.name, topQuality: p.topQuality || '' };
     console.log('⚠ 未找到源码仓，沿用已提交的 mf-cats.json 音质档位');
   } catch (e) {
     console.log('⚠ 未找到源码仓，也无已提交的 mf-cats.json，DJ 音质维度将归 dj64');
@@ -68,7 +75,7 @@ const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'plugins.
 const list = [];
 for (const p of manifest) {
   const file = p.url.split('/').pop();
-  const src = byFile[file] || {};
+  const src = bySlug[key] || {};
   const key = file.replace(/-source\.plugin.*|\.plugin.*/, '').replace(/-v\d+(\.\d+)*$/, '');
   let category;
   if (CAT_EDM.test(key) || CAT_DJ.test(key)) {
