@@ -11,23 +11,24 @@
 <script src="assets/site.js"></script>
 </head>
 <body>
-<div class="shell">
+<div class="app">
   <header class="topbar">
     <a class="brand" href="./"><span class="brand-mark">离</span><span><span class="brand-name">离线装载台</span><br><span class="brand-sub">Offline Loadout</span></span></a>
     <div class="top-links"><a href="./">← 返回订阅站</a><button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换深色模式">☾</button></div>
   </header>
 
   <main>
-    <section class="hero reveal">
-      <div><div class="kicker">No timeout · no proxy · local first</div><h1>把插件<br><span class="mark">装进</span>设备。</h1><p>在线订阅怕超时，就把文件先下载到本地。四生态、分类安装包、单文件直链都在这里，手机与桌面共用一套入口。</p></div>
+    <section class="reveal">
+      <h1 class="tagline">把插件，<br><span class="mark">装进</span>设备。</h1>
+      <p class="tagline-sub">在线订阅怕超时？先把文件下载到本地再导入。</p>
       <aside class="manifest"><b>装载清单 / MANIFEST</b><div class="line"><span>MUSICFREE</span><span>57 PLUGINS</span></div><div class="line"><span>CERU</span><span>50 · V2/V3</span></div><div class="line"><span>BAKA V2</span><span>1 PROVIDER</span></div><div class="line"><span>LX</span><span>5-IN-1</span></div></aside>
     </section>
 
     <nav class="eco-nav" id="eco-nav" role="tablist" aria-label="选择离线生态">
-      <button class="eco-tab active" data-eco="mf" role="tab" aria-selected="true"><span class="num">01</span>MusicFree</button>
-      <button class="eco-tab" data-eco="ceru" role="tab" aria-selected="false"><span class="num">02</span>澜音 Ceru</button>
-      <button class="eco-tab" data-eco="baka" role="tab" aria-selected="false"><span class="num">03</span>Baka V2</button>
-      <button class="eco-tab" data-eco="lx" role="tab" aria-selected="false"><span class="num">04</span>洛雪 LX</button>
+      <button class="eco-tab active" data-eco="mf" role="tab" aria-selected="true"><b>MusicFree</b><span>分类 zip · 单文件直链</span></button>
+      <button class="eco-tab" data-eco="ceru" role="tab" aria-selected="false"><b>澜音 Ceru</b><span>50 个 · v2/v3</span></button>
+      <button class="eco-tab" data-eco="baka" role="tab" aria-selected="false"><b>Baka V2</b><span>汽水 Provider</span></button>
+      <button class="eco-tab" data-eco="lx" role="tab" aria-selected="false"><b>洛雪 LX</b><span>五源合一脚本</span></button>
     </nav>
 
     <section class="eco-pane active" id="pane-mf" role="tabpanel">

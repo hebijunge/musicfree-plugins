@@ -4,86 +4,86 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#fbfbfa">
-<meta name="description" content="MusicFree、澜音 Ceru、Baka V2、洛雪 LX 四生态插件订阅与安装站。同一批音源，一份目录，四种格式。">
+<meta name="description" content="声库：汇合 MusicFree、澜音 Ceru、Baka V2、洛雪 LX 四大生态的插件订阅与安装站。选好播放器，一键拿订阅链接。">
 <title>声库 · 四生态插件订阅站</title>
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="assets/index.css">
 <script src="assets/site.js"></script>
 </head>
 <body>
-<div class="shell">
+<div class="app">
   <header class="topbar">
     <a class="brand" href="#top" aria-label="声库首页"><span class="brand-mark">声</span><span><span class="brand-name">声库</span><span class="brand-sub">Plugin Archive</span></span></a>
-    <div class="top-links"><span class="issue">VOL. 2026.11.28</span><a href="download.html">离线装载台</a><button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换深色模式">☾</button><a class="btn ghost" href="https://github.com/hebijunge/musicfree-plugins" target="_blank" rel="noopener">GitHub</a></div>
+    <div class="top-links"><button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换深色模式">☾</button><a href="https://github.com/hebijunge/musicfree-plugins" target="_blank" rel="noopener">GitHub</a></div>
   </header>
 
   <main id="top">
-    <section class="hero reveal">
-      <div>
-        <div class="eyebrow-row"><span class="dot"></span><span class="eyebrow">Four ecosystems · one archive</span><span class="rule"></span><span class="issue">VOL. 2026.11.28</span></div>
-        <h1>把音乐，<br>装进<span class="mark">播放器</span>。</h1>
-        <p class="lead">MusicFree、澜音 Ceru、Baka V2、洛雪 LX。同一批音源，一份目录，四种格式——选好播放器，复制链接即可。</p>
-        <div class="stat-pills" aria-label="插件统计"><span class="pill">MusicFree <b id="stat-mf">—</b></span><span class="pill">澜音 <b id="stat-ceru">—</b></span><span class="pill">DJ <b>30</b></span><span class="pill">听书 <b>10</b></span></div>
-        <p class="quick-line">第一次用？先复制<strong>「常用六平台」</strong>订阅地址，体积小、更稳定。<a href="download.html">离线导入 ↗</a></p>
-      </div>
+    <section class="view active" id="view-sub">
+      <h1 class="tagline">选好播放器，<br>一键拿<span class="mark">订阅链接</span>。</h1>
+      <p class="tagline-sub">四个生态 · 一份目录 · 点生态卡片切换</p>
+
+      <nav class="tiles" aria-label="选择插件生态">
+        <button class="tile active" data-eco="mf"><b>MusicFree</b><span id="tile-mf">— 个插件</span></button>
+        <button class="tile" data-eco="ceru"><b>澜音 Ceru</b><span id="tile-ceru">— 个 · v2/v3</span></button>
+        <button class="tile" data-eco="baka"><b>Baka V2</b><span>汽水 Provider</span></button>
+        <button class="tile" data-eco="lx"><b>洛雪 LX</b><span>五源合一脚本</span></button>
+      </nav>
+
+      <section class="eco-pane active" id="pane-mf">
+        <div class="pane-head"><h2>订阅清单</h2><p>地址以 .json 结尾，复制后粘贴到播放器插件设置。</p></div>
+        <article class="sub-card"><div class="index"><span>推荐</span><span class="pill">main.json</span></div><h3>常用六平台 <span class="rec">· 体积小更稳定</span></h3><p>QQ、酷我、酷狗、咪咕、网易云、汽水。</p><div class="copy-row"><button class="btn accent" data-copy="mf-main">复制订阅地址</button><a class="btn ghost" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json" target="_blank" rel="noopener">打开</a></div></article>
+        <article class="sub-card"><div class="index"><span>分类</span><span class="pill">dj.json</span></div><h3>DJ / 舞曲 / 电音</h3><p>30 个 DJ 与电音源，高音质与低音质两档。</p><div class="copy-row"><button class="btn" data-copy="mf-dj">复制链接</button></div></article>
+        <article class="sub-card"><div class="index"><span>分类</span><span class="pill">radio.json</span></div><h3>听书 / 电台 / 播客</h3><p>10 个有声内容源：喜马拉雅、番茄、懒人等。</p><div class="copy-row"><button class="btn" data-copy="mf-radio">复制链接</button></div></article>
+        <article class="sub-card"><div class="index"><span>分类</span><span class="pill">music.json</span></div><h3>其它音乐平台</h3><p>B站、5sing、千千、Apple Music、华为等 11 个。</p><div class="copy-row"><button class="btn" data-copy="mf-music">复制链接</button></div></article>
+        <article class="sub-card"><div class="index"><span>全量</span><span class="pill">all.json</span></div><h3>全部插件</h3><p>57 个一次装全；慢网络建议改用离线包。</p><div class="copy-row"><button class="btn" data-copy="mf-all">复制链接</button></div></article>
+        <article class="sub-card"><div class="index"><span>高级</span><span class="pill">plugins.json</span></div><h3>全量备用直链</h3><p>插件文件直链清单，适合高级用户。</p><div class="copy-row"><button class="btn" data-copy="mf-plugins">复制链接</button></div></article>
+        <details class="backup"><summary>备用线路与加速节点</summary><div class="backup-grid" id="backup-grid"></div></details>
+        <a class="offline-slim" href="download.html"><strong>在线导入总超时？</strong>改用离线 zip 或单文件直链。<span>前往离线装载台 ↗</span></a>
+      </section>
+
+      <section class="eco-pane" id="pane-ceru">
+        <div class="ceru-top">
+          <div><h2>澜音原生插件</h2><p>音源与 MusicFree 目录同源，格式为 .ceru.js。手机版用 v2；桌面 2.5.0+ 可用 v3，两者 ID 相同，v3 会覆盖升级。</p></div>
+          <div class="version-switch"><button class="active" data-mv="2">v2 · 全平台</button><button data-mv="3">v3 · 桌面</button></div>
+        </div>
+        <button class="dir-jump" data-view="dir" data-dir="ceru">浏览澜音插件目录并复制链接 ↘</button>
+        <div class="steps">
+          <h3>导入步骤</h3>
+          <div class="step"><b>1</b><p><strong>选版本</strong><br>手机 v2，桌面 2.5.0+ 选 v3。</p></div>
+          <div class="step"><b>2</b><p><strong>复制链接</strong><br>在插件目录中切到「澜音 Ceru」，逐条复制。</p></div>
+          <div class="step"><b>3</b><p><strong>本地导入</strong><br>插件管理 → 添加插件 → 粘贴链接或选本地文件；首次启用授予 network 权限。</p></div>
+        </div>
+      </section>
+
+      <section class="eco-pane" id="pane-baka">
+        <article class="lx-card"><div class="kicker">BAKA V2 PROVIDER / V1.0.0</div><h2>汽水音乐 Baka Provider</h2><p>覆盖搜索、歌单/榜单、媒体解析、歌词、评论与链接。仅承诺 128k / 320k，VIP 走酷我与网易云第三方整曲兜底。</p><code>https://gh.padao.fun/…/baka-plugins/qishui.js</code><div class="copy-row"><button class="btn accent" data-copy="baka-url">复制导入链接</button><a class="btn ghost" href="baka-list.json" target="_blank" rel="noopener">清单</a></div></article>
+        <div class="steps">
+          <h3>导入与能力</h3>
+          <div class="step"><b>1</b><p><strong>Baka 客户端</strong><br>插件管理 → 导入 Provider → 粘贴链接或选本地 qishui.js。</p></div>
+          <div class="step"><b>2</b><p><strong>标准 V2 容器</strong><br>首行 // @baka-provider 2，同步 CommonJS 导出，仅用官方 SDK。</p></div>
+          <div class="step"><b>3</b><p><strong>能力</strong><br>搜索、实体、集合、发现、媒体、歌词、评论、链接解析。</p></div>
+        </div>
+      </section>
+
+      <section class="eco-pane" id="pane-lx">
+        <article class="lx-card plain"><div class="kicker">LX CUSTOM SOURCE / V1.6.0</div><h2>五源合一洛雪脚本</h2><p>QQ、酷我、酷狗、网易云、咪咕。适用于支持洛雪 LX 协议的播放器，一次导入一个脚本。</p><code>https://gh.padao.fun/…/plugins/five-source-lx.plugin.v1.6.0.js</code><div class="copy-row"><button class="btn accent" data-copy="lx-url">复制导入链接</button></div></article>
+        <div class="steps">
+          <h3>导入步骤</h3>
+          <div class="step"><b>1</b><p><strong>洛雪 Music</strong><br>设置 → 自定义源管理 → 导入 → 在线链接。</p></div>
+          <div class="step"><b>2</b><p><strong>澜音 CeruMusic</strong><br>插件管理 → 添加插件 → 粘贴链接或选本地 .js。</p></div>
+          <div class="step"><b>3</b><p><strong>授予权限</strong><br>首次启用允许 network，之后在音源处切换。</p></div>
+        </div>
+      </section>
     </section>
 
-    <nav class="eco-nav" id="eco-nav" role="tablist" aria-label="选择插件生态">
-      <button class="eco-tab active" data-eco="mf" role="tab" aria-selected="true"><span class="num">01</span>MusicFree</button>
-      <button class="eco-tab" data-eco="ceru" role="tab" aria-selected="false"><span class="num">02</span>澜音 Ceru</button>
-      <button class="eco-tab" data-eco="baka" role="tab" aria-selected="false"><span class="num">03</span>Baka V2</button>
-      <button class="eco-tab" data-eco="lx" role="tab" aria-selected="false"><span class="num">04</span>洛雪 LX</button>
-    </nav>
-
-    <section class="eco-pane active" id="pane-mf" role="tabpanel">
-      <div class="section-head"><h2>订阅清单</h2><p>地址以 .json 结尾。主线路最快，备用线路见下方折叠。</p></div>
-      <div class="sub-grid">
-        <article class="sub-card featured reveal"><span class="index"><span>01 / 推荐</span><span class="pill">main.json</span></span><h3>常用六平台</h3><p>QQ、酷我、酷狗、咪咕、网易云、汽水。日常最常用的一组，下载压力最小。</p><div class="copy-row"><span class="url-inline">gh.padao.fun/…/sub/padao/main.json</span><button class="btn accent" data-copy="mf-main">复制订阅地址</button><a class="btn ghost" href="https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json" target="_blank" rel="noopener">打开</a></div></article>
-        <article class="sub-card"><span class="index"><span>02</span><span class="pill">dj.json</span></span><h3>DJ / 舞曲 / 电音</h3><p>30 个 DJ 与电音源，高音质与低音质两档，按需安装。</p><div class="copy-row"><button class="btn" data-copy="mf-dj">复制地址</button></div></article>
-        <article class="sub-card"><span class="index"><span>03</span><span class="pill">radio.json</span></span><h3>听书 / 电台 / 播客</h3><p>10 个有声内容源：喜马拉雅、番茄、懒人、蜻蜓等。</p><div class="copy-row"><button class="btn" data-copy="mf-radio">复制地址</button></div></article>
-        <article class="sub-card"><span class="index"><span>04</span><span class="pill">music.json</span></span><h3>其它音乐平台</h3><p>B站、5sing、千千、Apple Music、华为、JOOX 等 11 个。</p><div class="copy-row"><button class="btn" data-copy="mf-music">复制地址</button></div></article>
-        <article class="sub-card"><span class="index"><span>05</span><span class="pill">all.json</span></span><h3>全部插件</h3><p>57 个一次装全，体积最大；慢网络建议改用离线包。</p><div class="copy-row"><button class="btn" data-copy="mf-all">复制地址</button></div></article>
-        <article class="sub-card"><span class="index"><span>06</span><span class="pill">plugins.json</span></span><h3>全量备用直链</h3><p>插件文件直链清单，适合高级用户。</p><div class="copy-row"><button class="btn" data-copy="mf-plugins">复制地址</button></div></article>
-      </div>
-      <details class="backup"><summary>备用线路与加速节点</summary><div class="backup-grid" id="backup-grid"></div></details>
-      <div class="offline-slim"><p><strong>在线导入总超时？</strong>也可以先下载 zip 或单个 .js 再本地导入。</p><a href="download.html">前往离线装载台 ↗</a></div>
-    </section>
-
-    <section class="eco-pane" id="pane-ceru" role="tabpanel">
-      <div class="ceru-head">
-        <div><span class="eyebrow">Native Ceru plugins</span><h2>澜音原生插件</h2><p>音源与 MusicFree 目录同源，仅格式为 .ceru.js。手机版使用 v2；桌面 2.5.0+ 可选择 v3。目录在页面下方，切换到「澜音 Ceru」即可浏览与复制。</p></div>
-        <div class="version-switch"><button class="active" data-mv="2">v2 · 全平台</button><button data-mv="3">v3 · 桌面 2.5.0+</button></div>
-      </div>
-      <button class="dir-jump" data-dir="ceru">在下方目录查看澜音插件 ↘</button>
-      <div class="steps" style="margin-top:16px">
-        <div class="step"><b>1</b><p><strong>选择版本</strong><br>手机版用 v2，桌面 2.5.0+ 可用 v3；两者插件 ID 相同，v3 会覆盖升级。</p></div>
-        <div class="step"><b>2</b><p><strong>复制导入链接</strong><br>在下方目录中切换到「澜音 Ceru」，逐条复制 .ceru.js 链接。</p></div>
-        <div class="step"><b>3</b><p><strong>本地导入</strong><br>插件管理 → 添加插件 → 粘贴链接或选择本地文件；首次启用授予 network 权限。</p></div>
-      </div>
-    </section>
-
-    <section class="eco-pane" id="pane-baka" role="tabpanel">
-      <div class="lx-grid">
-        <article class="lx-card tint"><div class="kicker">BAKA V2 PROVIDER / V1.0.0</div><h2>汽水音乐 Baka Provider</h2><p>原创 Baka V2 provider，覆盖搜索、歌单/榜单、媒体解析、歌词、评论与链接。仅承诺 128k / 320k，VIP 走酷我与网易云第三方整曲兜底。</p><code>https://gh.padao.fun/…/baka-plugins/qishui.js</code><div class="copy-row"><button class="btn accent" data-copy="baka-url">复制导入链接</button><a class="btn ghost" href="baka-list.json" target="_blank" rel="noopener">查看清单</a></div></article>
-        <aside class="steps"><h3>导入与能力</h3><div class="step"><b>1</b><p><strong>Baka 客户端</strong><br>插件管理 → 导入 Provider → 粘贴在线链接或选择本地 qishui.js。</p></div><div class="step"><b>2</b><p><strong>标准 V2 容器</strong><br>首行 // @baka-provider 2，同步 CommonJS 导出，只使用官方 SDK。</p></div><div class="step"><b>3</b><p><strong>已声明能力</strong><br>搜索、实体、集合、发现、媒体、歌词、评论、链接解析与分享。</p></div></aside>
-      </div>
-    </section>
-
-    <section class="eco-pane" id="pane-lx" role="tabpanel">
-      <div class="lx-grid">
-        <article class="lx-card"><div class="kicker">LX CUSTOM SOURCE / V1.6.0</div><h2>五源合一洛雪脚本</h2><p>QQ、酷我、酷狗、网易云、咪咕五源合一。适用于支持洛雪 LX 协议的播放器，一次导入一个脚本。</p><code>https://gh.padao.fun/…/plugins/five-source-lx.plugin.v1.6.0.js</code><div class="copy-row"><button class="btn accent" data-copy="lx-url">复制导入链接</button></div></article>
-        <aside class="steps"><h3>导入步骤</h3><div class="step"><b>1</b><p><strong>洛雪 Music</strong><br>设置 → 自定义源管理 → 导入 → 在线链接。</p></div><div class="step"><b>2</b><p><strong>澜音 CeruMusic</strong><br>插件管理 → 添加插件 → 粘贴链接，或选择本地 .js。</p></div><div class="step"><b>3</b><p><strong>授予网络权限</strong><br>首次启用时允许 network，之后在音源处切换即可。</p></div></aside>
-      </div>
-    </section>
-
-    <section class="directory" id="directory">
-      <div class="section-head"><h2>插件目录</h2><p>同一批音源，MusicFree 与澜音双格式；分类一致，切换查看。</p></div>
+    <section class="view" id="view-dir">
+      <div class="dir-head"><h2>插件目录</h2><span>同一批音源 · 双格式</span></div>
       <div class="dir-toolbar">
-        <div class="dir-eco" role="group" aria-label="切换目录生态">
+        <div class="dir-eco" id="dir-eco" role="group" aria-label="切换目录生态">
           <button class="active" data-dir="mf">MusicFree</button>
           <button data-dir="ceru">澜音 Ceru</button>
         </div>
-        <label class="search"><input id="dir-search" type="search" placeholder="搜索名称、版本或文件名…" autocomplete="off"><button type="button" aria-label="清空搜索">×</button></label>
+        <label class="search"><input id="dir-search" type="search" placeholder="搜索名称或版本…" autocomplete="off"><button type="button" aria-label="清空搜索">×</button></label>
       </div>
       <div class="filters" id="dir-filters"><button class="filter active" data-cat="common">常用音乐</button><button class="filter" data-cat="music">其它音乐</button><button class="filter" data-cat="radio">听书电台</button><button class="filter" data-cat="djhq">DJ 高音质</button><button class="filter" data-cat="dj64">DJ 低音质</button><button class="filter" data-cat="all">全部</button></div>
       <p class="result-meta" id="dir-meta">正在读取清单…</p>
@@ -91,8 +91,14 @@
     </section>
   </main>
 
-  <footer><div>声库 · MusicFree / 澜音 Ceru / Baka V2 / 洛雪 LX<br>插件由沙箱构建并逐项自测后发布。</div><div><a href="https://github.com/hebijunge/musicfree-plugins" target="_blank" rel="noopener">GitHub 仓库</a> · <a href="download.html">离线装载台</a><br><span id="update-time"></span></div></footer>
+  <footer>声库 · MusicFree / 澜音 Ceru / Baka V2 / 洛雪 LX<br>插件由沙箱构建并逐项自测后发布 · <a href="https://github.com/hebijunge/musicfree-plugins" target="_blank" rel="noopener">GitHub</a><br><span id="update-time"></span></footer>
 </div>
+
+<nav class="tabbar" aria-label="页面导航">
+  <button class="active" data-view="sub">订阅</button>
+  <button data-view="dir">插件目录</button>
+  <a href="download.html">离线包</a>
+</nav>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 window.COPY_URLS={
@@ -115,7 +121,7 @@ window.Site.ready(function(){
     ['QQ音乐','1.9.26','qq-source.plugin.v1.9.26.js'],['酷我音乐','1.9.24','kuwo-source.plugin.v1.9.24.js'],['酷狗音乐','1.9.24','kugou-source.plugin.v1.9.24.js'],['咪咕音乐','1.9.20','migu-source.plugin.v1.9.20.js'],['网易云音乐','1.9.27','netease-source.plugin.v1.9.27.js'],['汽水音乐','1.9.24','qishui-source.plugin.js'],['B站','1.1.4','bilibili-source.plugin.v1.1.4.js'],['番茄畅听','1.3.1','fanqie-source.plugin.v1.3.1.js'],['DJ多多','1.0.2','djduoduo-source.plugin.v1.0.2.js'],['5sing','1.0.2','5sing-source.plugin.v1.0.2.js'],['千千音乐','1.0.4','qianqian-source.plugin.v1.0.4.js'],['Y2002电音','1.0.2','y2002-source.plugin.v1.0.2.js'],['一听音乐','1.0.2','1ting-source.plugin.v1.0.2.js'],['懒人听书','1.0.3','lrts-source.plugin.v1.0.3.js'],['博看听书','1.0.2','bokantingshu-source.plugin.v1.0.2.js'],['街声','1.0.1','streetvoice-source.plugin.v1.0.1.js'],['火龙DJ','1.0.4','huolongdj-source.plugin.v1.0.4.js'],['快音','1.0.2','kuaiyin-source.plugin.v1.0.2.js'],['猫耳FM','1.0.3','missevan-source.plugin.v1.0.3.js'],['DJ串烧集','1.0.1','djcsj-source.plugin.v1.0.1.js'],['DJ秀','1.0.4','djshow.plugin.v1.0.4.js'],['Apple Music','1.0.2','apple-music-v1.0.2.js'],['华为音乐','1.0.3','hwmusic-source.plugin.v1.0.3.js'],['蜻蜓FM','1.0.3','qingting-source.plugin.v1.0.3.js'],['喜马拉雅','1.2.1','ximalaya-source.plugin.v1.2.1.js'],['荔枝FM','1.0.2','lizhi-source.plugin.v1.0.2.js'],['网易云电台','1.1.3','neteaseradio-source.plugin.v1.1.3.js'],['CCTV听音','1.0.2','cctv-source.plugin.v1.0.2.js'],['Jamendo','1.0.2','jamendo-source.plugin.v1.0.2.js'],['聚合','1.9.19','agg-source.plugin.v1.9.19.js'],['JOOX音乐','1.1.3','joox-source.plugin.v1.1.3.js'],['djuu DJ','1.1.2','djuu-source.plugin.v1.1.2.js'],['相声评书','1.0.3','xiangsheng-pingshu-source.plugin.v1.0.3.js'],['皮狗DJ','1.1.2','pgdjz-source.plugin.v1.1.2.js'],['DJKK','1.1.2','djkk-source.plugin.v1.1.2.js'],['水晶舞曲','1.2.2','dj14-source.plugin.v1.2.2.js'],['清风DJ','1.2.2','ddddj-source.plugin.v1.2.2.js'],['DJ766','1.4.1','dj766-source.plugin.v1.4.1.js'],['82DJ','1.2.3','82dj-source.plugin.v1.2.3.js'],['QQDJ','1.2.2','qqdjs-source.plugin.v1.2.2.js'],['36DJ','1.2.2','36dj-source.plugin.v1.2.2.js'],['宝贝DJ','1.2.1','bibdj-source.plugin.v1.2.1.js'],['172Mix','1.2.1','172mix-source.plugin.v1.2.1.js'],['DJ耶耶耶','1.1.2','djyyy-source.plugin.v1.1.2.js'],['黑色音频','1.1.2','hy57-source.plugin.v1.1.2.js'],['好听轻音乐','1.2.3','htqyy-source.plugin.v1.2.3.js'],['我是DJ','1.1.2','54dj-source.plugin.v1.1.2.js'],['电音阁','1.1.2','dianyinge-source.plugin.v1.1.2.js'],['SpaceDJ','1.1.2','spacedj-source.plugin.v1.1.2.js'],['DJ6','1.0.2','dj6-source.plugin.v1.0.2.js'],['73DJ','1.0.1','73dj-source.plugin.v1.0.1.js'],['先上DJ','1.1.1','xsdj123-source.plugin.v1.1.1.js'],['MixDJ','1.0.2','mixdj-source.plugin.v1.0.2.js'],['波比DJ','1.0.1','bobidj-source.plugin.v1.0.1.js'],['魅力DJ','1.0.1','djmei-source.plugin.v1.0.1.js'],['DJ娱乐','1.2.1','djyule-source.plugin.v1.2.1.js'],['小熊电音','1.0.2','xxedm-source.plugin.v1.0.2.js']
   ].map(function(x){return {name:x[0],version:x[1],file:x[2]}})
   var CAT_LABEL={common:'常用音乐',music:'其它音乐',radio:'听书电台',djhq:'DJ 高音质',dj64:'DJ 低音质',all:'全部'};
-  var mfItems=FALLBACK.slice(),mfCats={},dirCat='common',dirEco='mf',ceruItems={2:[],3:[]},ceruMv=2,dirFrame=0;
+  var mfItems=FALLBACK.slice(),mfCats={},dirCat='common',dirEco='mf',eco='mf',ceruItems={2:[],3:[]},ceruMv=2,dirFrame=0;
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function fileOf(p){return String(p.file||(p.url||'').split('/').pop()||'')}
   function initial(name){var s=String(name||'').trim();return /^[a-zA-Z0-9]/.test(s)?s.slice(0,2).toUpperCase():s.slice(0,1)}
@@ -124,6 +130,9 @@ window.Site.ready(function(){
   function filtered(list,cat,q,catFn){return list.filter(function(p){return (cat==='all'||catFn(p)===cat)&&(!q||(p.name+' '+p.version+' '+fileOf(p)+' '+(p.description||'')).toLowerCase().indexOf(q)>=0)})}
   function dedupeCeru(list){var best={};list.forEach(function(p){if(!best[p.name]||String(p.description||'').length>String(best[p.name].description||'').length)best[p.name]=p});return Object.keys(best).map(function(k){return best[k]})}
   function ceruCount(){return dedupeCeru(ceruItems[2].concat(ceruItems[3])).length}
+  function syncTiles(){document.querySelectorAll('.tiles [data-eco]').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-eco')===eco)});document.querySelectorAll('.eco-pane').forEach(function(p){p.classList.toggle('active',p.id==='pane-'+eco)})}
+  function syncDirEco(){document.querySelectorAll('#dir-eco [data-dir]').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-dir')===dirEco)})}
+  function syncViews(key){document.querySelectorAll('.view').forEach(function(v){v.classList.toggle('active',v.id==='view-'+key)});document.querySelectorAll('.tabbar [data-view]').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-view')===key)});window.scrollTo({top:0,behavior:'smooth'})}
   function renderDir(){
     var q=document.getElementById('dir-search').value.trim().toLowerCase();
     var isMf=dirEco==='mf';
@@ -139,8 +148,8 @@ window.Site.ready(function(){
     }).join(''):'<div class="empty">没有匹配的插件。</div>';
     var label=isMf?'MusicFree':(ceruMv===3?'澜音 v3 · 桌面 2.5.0+':'澜音 v2 · 全平台');
     document.getElementById('dir-meta').textContent=label+' · '+CAT_LABEL[dirCat]+' '+list.length+' / '+all.length;
-    document.getElementById('stat-mf').textContent=mfItems.length;
-    document.getElementById('stat-ceru').textContent=ceruCount()||'—';
+    document.getElementById('tile-mf').textContent=mfItems.length+' 个插件';
+    document.getElementById('tile-ceru').textContent=ceruCount()+' 个 · v2/v3';
   }
   function scheduleDir(){cancelAnimationFrame(dirFrame);dirFrame=requestAnimationFrame(renderDir)}
   function renderBackup(){
@@ -158,10 +167,14 @@ window.Site.ready(function(){
   document.addEventListener('click',function(e){
     var f=e.target.closest('#dir-filters .filter');
     if(f){dirCat=f.getAttribute('data-cat');document.querySelectorAll('#dir-filters .filter').forEach(function(b){b.classList.toggle('active',b===f)});renderDir();return}
-    var d=e.target.closest('[data-dir]');
-    if(d){dirEco=d.getAttribute('data-dir');document.querySelectorAll('[data-dir]').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-dir')===dirEco)});renderDir();if(d.classList.contains('dir-jump'))document.getElementById('directory').scrollIntoView({behavior:'smooth'});return}
+    var de=e.target.closest('#dir-eco [data-dir]');
+    if(de){dirEco=de.getAttribute('data-dir');syncDirEco();renderDir()}
+    var v=e.target.closest('[data-view]');
+    if(v){if(v.hasAttribute('data-dir')){dirEco=v.getAttribute('data-dir');syncDirEco()}syncViews(v.getAttribute('data-view'));renderDir();return}
+    var t=e.target.closest('.tiles [data-eco]');
+    if(t){eco=t.getAttribute('data-eco');syncTiles();return}
     var mv=e.target.closest('[data-mv]');
-    if(mv){ceruMv=Number(mv.getAttribute('data-mv'))||2;document.querySelectorAll('[data-mv]').forEach(function(b){b.classList.toggle('active',b===mv)});if(dirEco==='ceru')renderDir();return}
+    if(mv){ceruMv=Number(mv.getAttribute('data-mv'))||2;document.querySelectorAll('[data-mv]').forEach(function(b){b.classList.toggle('active',b===mv)});renderDir();return}
     var cf=e.target.closest('[data-ceru-file]');
     if(cf){window.Site.copy(CERU_BASE+cf.getAttribute('data-ceru-file'),cf)}
   });
