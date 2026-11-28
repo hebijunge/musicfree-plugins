@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-28T04:42:58.771Z",
+  "generatedAt": "2026-11-28T11:53:21.435Z",
   "manifestVersion": 3,
-  "count": 50,
+  "count": 55,
   "plugins": [
     {
       "name": "172Mix",
@@ -41,7 +41,7 @@
     },
     {
       "name": "36DJ",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "file": "v3/36dj.ceru.js",
       "description": "支持音质：64k",
       "author": "hebijunge",
@@ -141,9 +141,26 @@
       ]
     },
     {
+      "name": "聚合源",
+      "version": "1.0.0",
+      "file": "v3/agg.ceru.js",
+      "description": "聚合源 原生澜音 provider",
+      "author": "hebijunge",
+      "id": "ceru.agg",
+      "category": "music",
+      "qualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
       "name": "Apple Music",
-      "version": "1.1.0",
-      "file": "v3/applemusic.ceru.js",
+      "version": "1.1.1",
+      "file": "v3/apple-music.ceru.js",
       "description": "Apple Music 搜索 + 酷我兜底取链，音质 128k/320k/flac",
       "author": "hebijunge",
       "id": "ceru.applemusic",
@@ -180,6 +197,25 @@
       ]
     },
     {
+      "name": "B站",
+      "version": "1.0.0",
+      "file": "v3/bilibili.ceru.js",
+      "description": "B站 原生澜音 provider",
+      "author": "hebijunge",
+      "id": "ceru.bilibili",
+      "category": "music",
+      "qualities": [
+        "64k",
+        "96k",
+        "192k",
+        "hires",
+        "dolby"
+      ],
+      "topQuality": "192k",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
       "name": "波比DJ",
       "version": "1.1.0",
       "file": "v3/bobidj.ceru.js",
@@ -202,7 +238,7 @@
     },
     {
       "name": "博看听书",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "file": "v3/bokantingshu.ceru.js",
       "description": "支持音质：64k",
       "author": "hebijunge",
@@ -276,27 +312,6 @@
         {
           "id": "ceru.dianyinge.charts",
           "title": "电音阁榜单",
-          "kind": "charts"
-        }
-      ]
-    },
-    {
-      "name": "我是DJ",
-      "version": "1.2.0",
-      "file": "v3/dj54.ceru.js",
-      "description": "54dj DJ 音源（搜索 / 取链 / 榜单，64k m4a）",
-      "author": "hebijunge",
-      "id": "ceru.dj54",
-      "category": "dj64",
-      "qualities": [
-        "64k"
-      ],
-      "topQuality": "64k",
-      "manifestVersion": 3,
-      "homeSections": [
-        {
-          "id": "dj54-charts",
-          "title": "我是DJ榜单",
           "kind": "charts"
         }
       ]
@@ -417,7 +432,7 @@
       "name": "魅力DJ",
       "version": "1.1.0",
       "file": "v3/djmei.ceru.js",
-      "description": "支持音质：128k",
+      "description": "魅力DJ现行HTML搜索、分类浏览与128k整曲取链",
       "author": "hebijunge",
       "id": "ceru.djmei",
       "category": "djhq",
@@ -430,6 +445,25 @@
         {
           "id": "ceru.djmei.charts",
           "title": "魅力DJ榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "DJ秀",
+      "version": "1.0.0",
+      "file": "v3/djshow.ceru.js",
+      "description": "DJ秀 原生澜音 provider",
+      "author": "hebijunge",
+      "id": "ceru.djshow",
+      "category": "dj64",
+      "qualities": [],
+      "topQuality": "",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.djshow.charts",
+          "title": "DJ秀榜单",
           "kind": "charts"
         }
       ]
@@ -499,6 +533,21 @@
       ]
     },
     {
+      "name": "番茄畅听",
+      "version": "1.0.0",
+      "file": "v3/fanqie.ceru.js",
+      "description": "番茄畅听 原生澜音 provider",
+      "author": "hebijunge",
+      "id": "ceru.fanqie",
+      "category": "radio",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
       "name": "好听轻音乐",
       "version": "1.1.0",
       "file": "v3/htqyy.ceru.js",
@@ -515,29 +564,6 @@
         {
           "id": "ceru.htqyy.charts",
           "title": "好听轻音乐榜单",
-          "kind": "charts"
-        }
-      ]
-    },
-    {
-      "name": "火龙DJ",
-      "version": "1.1.0",
-      "file": "v3/huole.ceru.js",
-      "description": "支持音质：64k/320k/flac",
-      "author": "hebijunge",
-      "id": "ceru.huole",
-      "category": "djhq",
-      "qualities": [
-        "64k",
-        "320k",
-        "flac"
-      ],
-      "topQuality": "flac",
-      "manifestVersion": 3,
-      "homeSections": [
-        {
-          "id": "ceru.huole.charts",
-          "title": "火龙DJ榜单",
           "kind": "charts"
         }
       ]
@@ -604,6 +630,23 @@
       ]
     },
     {
+      "name": "Jamendo",
+      "version": "1.0.0",
+      "file": "v3/jamendo.ceru.js",
+      "description": "Jamendo 原生澜音 provider",
+      "author": "hebijunge",
+      "id": "ceru.jamendo",
+      "category": "music",
+      "qualities": [
+        "96k",
+        "192k",
+        "flac"
+      ],
+      "topQuality": "flac",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
       "name": "JOOX音乐",
       "version": "1.1.1",
       "file": "v3/joox.ceru.js",
@@ -622,7 +665,7 @@
     },
     {
       "name": "快音",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "file": "v3/kuaiyin.ceru.js",
       "description": "支持音质：128k",
       "author": "hebijunge",
@@ -666,7 +709,7 @@
     },
     {
       "name": "酷我音乐",
-      "version": "2.1.1",
+      "version": "2.1.2",
       "file": "v3/kuwo.ceru.js",
       "description": "酷我音乐音源（搜索 / 取链 / 歌词 / 榜单 / 歌单）",
       "author": "hebijunge",
@@ -704,6 +747,21 @@
       "homeSections": []
     },
     {
+      "name": "懒人听书",
+      "version": "1.1.0",
+      "file": "v3/lrts.ceru.js",
+      "description": "懒人听书 原生澜音 provider",
+      "author": "hebijunge",
+      "id": "ceru.lrts",
+      "category": "radio",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": []
+    },
+    {
       "name": "咪咕音乐",
       "version": "2.1.0",
       "file": "v3/migu.ceru.js",
@@ -729,7 +787,7 @@
     },
     {
       "name": "猫耳FM",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "file": "v3/missevan.ceru.js",
       "description": "支持音质：128k",
       "author": "hebijunge",
@@ -964,6 +1022,27 @@
         {
           "id": "ceru.streetvoice.charts",
           "title": "街声榜单",
+          "kind": "charts"
+        }
+      ]
+    },
+    {
+      "name": "相声评书",
+      "version": "1.0.0",
+      "file": "v3/xiangsheng-pingshu.ceru.js",
+      "description": "相声评书 原生澜音 provider",
+      "author": "hebijunge",
+      "id": "ceru.xiangsheng-pingshu",
+      "category": "music",
+      "qualities": [
+        "64k"
+      ],
+      "topQuality": "64k",
+      "manifestVersion": 3,
+      "homeSections": [
+        {
+          "id": "ceru.xiangsheng-pingshu.charts",
+          "title": "相声评书榜单",
           "kind": "charts"
         }
       ]

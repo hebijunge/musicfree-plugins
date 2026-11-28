@@ -3,33 +3,33 @@
     "plugins": [
         {
             "name": "QQ音乐",
-            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/qq-source.plugin.v1.9.26.js",
-            "version": "1.9.26"
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/qq-source.plugin.js",
+            "version": "1.9.27"
         },
         {
             "name": "酷我音乐",
-            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/kuwo-source.plugin.v1.9.24.js",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/kuwo-source.plugin.js",
             "version": "1.9.24"
         },
         {
             "name": "酷狗音乐",
-            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/kugou-source.plugin.v1.9.24.js",
-            "version": "1.9.24"
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/kugou-source.plugin.js",
+            "version": "1.9.25"
         },
         {
             "name": "咪咕音乐",
-            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/migu-source.plugin.v1.9.20.js",
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/migu-source.plugin.js",
             "version": "1.9.20"
         },
         {
             "name": "网易云音乐",
-            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/netease-source.plugin.v1.9.27.js",
-            "version": "1.9.27"
+            "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/netease-source.plugin.js",
+            "version": "1.9.28"
         },
         {
             "name": "汽水音乐",
             "url": "https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/plugins/qishui-source.plugin.js",
-            "version": "1.9.24"
+            "version": "1.9.25"
         }
     ]
 }

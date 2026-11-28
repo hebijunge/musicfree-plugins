@@ -1,10 +1,1126 @@
 {
-  "generatedAt": "2026-11-28T04:37:15.697Z",
-  "count": 1,
+  "generatedAt": "2026-11-28T11:58:53.866Z",
+  "count": 55,
   "plugins": [
     {
-      "name": "汽水音乐",
+      "name": "172Mix",
       "version": "1.0.0",
+      "file": "172mix.js",
+      "id": "org.hebijunge.x172mix",
+      "sourceId": "x172mix.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "一听音乐",
+      "version": "1.0.0",
+      "file": "1ting.js",
+      "id": "org.hebijunge.x1ting",
+      "sourceId": "x1ting.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k"
+      ],
+      "category": "music",
+      "topQuality": "128k"
+    },
+    {
+      "name": "36DJ",
+      "version": "1.0.0",
+      "file": "36dj.js",
+      "id": "org.hebijunge.x36dj",
+      "sourceId": "x36dj.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "我是DJ",
+      "version": "1.0.0",
+      "file": "54dj.js",
+      "id": "org.hebijunge.x54dj",
+      "sourceId": "x54dj.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "5sing",
+      "version": "1.0.0",
+      "file": "5sing.js",
+      "id": "org.hebijunge.x5sing",
+      "sourceId": "x5sing.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k",
+        "192k",
+        "320k"
+      ],
+      "category": "music",
+      "topQuality": "320k"
+    },
+    {
+      "name": "73DJ",
+      "version": "1.0.0",
+      "file": "73dj.js",
+      "id": "org.hebijunge.x73dj",
+      "sourceId": "x73dj.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "82DJ舞曲网",
+      "version": "1.0.0",
+      "file": "82dj.js",
+      "id": "org.hebijunge.x82dj",
+      "sourceId": "x82dj.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k",
+        "320k"
+      ],
+      "category": "djhq",
+      "topQuality": "320k"
+    },
+    {
+      "name": "聚合源",
+      "version": "1.0.0",
+      "file": "agg.js",
+      "id": "org.hebijunge.agg",
+      "sourceId": "agg.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "category": "music",
+      "topQuality": "flac"
+    },
+    {
+      "name": "Apple Music",
+      "version": "1.0.0",
+      "file": "apple-music.js",
+      "id": "org.hebijunge.apple-music",
+      "sourceId": "apple-music.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music",
+        "album",
+        "artist"
+      ],
+      "supportedQualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "category": "music",
+      "topQuality": "flac"
+    },
+    {
+      "name": "宝贝DJ",
+      "version": "1.0.0",
+      "file": "bibdj.js",
+      "id": "org.hebijunge.bibdj",
+      "sourceId": "bibdj.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k",
+        "320k"
+      ],
+      "category": "djhq",
+      "topQuality": "320k"
+    },
+    {
+      "name": "B站",
+      "version": "1.0.0",
+      "file": "bilibili.js",
+      "id": "org.hebijunge.bilibili",
+      "sourceId": "bilibili.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.get",
+        "collections.members",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k",
+        "96k",
+        "192k",
+        "hires",
+        "dolby"
+      ],
+      "category": "music",
+      "topQuality": "hires"
+    },
+    {
+      "name": "波比DJ",
+      "version": "1.0.0",
+      "file": "bobidj.js",
+      "id": "org.hebijunge.bobidj",
+      "sourceId": "bobidj.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "博看听书",
+      "version": "1.0.0",
+      "file": "bokantingshu.js",
+      "id": "org.hebijunge.bokantingshu",
+      "sourceId": "bokantingshu.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "radio",
+      "topQuality": "64k"
+    },
+    {
+      "name": "CCTV听音",
+      "version": "1.0.0",
+      "file": "cctv.js",
+      "id": "org.hebijunge.cctv",
+      "sourceId": "cctv.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k",
+        "128k"
+      ],
+      "category": "radio",
+      "topQuality": "128k"
+    },
+    {
+      "name": "清风DJ",
+      "version": "1.0.0",
+      "file": "ddddj.js",
+      "id": "org.hebijunge.ddddj",
+      "sourceId": "ddddj.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "96k",
+        "320k"
+      ],
+      "category": "djhq",
+      "topQuality": "320k"
+    },
+    {
+      "name": "电音阁",
+      "version": "1.0.0",
+      "file": "dianyinge.js",
+      "id": "org.hebijunge.dianyinge",
+      "sourceId": "dianyinge.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "DJ6",
+      "version": "1.0.0",
+      "file": "dj6.js",
+      "id": "org.hebijunge.dj6",
+      "sourceId": "dj6.v1",
+      "capabilities": [
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "DJ766",
+      "version": "1.0.0",
+      "file": "dj766.js",
+      "id": "org.hebijunge.dj766",
+      "sourceId": "dj766.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "96k",
+        "320k"
+      ],
+      "category": "djhq",
+      "topQuality": "320k"
+    },
+    {
+      "name": "DJ串烧集",
+      "version": "1.0.0",
+      "file": "djcsj.js",
+      "id": "org.hebijunge.djcsj",
+      "sourceId": "djcsj.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k",
+        "320k"
+      ],
+      "category": "djhq",
+      "topQuality": "320k"
+    },
+    {
+      "name": "DJ多多",
+      "version": "1.0.0",
+      "file": "djduoduo.js",
+      "id": "org.hebijunge.djduoduo",
+      "sourceId": "djduoduo.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "DJKK",
+      "version": "1.0.0",
+      "file": "djkk.js",
+      "id": "org.hebijunge.djkk",
+      "sourceId": "djkk.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "魅力DJ",
+      "version": "1.0.0",
+      "file": "djmei.js",
+      "id": "org.hebijunge.djmei",
+      "sourceId": "djmei.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k"
+      ],
+      "category": "djhq",
+      "topQuality": "128k"
+    },
+    {
+      "name": "DJ秀",
+      "version": "1.0.0",
+      "file": "djshow.js",
+      "id": "org.hebijunge.djshow",
+      "sourceId": "djshow.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "lyrics.get"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [],
+      "category": "dj64",
+      "topQuality": ""
+    },
+    {
+      "name": "djuu DJ",
+      "version": "1.0.0",
+      "file": "djuu.js",
+      "id": "org.hebijunge.djuu",
+      "sourceId": "djuu.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "DJ娱乐",
+      "version": "1.0.0",
+      "file": "djyule.js",
+      "id": "org.hebijunge.djyule",
+      "sourceId": "djyule.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k",
+        "320k"
+      ],
+      "category": "djhq",
+      "topQuality": "320k"
+    },
+    {
+      "name": "DJ耶耶耶",
+      "version": "1.0.0",
+      "file": "djyyy.js",
+      "id": "org.hebijunge.djyyy",
+      "sourceId": "djyyy.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "番茄畅听",
+      "version": "1.0.0",
+      "file": "fanqie.js",
+      "id": "org.hebijunge.fanqie",
+      "sourceId": "fanqie.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "radio",
+      "topQuality": "64k"
+    },
+    {
+      "name": "好听轻音乐",
+      "version": "1.0.0",
+      "file": "htqyy.js",
+      "id": "org.hebijunge.htqyy",
+      "sourceId": "htqyy.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k"
+      ],
+      "category": "music",
+      "topQuality": "128k"
+    },
+    {
+      "name": "火龙DJ",
+      "version": "1.0.0",
+      "file": "huolongdj.js",
+      "id": "org.hebijunge.huolongdj",
+      "sourceId": "huolongdj.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k",
+        "320k",
+        "flac"
+      ],
+      "category": "djhq",
+      "topQuality": "flac"
+    },
+    {
+      "name": "华为音乐",
+      "version": "1.0.0",
+      "file": "hwmusic.js",
+      "id": "org.hebijunge.hwmusic",
+      "sourceId": "hwmusic.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "category": "music",
+      "topQuality": "flac"
+    },
+    {
+      "name": "黑色音频",
+      "version": "1.0.0",
+      "file": "hy57.js",
+      "id": "org.hebijunge.hy57",
+      "sourceId": "hy57.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "Jamendo",
+      "version": "1.0.0",
+      "file": "jamendo.js",
+      "id": "org.hebijunge.jamendo",
+      "sourceId": "jamendo.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.get",
+        "collections.members",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "96k",
+        "192k",
+        "flac"
+      ],
+      "category": "music",
+      "topQuality": "flac"
+    },
+    {
+      "name": "JOOX音乐",
+      "version": "1.0.0",
+      "file": "joox.js",
+      "id": "org.hebijunge.joox",
+      "sourceId": "joox.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "category": "music",
+      "topQuality": "flac"
+    },
+    {
+      "name": "快音",
+      "version": "1.0.0",
+      "file": "kuaiyin.js",
+      "id": "org.hebijunge.kuaiyin",
+      "sourceId": "kuaiyin.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k"
+      ],
+      "category": "music",
+      "topQuality": "128k"
+    },
+    {
+      "name": "酷狗音乐",
+      "version": "1.0.0",
+      "file": "kugou.js",
+      "id": "org.hebijunge.kugou",
+      "sourceId": "kugou.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "category": "common",
+      "topQuality": "flac"
+    },
+    {
+      "name": "酷我音乐",
+      "version": "1.0.0",
+      "file": "kuwo.js",
+      "id": "org.hebijunge.kuwo",
+      "sourceId": "kuwo.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "lyrics.get",
+        "comments.list",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "category": "common",
+      "topQuality": "flac"
+    },
+    {
+      "name": "荔枝FM",
+      "version": "1.0.0",
+      "file": "lizhi.js",
+      "id": "org.hebijunge.lizhi",
+      "sourceId": "lizhi.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k",
+        "128k"
+      ],
+      "category": "radio",
+      "topQuality": "128k"
+    },
+    {
+      "name": "懒人听书",
+      "version": "1.1.0",
+      "file": "lrts.js",
+      "id": "org.hebijunge.lrts",
+      "sourceId": "lrts.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "album"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "radio",
+      "topQuality": "64k"
+    },
+    {
+      "name": "咪咕音乐",
+      "version": "1.0.0",
+      "file": "migu.js",
+      "id": "org.hebijunge.migu",
+      "sourceId": "migu.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k",
+        "320k",
+        "flac",
+        "flac24bit"
+      ],
+      "category": "common",
+      "topQuality": "flac24bit"
+    },
+    {
+      "name": "猫耳FM",
+      "version": "1.0.0",
+      "file": "missevan.js",
+      "id": "org.hebijunge.missevan",
+      "sourceId": "missevan.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k"
+      ],
+      "category": "radio",
+      "topQuality": "128k"
+    },
+    {
+      "name": "MixDJ",
+      "version": "1.0.0",
+      "file": "mixdj.js",
+      "id": "org.hebijunge.mixdj",
+      "sourceId": "mixdj.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "网易云音乐",
+      "version": "1.0.0",
+      "file": "netease.js",
+      "id": "org.hebijunge.netease",
+      "sourceId": "netease.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "category": "common",
+      "topQuality": "flac"
+    },
+    {
+      "name": "网易电台",
+      "version": "1.0.0",
+      "file": "neteaseradio.js",
+      "id": "org.hebijunge.neteaseradio",
+      "sourceId": "neteaseradio.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k"
+      ],
+      "category": "radio",
+      "topQuality": "128k"
+    },
+    {
+      "name": "皮狗DJ",
+      "version": "1.0.0",
+      "file": "pgdjz.js",
+      "id": "org.hebijunge.pgdjz",
+      "sourceId": "pgdjz.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "千千音乐",
+      "version": "1.0.0",
+      "file": "qianqian.js",
+      "id": "org.hebijunge.qianqian",
+      "sourceId": "qianqian.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "category": "music",
+      "topQuality": "flac"
+    },
+    {
+      "name": "蜻蜓FM",
+      "version": "1.0.0",
+      "file": "qingting.js",
+      "id": "org.hebijunge.qingting",
+      "sourceId": "qingting.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k",
+        "64k",
+        "24k"
+      ],
+      "category": "radio",
+      "topQuality": "128k"
+    },
+    {
+      "name": "汽水音乐",
+      "version": "1.1.0",
       "file": "qishui.js",
       "id": "org.hebijunge.qishui",
       "sourceId": "qishui.v1",
@@ -30,8 +1146,205 @@
       ],
       "supportedQualities": [
         "128k",
+        "320k",
+        "flac"
+      ],
+      "category": "common",
+      "topQuality": "flac"
+    },
+    {
+      "name": "QQ音乐",
+      "version": "1.0.0",
+      "file": "qq.js",
+      "id": "org.hebijunge.qq",
+      "sourceId": "qq.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "128k",
+        "320k",
+        "flac"
+      ],
+      "category": "common",
+      "topQuality": "flac"
+    },
+    {
+      "name": "QQDJ",
+      "version": "1.0.0",
+      "file": "qqdjs.js",
+      "id": "org.hebijunge.qqdjs",
+      "sourceId": "qqdjs.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "96k",
         "320k"
-      ]
+      ],
+      "category": "djhq",
+      "topQuality": "320k"
+    },
+    {
+      "name": "SpaceDJ",
+      "version": "1.0.0",
+      "file": "spacedj.js",
+      "id": "org.hebijunge.spacedj",
+      "sourceId": "spacedj.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "96k"
+      ],
+      "category": "dj64",
+      "topQuality": "96k"
+    },
+    {
+      "name": "街声",
+      "version": "1.0.0",
+      "file": "streetvoice.js",
+      "id": "org.hebijunge.streetvoice",
+      "sourceId": "streetvoice.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "lyrics.get",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "96k"
+      ],
+      "category": "music",
+      "topQuality": "96k"
+    },
+    {
+      "name": "相声评书",
+      "version": "1.0.0",
+      "file": "xiangsheng-pingshu.js",
+      "id": "org.hebijunge.xiangsheng-pingshu",
+      "sourceId": "xiangsheng-pingshu.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "radio",
+      "topQuality": "64k"
+    },
+    {
+      "name": "喜马拉雅",
+      "version": "1.0.0",
+      "file": "ximalaya.js",
+      "id": "org.hebijunge.ximalaya",
+      "sourceId": "ximalaya.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.get",
+        "collections.members",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music",
+        "album"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "radio",
+      "topQuality": "64k"
+    },
+    {
+      "name": "小熊电音",
+      "version": "1.0.0",
+      "file": "xxedm.js",
+      "id": "org.hebijunge.xxedm",
+      "sourceId": "xxedm.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k"
+      ],
+      "category": "dj64",
+      "topQuality": "64k"
+    },
+    {
+      "name": "Y2002电音",
+      "version": "1.0.0",
+      "file": "y2002.js",
+      "id": "org.hebijunge.y2002",
+      "sourceId": "y2002.v1",
+      "capabilities": [
+        "search",
+        "entities.get",
+        "collections.members",
+        "discovery.charts",
+        "media.resolve",
+        "links.resolve",
+        "links.share"
+      ],
+      "supportedSearchType": [
+        "music"
+      ],
+      "supportedQualities": [
+        "64k",
+        "320k",
+        "flac"
+      ],
+      "category": "djhq",
+      "topQuality": "flac"
     }
   ]
 }

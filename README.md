@@ -1,9 +1,10 @@
 # MusicFree 插件订阅站
 
-MusicFree 插件订阅仓库（57 个插件）+ 澜音 Ceru 原生插件（50 个）+ 洛雪（LX Music）自定义源，三个生态相互独立。
+MusicFree 插件订阅仓库（55 个插件）+ 澜音 Ceru 原生插件（55 个）+ Baka V2 Provider（55 个）+ 洛雪（LX Music）自定义源，四个生态相互独立。
 
-- **MusicFree 插件**：通过「订阅」机制安装/更新，订阅清单不含洛雪/澜音内容
-- **澜音 Ceru 原生插件**：`ceru-plugins/` 下 50 个 `.ceru.js`（`manifestVersion: 2`），逐条在线导入，非订阅机制
+- **MusicFree 插件**：通过「订阅」机制安装/更新，订阅清单不含洛雪/澜音/Baka 内容
+- **澜音 Ceru 原生插件**：`ceru-plugins/` 下 55 个 `.ceru.js`（`manifestVersion: 2`），逐条在线导入，非订阅机制
+- **Baka V2 Provider**：`baka-plugins/` 下 55 个独立 `.js`，标准 V2 容器，逐条导入
 - **洛雪自定义源**：五源合一脚本，仅适用于洛雪/澜音等 LX 协议播放器，单独下载导入
 
 ## 订阅站首页
@@ -26,16 +27,16 @@ https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugi
 
 ## 按类别订阅（推荐）
 
-插件按用途拆成 5 份清单，**用哪个类别就只装哪份**，不必一次拉 57 个。
+插件按用途拆成 5 份清单，**用哪个类别就只装哪份**，不必一次拉 55 个。
 
 <!-- README:cat-stats -->
 | 类别 | 条目 | 体积 | 订阅地址 |
 |---|---|---|---|
-| ① 常用六平台 | 6 | 2.88 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json` |
-| ② DJ / 舞曲 / 电音 | 30 | 0.79 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json` |
-| ③ 听书 / 电台 / 播客 | 10 | 0.59 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/radio.json` |
-| ④ 其它音乐平台 | 11 | 3.49 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/music.json` |
-| ⑤ 全部插件 | 57 | 7.76 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json` |
+| ① 常用六平台 | 6 | 2.87 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/main.json` |
+| ② DJ / 舞曲 / 电音 | 28 | 0.77 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/dj.json` |
+| ③ 听书 / 电台 / 播客 | 10 | 0.60 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/radio.json` |
+| ④ 其它音乐平台 | 11 | 3.48 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/music.json` |
+| ⑤ 全部插件 | 55 | 7.71 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/sub/padao/all.json` |
 <!-- /README:cat-stats -->
 
 <!-- README:cat-desc -->
@@ -58,7 +59,7 @@ https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugi
 
 例：常用六平台的 Pages 版 = `https://hebijunge.github.io/musicfree-plugins/sub/githubio/main.json`
 
-## 全部插件（57 个）· 备用线路
+## 全部插件（55 个）· 备用线路
 
 想一次装全就用这里；**只装常用平台建议用上面的分类订阅**，体积从 7.70 MB 降到 2.84 MB。下面各条清单内容完全一致，只是插件下载源不同：
 
@@ -76,11 +77,11 @@ https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugi
 
 | 包 | 内容 | 大小 | 直链（加速） |
 |---|---|---|---|
-| mf-common-6.zip | 常用六平台 6 个 | 1.02 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-common-6.zip` |
-| mf-all.zip | 全部 57 个 | 2.74 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-all.zip` |
-| mf-dj.zip | DJ / 舞曲 / 电音 30 个 | 0.30 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-dj.zip` |
-| mf-radio.zip | 听书 / 电台 10 个 | 0.21 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-radio.zip` |
-| mf-music.zip | 其它音乐平台 11 个 | 1.22 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-music.zip` |
+| mf-common-6.zip | 常用六平台 6 个 | 1.03 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-common-6.zip` |
+| mf-all.zip | 全部 55 个 | 2.75 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-all.zip` |
+| mf-dj.zip | DJ / 舞曲 / 电音 28 个 | 0.29 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-dj.zip` |
+| mf-radio.zip | 听书 / 电台 10 个 | 0.22 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-radio.zip` |
+| mf-music.zip | 其它音乐平台 11 个 | 1.21 MB | `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/dl/mf-music.zip` |
 
 官方 Pages 直链把前缀换成 `https://hebijunge.github.io/musicfree-plugins/dl/` 即可（较慢，但一定在）。
 
@@ -90,17 +91,27 @@ https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugi
 
 ## 澜音（CeruMusic）原生插件 · Ceru v2
 
-50 个澜音 Ceru v2 原生插件（`ceru-plugins/*.ceru.js`，`manifestVersion: 2`），适用于澜音 CeruMusic 手机 v2 / 桌面端。搜索、取链、歌词由插件内建逻辑完成（与 MusicFree 插件生态完全独立）。
+55 个澜音 Ceru v2 原生插件（`ceru-plugins/*.ceru.js`，`manifestVersion: 2`），适用于澜音 CeruMusic 手机 v2 / 桌面端。搜索、取链、歌词由插件内建逻辑完成（与 MusicFree 插件生态完全独立）。
 
 > 这是澜音**原生**插件格式（`.ceru.js`），**不是** MusicFree 插件格式，无法在 MusicFree「插件订阅」里安装；也无法用洛雪 LX 导入入口导入（LX 只认 `exports.manifest` 的洛雪协议）。
 
-- 清单：`ceru-list.json`（50 个，含 name/version/id，由 `scripts/gen-ceru-list.js` 生成）
+- 清单：`ceru-list.json`（55 个，含 name/version/id，由 `scripts/gen-ceru-list.js` 生成）
 - 在线导入链接示例：`https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/ceru-plugins/qq.ceru.js`（每个插件一个文件，逐个导入）
-- 一键复制全部：订阅站首页「澜音 Ceru」区点「一键复制全部导入链接」（按名称去重后 48 个，同站重复文件只保留一个）
+- 一键复制全部：订阅站首页「澜音 Ceru」区可浏览 v2/v3 目录并逐条复制链接
 
 **导入方法：** 澜音 CeruMusic → 插件管理 → 添加插件 → 粘贴任一 `https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/ceru-plugins/xxx.ceru.js` 在线链接导入，或下载 `.ceru.js` 本地导入；首次启用授予 network（网络）权限即可。
 
 > 澜音也能装下面「洛雪 LX 五源合一」脚本（走 LX 导入入口），两者不冲突，可都装。
+
+## Baka V2 原生 Provider
+
+55 个 Baka V2 Provider（`baka-plugins/*.js`），与 MusicFree、澜音同平台但按 Baka V2 规范独立实现。首行固定为 `// @baka-provider 2`，同步 CommonJS 导出，只使用官方 SDK。
+
+- 清单：`baka-list.json`（55 个，含 name/version/id/sourceId/能力与音质声明，由 `scripts/gen-baka-list.js` 生成）
+- 在线导入链接示例：`https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugins/master/baka-plugins/qq.js`
+- 订阅站首页「Baka V2」区可浏览全部 Provider 并复制链接
+
+**导入方法：** Baka 客户端 → 插件管理 → 导入 Provider → 粘贴在线链接或选择本地 `.js`。
 
 ## 洛雪（LX）自定义源 · 多播放器通用
 
@@ -117,90 +128,91 @@ https://gh.padao.fun/https://raw.githubusercontent.com/hebijunge/musicfree-plugi
 
 LX 自定义源为非订阅机制，一次导入一个脚本，升级需重新导入。
 
-## 插件清单（57 个）
+## 插件清单（55 个）
 
 <!-- README:plugins-table -->
 | 插件 | 版本 | 文件 |
 |---|---|---|
-| QQ音乐 | 1.9.26 | [qq-source.plugin.v1.9.26.js](plugins/qq-source.plugin.v1.9.26.js) |
-| 酷我音乐 | 1.9.24 | [kuwo-source.plugin.v1.9.24.js](plugins/kuwo-source.plugin.v1.9.24.js) |
-| 酷狗音乐 | 1.9.24 | [kugou-source.plugin.v1.9.24.js](plugins/kugou-source.plugin.v1.9.24.js) |
-| 咪咕音乐 | 1.9.20 | [migu-source.plugin.v1.9.20.js](plugins/migu-source.plugin.v1.9.20.js) |
-| 网易云音乐 | 1.9.27 | [netease-source.plugin.v1.9.27.js](plugins/netease-source.plugin.v1.9.27.js) |
-| 汽水音乐 | 1.9.24 | [qishui-source.plugin.js](plugins/qishui-source.plugin.js) |
-| B站 | 1.1.4 | [bilibili-source.plugin.v1.1.4.js](plugins/bilibili-source.plugin.v1.1.4.js) |
-| 番茄畅听 | 1.3.1 | [fanqie-source.plugin.v1.3.1.js](plugins/fanqie-source.plugin.v1.3.1.js) |
-| DJ多多 | 1.0.2 | [djduoduo-source.plugin.v1.0.2.js](plugins/djduoduo-source.plugin.v1.0.2.js) |
-| 5sing | 1.0.2 | [5sing-source.plugin.v1.0.2.js](plugins/5sing-source.plugin.v1.0.2.js) |
-| 千千音乐 | 1.0.4 | [qianqian-source.plugin.v1.0.4.js](plugins/qianqian-source.plugin.v1.0.4.js) |
-| Y2002电音 | 1.0.2 | [y2002-source.plugin.v1.0.2.js](plugins/y2002-source.plugin.v1.0.2.js) |
-| 一听音乐 | 1.0.2 | [1ting-source.plugin.v1.0.2.js](plugins/1ting-source.plugin.v1.0.2.js) |
-| 懒人听书 | 1.0.3 | [lrts-source.plugin.v1.0.3.js](plugins/lrts-source.plugin.v1.0.3.js) |
-| 博看听书 | 1.0.2 | [bokantingshu-source.plugin.v1.0.2.js](plugins/bokantingshu-source.plugin.v1.0.2.js) |
-| 街声 | 1.0.1 | [streetvoice-source.plugin.v1.0.1.js](plugins/streetvoice-source.plugin.v1.0.1.js) |
-| 火龙DJ | 1.0.4 | [huolongdj-source.plugin.v1.0.4.js](plugins/huolongdj-source.plugin.v1.0.4.js) |
-| 快音 | 1.0.2 | [kuaiyin-source.plugin.v1.0.2.js](plugins/kuaiyin-source.plugin.v1.0.2.js) |
-| 猫耳FM | 1.0.3 | [missevan-source.plugin.v1.0.3.js](plugins/missevan-source.plugin.v1.0.3.js) |
-| DJ串烧集 | 1.0.1 | [djcsj-source.plugin.v1.0.1.js](plugins/djcsj-source.plugin.v1.0.1.js) |
-| DJ秀 | 1.0.4 | [djshow.plugin.v1.0.4.js](plugins/djshow.plugin.v1.0.4.js) |
-| Apple Music | 1.0.2 | [apple-music-v1.0.2.js](plugins/apple-music-v1.0.2.js) |
-| 华为音乐 | 1.0.3 | [hwmusic-source.plugin.v1.0.3.js](plugins/hwmusic-source.plugin.v1.0.3.js) |
-| 蜻蜓FM | 1.0.3 | [qingting-source.plugin.v1.0.3.js](plugins/qingting-source.plugin.v1.0.3.js) |
-| 喜马拉雅 | 1.2.1 | [ximalaya-source.plugin.v1.2.1.js](plugins/ximalaya-source.plugin.v1.2.1.js) |
-| 荔枝FM | 1.0.2 | [lizhi-source.plugin.v1.0.2.js](plugins/lizhi-source.plugin.v1.0.2.js) |
-| 网易云电台 | 1.1.3 | [neteaseradio-source.plugin.v1.1.3.js](plugins/neteaseradio-source.plugin.v1.1.3.js) |
-| CCTV听音 | 1.0.2 | [cctv-source.plugin.v1.0.2.js](plugins/cctv-source.plugin.v1.0.2.js) |
-| Jamendo | 1.0.2 | [jamendo-source.plugin.v1.0.2.js](plugins/jamendo-source.plugin.v1.0.2.js) |
-| 聚合 | 1.9.19 | [agg-source.plugin.v1.9.19.js](plugins/agg-source.plugin.v1.9.19.js) |
-| JOOX音乐 | 1.1.3 | [joox-source.plugin.v1.1.3.js](plugins/joox-source.plugin.v1.1.3.js) |
-| djuu DJ | 1.1.2 | [djuu-source.plugin.v1.1.2.js](plugins/djuu-source.plugin.v1.1.2.js) |
-| 相声评书 | 1.0.3 | [xiangsheng-pingshu-source.plugin.v1.0.3.js](plugins/xiangsheng-pingshu-source.plugin.v1.0.3.js) |
-| 皮狗DJ | 1.1.2 | [pgdjz-source.plugin.v1.1.2.js](plugins/pgdjz-source.plugin.v1.1.2.js) |
-| DJKK | 1.1.2 | [djkk-source.plugin.v1.1.2.js](plugins/djkk-source.plugin.v1.1.2.js) |
-| 水晶舞曲 | 1.2.2 | [dj14-source.plugin.v1.2.2.js](plugins/dj14-source.plugin.v1.2.2.js) |
-| 清风DJ | 1.2.2 | [ddddj-source.plugin.v1.2.2.js](plugins/ddddj-source.plugin.v1.2.2.js) |
-| DJ766 | 1.4.1 | [dj766-source.plugin.v1.4.1.js](plugins/dj766-source.plugin.v1.4.1.js) |
-| 82DJ | 1.2.2 | [82dj-source.plugin.v1.2.2.js](plugins/82dj-source.plugin.v1.2.2.js) |
-| QQDJ | 1.2.2 | [qqdjs-source.plugin.v1.2.2.js](plugins/qqdjs-source.plugin.v1.2.2.js) |
-| 36DJ | 1.2.2 | [36dj-source.plugin.v1.2.2.js](plugins/36dj-source.plugin.v1.2.2.js) |
-| 宝贝DJ | 1.2.1 | [bibdj-source.plugin.v1.2.1.js](plugins/bibdj-source.plugin.v1.2.1.js) |
-| 172Mix | 1.2.1 | [172mix-source.plugin.v1.2.1.js](plugins/172mix-source.plugin.v1.2.1.js) |
-| DJ耶耶耶 | 1.1.2 | [djyyy-source.plugin.v1.1.2.js](plugins/djyyy-source.plugin.v1.1.2.js) |
-| 黑色音频 | 1.1.2 | [hy57-source.plugin.v1.1.2.js](plugins/hy57-source.plugin.v1.1.2.js) |
-| 好听轻音乐 | 1.2.3 | [htqyy-source.plugin.v1.2.3.js](plugins/htqyy-source.plugin.v1.2.3.js) |
-| 我是DJ | 1.1.2 | [54dj-source.plugin.v1.1.2.js](plugins/54dj-source.plugin.v1.1.2.js) |
-| 电音阁 | 1.1.2 | [dianyinge-source.plugin.v1.1.2.js](plugins/dianyinge-source.plugin.v1.1.2.js) |
-| SpaceDJ | 1.1.2 | [spacedj-source.plugin.v1.1.2.js](plugins/spacedj-source.plugin.v1.1.2.js) |
-| DJ6 | 1.0.2 | [dj6-source.plugin.v1.0.2.js](plugins/dj6-source.plugin.v1.0.2.js) |
-| 73DJ | 1.0.1 | [73dj-source.plugin.v1.0.1.js](plugins/73dj-source.plugin.v1.0.1.js) |
-| 先上DJ | 1.1.1 | [xsdj123-source.plugin.v1.1.1.js](plugins/xsdj123-source.plugin.v1.1.1.js) |
-| MixDJ | 1.0.2 | [mixdj-source.plugin.v1.0.2.js](plugins/mixdj-source.plugin.v1.0.2.js) |
-| 波比DJ | 1.0.1 | [bobidj-source.plugin.v1.0.1.js](plugins/bobidj-source.plugin.v1.0.1.js) |
-| 魅力DJ | 1.0.1 | [djmei-source.plugin.v1.0.1.js](plugins/djmei-source.plugin.v1.0.1.js) |
-| DJ娱乐 | 1.2.1 | [djyule-source.plugin.v1.2.1.js](plugins/djyule-source.plugin.v1.2.1.js) |
-| 小熊电音 | 1.0.2 | [xxedm-source.plugin.v1.0.2.js](plugins/xxedm-source.plugin.v1.0.2.js) |
+| QQ音乐 | 1.9.27 | [qq-source.plugin.js](plugins/qq-source.plugin.js) |
+| 酷我音乐 | 1.9.24 | [kuwo-source.plugin.js](plugins/kuwo-source.plugin.js) |
+| 酷狗音乐 | 1.9.25 | [kugou-source.plugin.js](plugins/kugou-source.plugin.js) |
+| 咪咕音乐 | 1.9.20 | [migu-source.plugin.js](plugins/migu-source.plugin.js) |
+| 网易云音乐 | 1.9.28 | [netease-source.plugin.js](plugins/netease-source.plugin.js) |
+| 汽水音乐 | 1.9.25 | [qishui-source.plugin.js](plugins/qishui-source.plugin.js) |
+| B站 | 1.1.4 | [bilibili-source.plugin.js](plugins/bilibili-source.plugin.js) |
+| 番茄畅听 | 1.3.1 | [fanqie-source.plugin.js](plugins/fanqie-source.plugin.js) |
+| DJ多多 | 1.0.2 | [djduoduo-source.plugin.js](plugins/djduoduo-source.plugin.js) |
+| 5sing | 1.0.2 | [5sing-source.plugin.js](plugins/5sing-source.plugin.js) |
+| 千千音乐 | 1.0.4 | [qianqian-source.plugin.js](plugins/qianqian-source.plugin.js) |
+| Y2002电音 | 1.0.2 | [y2002-source.plugin.js](plugins/y2002-source.plugin.js) |
+| 一听音乐 | 1.0.2 | [1ting-source.plugin.js](plugins/1ting-source.plugin.js) |
+| 懒人听书 | 1.1.0 | [lrts-source.plugin.js](plugins/lrts-source.plugin.js) |
+| 博看听书 | 1.0.2 | [bokantingshu-source.plugin.js](plugins/bokantingshu-source.plugin.js) |
+| 街声 | 1.0.1 | [streetvoice-source.plugin.js](plugins/streetvoice-source.plugin.js) |
+| 火龙DJ | 1.0.4 | [huolongdj-source.plugin.js](plugins/huolongdj-source.plugin.js) |
+| 快音 | 1.0.2 | [kuaiyin-source.plugin.js](plugins/kuaiyin-source.plugin.js) |
+| 猫耳FM | 1.0.3 | [missevan-source.plugin.js](plugins/missevan-source.plugin.js) |
+| DJ串烧集 | 1.0.1 | [djcsj-source.plugin.js](plugins/djcsj-source.plugin.js) |
+| DJ秀 | 1.0.4 | [djshow.plugin.js](plugins/djshow.plugin.js) |
+| Apple Music | 1.0.3 | [apple-music.plugin.js](plugins/apple-music.plugin.js) |
+| 华为音乐 | 1.0.3 | [hwmusic-source.plugin.js](plugins/hwmusic-source.plugin.js) |
+| 蜻蜓FM | 1.0.3 | [qingting-source.plugin.js](plugins/qingting-source.plugin.js) |
+| 喜马拉雅 | 1.2.2 | [ximalaya-source.plugin.js](plugins/ximalaya-source.plugin.js) |
+| 荔枝FM | 1.0.2 | [lizhi-source.plugin.js](plugins/lizhi-source.plugin.js) |
+| 网易云电台 | 1.1.3 | [neteaseradio-source.plugin.js](plugins/neteaseradio-source.plugin.js) |
+| CCTV听音 | 1.0.2 | [cctv-source.plugin.js](plugins/cctv-source.plugin.js) |
+| Jamendo | 1.0.3 | [jamendo-source.plugin.js](plugins/jamendo-source.plugin.js) |
+| 聚合 | 1.9.19 | [agg-source.plugin.js](plugins/agg-source.plugin.js) |
+| JOOX音乐 | 1.1.3 | [joox-source.plugin.js](plugins/joox-source.plugin.js) |
+| djuu DJ | 1.1.2 | [djuu-source.plugin.js](plugins/djuu-source.plugin.js) |
+| 相声评书 | 1.0.3 | [xiangsheng-pingshu-source.plugin.js](plugins/xiangsheng-pingshu-source.plugin.js) |
+| 皮狗DJ | 1.1.2 | [pgdjz-source.plugin.js](plugins/pgdjz-source.plugin.js) |
+| DJKK | 1.1.2 | [djkk-source.plugin.js](plugins/djkk-source.plugin.js) |
+| 清风DJ | 1.2.2 | [ddddj-source.plugin.js](plugins/ddddj-source.plugin.js) |
+| DJ766 | 1.4.2 | [dj766-source.plugin.js](plugins/dj766-source.plugin.js) |
+| 82DJ | 1.2.3 | [82dj-source.plugin.js](plugins/82dj-source.plugin.js) |
+| QQDJ | 1.2.2 | [qqdjs-source.plugin.js](plugins/qqdjs-source.plugin.js) |
+| 36DJ | 1.2.2 | [36dj-source.plugin.js](plugins/36dj-source.plugin.js) |
+| 宝贝DJ | 1.2.1 | [bibdj-source.plugin.js](plugins/bibdj-source.plugin.js) |
+| 172Mix | 1.2.1 | [172mix-source.plugin.js](plugins/172mix-source.plugin.js) |
+| DJ耶耶耶 | 1.1.2 | [djyyy-source.plugin.js](plugins/djyyy-source.plugin.js) |
+| 黑色音频 | 1.1.2 | [hy57-source.plugin.js](plugins/hy57-source.plugin.js) |
+| 好听轻音乐 | 1.2.3 | [htqyy-source.plugin.js](plugins/htqyy-source.plugin.js) |
+| 我是DJ | 1.1.2 | [54dj-source.plugin.js](plugins/54dj-source.plugin.js) |
+| 电音阁 | 1.1.2 | [dianyinge-source.plugin.js](plugins/dianyinge-source.plugin.js) |
+| SpaceDJ | 1.1.2 | [spacedj-source.plugin.js](plugins/spacedj-source.plugin.js) |
+| DJ6 | 1.0.2 | [dj6-source.plugin.js](plugins/dj6-source.plugin.js) |
+| 73DJ | 1.0.2 | [73dj-source.plugin.js](plugins/73dj-source.plugin.js) |
+| MixDJ | 1.0.3 | [mixdj-source.plugin.js](plugins/mixdj-source.plugin.js) |
+| 波比DJ | 1.0.2 | [bobidj-source.plugin.js](plugins/bobidj-source.plugin.js) |
+| 魅力DJ | 1.0.2 | [djmei-source.plugin.js](plugins/djmei-source.plugin.js) |
+| DJ娱乐 | 1.3.0 | [djyule-source.plugin.js](plugins/djyule-source.plugin.js) |
+| 小熊电音 | 1.0.3 | [xxedm-source.plugin.js](plugins/xxedm-source.plugin.js) |
 <!-- /README:plugins-table -->
 
 ## 目录结构
 
-- `index.html` — 订阅站首页（三生态分区：MusicFree / 澜音 Ceru / 洛雪 LX；数据自动跟随 `plugins.json` + `ceru-list.json`）
+- `index.html` — 订阅站首页（四生态分区：MusicFree / 澜音 Ceru / Baka V2 / 洛雪 LX；数据自动跟随对应清单）
 - `download.html` — 离线安装包下载页
 - `plugins.json` — MusicFree 订阅清单（`desc` + `plugins[]`，每项 `name/url/version`；不含洛雪脚本）
 - `sub/<line>/<cat>.json` — 分类订阅清单（main / dj / radio / music / all），按线路分组
-- `ceru-list.json` — 澜音 Ceru 插件清单（50 个，由 `ceru-plugins/` 生成）
-- `ceru-plugins/*.ceru.js` — 澜音 Ceru v2 原生插件（50 个，与 MusicFree 插件严格分离）
+- `ceru-list.json` — 澜音 Ceru 插件清单（55 个，由 `ceru-plugins/` 生成）
+- `ceru-plugins/*.ceru.js` — 澜音 Ceru v2 原生插件（55 个，与 MusicFree 插件严格分离）
+- `baka-list.json` — Baka V2 Provider 清单（55 个，由 `baka-plugins/` 生成）
+- `baka-plugins/*.js` — Baka V2 原生 Provider（55 个，与 MusicFree / 澜音严格分离）
 - `plugins/five-source-lx.plugin.v1.6.0.js` — 洛雪自定义源脚本（仅洛雪专区入口分发，不进任何 `plugins*.json`）
-- `scripts/gen-site.js` — **统一生成入口**：串行跑 subscriptions + ceru-list + readme（改完插件跑这一个命令）
+- `scripts/gen-site.js` — **统一生成入口**：串行跑 subscriptions + ceru-list + baka-list + readme（改完插件跑这一个命令）
 - `scripts/gen-subscriptions.js` — 生成分类 + 线路订阅清单
 - `scripts/gen-ceru-list.js` — 从 ceru-plugins 提取 manifest 生成 ceru-list.json
+- `scripts/gen-baka-list.js` — 从 baka-plugins 读取 manifest 生成 baka-list.json
 - `scripts/gen-readme.js` — 从 plugins.json / sub / sizes 自动更新 README 插件清单表与分类统计
 - `scripts/pack-zips.js` — 打包离线安装 zip
 - `scripts/verify-subscriptions.js` — 逐条下载比对字节数与 sha256
 
 ## 维护约定
 
-- 新插件完成后：把 js 按命名规范放入 `plugins/`（MusicFree）或 `ceru-plugins/`（澜音），在 `plugins.json` 追加一条（name/url/version 与插件内部声明一致）
-- **改完自动同步**：跑 `node scripts/gen-site.js` 一键重生成订阅清单 + 澜音清单 + README；GitHub Actions（`.github/workflows/gen-site.yml`）在 push 到 `plugins/` 或 `ceru-plugins/` 时自动执行并提交派生产物，无需手动跑
+- 新插件完成后：按对应规范放入 `plugins/`（MusicFree）、`ceru-plugins/`（澜音）或 `baka-plugins/`（Baka V2），并同步对应清单
+- **改完自动同步**：跑 `node scripts/gen-site.js` 一键重生成订阅清单 + 澜音清单 + Baka 清单 + README；GitHub Actions（`.github/workflows/gen-site.yml`）在 push 到 `plugins/` 或 `ceru-plugins/` 时自动执行并提交派生产物，无需手动跑
 - 插件升级：远端 `plugins/` 每个源只保留最新版本文件，旧版本不保留（回看历史走 git 记录），`plugins.json` 中 url/version 更新到新文件
 - 版本号以各插件 js 内部 `version` 字段为权威依据
 - 洛雪自定义源脚本与 MusicFree 插件严格分离：只放 `plugins/` 目录与订阅站洛雪专区，禁止写入 `plugins.json` 及任何镜像清单

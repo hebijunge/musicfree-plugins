@@ -15,7 +15,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const SRC_DIR = path.resolve(__dirname, '..', '..', 'musicfree-plugins-src', 'plugins');
+const SRC_DIR = process.env.MF_SRC_DIR || path.resolve(__dirname, '..', '..', 'musicfree-plugins-src', 'plugins');
 const OUT = path.join(__dirname, '..', 'mf-cats.json');
 
 // 分类规则（按文件名前缀识别，最可靠；与澜音 id 规则一致）
