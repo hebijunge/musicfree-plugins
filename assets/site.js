@@ -17,7 +17,7 @@
   function switchEco(key){if(reduced||!document.startViewTransition){applyEco(key);return}document.startViewTransition(function(){applyEco(key)})}
   function initTheme(){
     var saved=null;try{saved=localStorage.getItem('site-theme')}catch(e){}
-    var dark=saved?saved==='dark':true;
+    var dark=saved?saved==='dark':false;
     root.setAttribute('data-theme',dark?'dark':'light');
     var button=document.getElementById('theme-toggle');
     if(button){button.textContent=dark?'☀':'☾';button.setAttribute('aria-label',dark?'切换浅色模式':'切换深色模式');button.addEventListener('click',function(){var next=root.getAttribute('data-theme')==='dark'?'light':'dark';root.setAttribute('data-theme',next);try{localStorage.setItem('site-theme',next)}catch(e){}button.textContent=next==='dark'?'☀':'☾';button.setAttribute('aria-label',next==='dark'?'切换浅色模式':'切换深色模式')})}
